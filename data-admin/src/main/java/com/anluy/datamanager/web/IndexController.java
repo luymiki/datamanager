@@ -29,7 +29,7 @@ public class IndexController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     /**
-     * 服务状态查询接口
+     * 首页接口
      *
      * @return
      */
