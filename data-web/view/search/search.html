@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>一键搜索 | 数据管理系统</title>
+
+    <meta name="keywords" content="一键搜索 | 数据管理系统">
+    <meta name="description" content="一键搜索 | 数据管理系统">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <h2 id="search-msg">
+                            <!--为您找到相关结果约100,000,000个： <span class="text-navy">“后台主题”</span>-->
+                        </h2>
+                        <!--<small>搜索用时  (0.23秒)</small>-->
+
+                        <div class="search-form">
+                            <div class="input-group">
+                                <input type="text" placeholder="查询内容" id="search" name="search" class="form-control input-lg">
+                                <div class="input-group-btn">
+                                    <button id="search-btn" class="btn btn-lg btn-primary" type="button">搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="search-list">
+                            <!--<div class="search-result">-->
+                                <!--<h3><a href="search.html#">定制后台的主题目录(Theme)</a></h3>-->
+                                <!--<a href="search.html#" class="search-link">koda.iteye.com/blog/10...</a>-->
+                                <!--<p>-->
+                                    <!--不像前台Theme目录的改变可以通过后台界面配置,后台的主题目录要自己修改相应的配置文件。 Theme目录的配置再Adminhtml模块,打开后台的配置文件 $MAGENO_DIR\app\code...-->
+                                <!--</p>-->
+                            <!--</div>-->
+                            <!--<div class="hr-line-dashed"></div>-->
+                        </div>
+                        <nav id="pagination_box">
+                            <ul class="pagination" id="pagination"></ul>
+                        </nav>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/ajax.proxy.js"></script>
+    <script src="/js/plugins/twbsPagination/jquery.twbsPagination.js"></script>
+    <script src="/js/msg.js"></script>
+
+
+    <!-- 自定义js -->
+    <script src="/js/content.js?v=1.0.0"></script>
+    <script src="/js/search/search.js"></script>
+
+</body>
+
+</html>

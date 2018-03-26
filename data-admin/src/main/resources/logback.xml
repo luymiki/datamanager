@@ -25,9 +25,9 @@
     <!-- ERROR -->
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<Encoding>UTF-8</Encoding>-->
-        <File>${logDir}/error.log</File>
+        <File>${logDir}/data-admin/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logDir}/history/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>${logDir}/data-admin/history/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>20MB</maxFileSize>
@@ -47,9 +47,9 @@
     <!-- warn -->
     <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<Encoding>UTF-8</Encoding>-->
-        <File>${logDir}/warn.log</File>
+        <File>${logDir}/data-admin/warn.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logDir}/history/warn.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>${logDir}/data-admin/history/warn.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>20MB</maxFileSize>
@@ -68,9 +68,9 @@
     <!-- warn -->
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<Encoding>UTF-8</Encoding>-->
-        <File>${logDir}/info.log</File>
+        <File>${logDir}/data-admin/info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logDir}/history/info.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>${logDir}/data-admin/history/info.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>20MB</maxFileSize>

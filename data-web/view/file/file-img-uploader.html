@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>图片上传 | 数据管理系统</title>
+
+    <meta name="keywords" content="图片上传 | 数据管理系统">
+    <meta name="description" content="图片上传 | 数据管理系统">
+
+    <link rel="shortcut icon" href="/favicon.ico"> <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="/css/plugins/webuploader/webuploader.css" rel="stylesheet">
+    <link href="/css/file/file-img-uploader.css" rel="stylesheet">
+    <link href="/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="/css/plugins/chosen/chosen.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">嫌疑人</label>
+                                <div class="col-sm-5">
+                                    <select data-placeholder="请选择嫌疑人..." id="suspicious-list" class="form-control btn-outline" tabindex="2">
+                                        <option value="">请选择嫌疑人</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">文件夹</label>
+                                <div class="col-sm-5 folder-select" >
+                                    <select class="form-control btn-outline" name="folder" id="image-folder">
+                                        <option>文件</option>
+                                        <option selected>图片</option>
+                                        <option>视频</option>
+                                        <option>SQL文件</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">标签</label>
+                                <div class="col-sm-5">
+                                    <input type="text" id="image-tags" class="form-control" data-role="tagsinput">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                        </form>
+
+                        <div class="page-container">
+                            <p>您可以尝试文件拖拽，或者点击添加图片按钮，来上传图片</p>
+                            <div id="uploader" class="wu-example">
+                                <div class="queueList">
+                                    <div id="dndArea" class="placeholder">
+                                        <div id="filePicker"></div>
+                                        <p>或将图片拖到这里，单次最多可选30张</p>
+                                    </div>
+                                </div>
+                                <div class="statusBar" style="display:none;">
+                                    <div class="progress">
+                                        <span class="text">0%</span>
+                                        <span class="percentage"></span>
+                                    </div>
+                                    <div class="info"></div>
+                                    <div class="btns">
+                                        <div id="filePicker2"></div>
+                                        <div class="uploadBtn">开始上传</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 全局js -->
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="/js/msg.js"></script>
+
+    <!-- Chosen -->
+    <script src="/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- Web Uploader -->
+    <script src="/js/plugins/webuploader/webuploader.min.js"></script>
+    <script src="/js/file/file-img-uploader.js"></script>
+    <script src="/js/suspicious/suspicious-list.js"></script>
+
+</body>
+
+</html>

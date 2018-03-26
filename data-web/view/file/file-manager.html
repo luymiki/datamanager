@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>文件管理 | 数据管理系统</title>
+
+    <meta name="keywords" content="文件管理 | 数据管理系统">
+    <meta name="description" content="文件管理 | 数据管理系统">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="file-manager">
+                            <h5>显示：</h5>
+                            <a href="javascript:void(0);" class="file-control active btn-file-type btn-file-type-all" data-type="">所有</a>
+                            <a href="javascript:void(0);" class="file-control btn-file-type" data-type="文件">文件</a>
+                            <a href="javascript:void(0);" class="file-control btn-file-type" data-type="视频">视频</a>
+                            <a href="javascript:void(0);" class="file-control btn-file-type" data-type="图片">图片</a>
+                            <a href="javascript:void(0);" class="file-control btn-file-type" data-type="SQL文件">SQL文件</a>
+                            <div class="hr-line-dashed"></div>
+                            <button class="btn btn-primary btn-block" id="btn-upload-img">上传图片</button>
+                            <button class="btn btn-primary btn-block" id="btn-upload-file">上传文件</button>
+                            <div class="hr-line-dashed"></div>
+                            <h5>文件夹</h5>
+                            <ul class="folder-list" style="padding: 0">
+                                <li><a href="javascript:void(0);" class="file-control active btn-file-folder btn-file-folder-all" data-folder=""><i class="fa fa-folder"></i> 所有</a></li>
+                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="文件"><i class="fa fa-folder"></i> 文件</a></li>
+                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="图片"><i class="fa fa-folder"></i> 图片</a></li>
+                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="视频"><i class="fa fa-folder"></i> 视频</a></li>
+                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="SQL文件"><i class="fa fa-folder"></i> SQL文件</a></li>
+                            </ul>
+                            <h5 class="tag-title">标签</h5>
+                            <ul class="tag-list" id="tag-list" style="padding: 0">
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9 animated fadeInRight">
+                <div class="row">
+                    <div class="col-sm-12" id="file-list">
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-file"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p1.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Italy street.jpg-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p2.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--My feel.png-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-music"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Michal Jackson.mp3-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p3.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="img-responsive fa fa-film"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Monica's birthday.mpg4-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<a href="file-manager.html#">-->
+                                <!--<div class="file">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-bar-chart-o"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Annual report 2014.xls-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-file"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p1.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Italy street.jpg-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p2.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--My feel.png-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-music"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Michal Jackson.mp3-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p3.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="img-responsive fa fa-film"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Monica's birthday.mpg4-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<a href="file-manager.html#">-->
+                                <!--<div class="file">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-bar-chart-o"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Annual report 2014.xls-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-file"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p1.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Italy street.jpg-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p2.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--My feel.png-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-music"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Michal Jackson.mp3-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="image">-->
+                                        <!--<img alt="image" class="img-responsive" src="img/p3.jpg">-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Document_2014.doc-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<div class="file">-->
+                                <!--<a href="file-manager.html#">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="img-responsive fa fa-film"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Monica's birthday.mpg4-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="file-box">-->
+                            <!--<a href="file-manager.html#">-->
+                                <!--<div class="file">-->
+                                    <!--<span class="corner"></span>-->
+
+                                    <!--<div class="icon">-->
+                                        <!--<i class="fa fa-bar-chart-o"></i>-->
+                                    <!--</div>-->
+                                    <!--<div class="file-name">-->
+                                        <!--Annual report 2014.xls-->
+                                        <!--<br/>-->
+                                        <!--<small>添加时间：2014-10-13</small>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</a>-->
+                        <!--</div>-->
+
+                    </div>
+                </div>
+                <nav id="pagination_box">
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/ajax.proxy.js"></script>
+    <script src="/js/file/file-manager.js"></script>
+    <script src="/js/plugins/twbsPagination/jquery.twbsPagination.js"></script>
+    <script src="/js/msg.js"></script>
+
+
+    <!-- 自定义js -->
+    <script src="/js/content.js?v=1.0.0"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.file-box').each(function () {
+                animationHover(this, 'pulse');
+            });
+            $('#btn-upload-img').on("click",function () {
+                top.contabs.addMenuItem("/view/file/file-img-uploader.html",'照片上传');
+            });
+            $('#btn-upload-file').on("click",function () {
+                top.contabs.addMenuItem("/view/file/file-file-uploader.html",'文件上传');
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
