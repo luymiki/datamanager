@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>QQ登录记录列表 | 数据管理系统</title>
+
+    <meta name="keywords" content="QQ登录记录列表 | 数据管理系统">
+    <meta name="description" content="QQ登录记录列表 | 数据管理系统">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/css/plugins/webuploader/webuploader.css" rel="stylesheet">
+    <link href="/css/file/file-img-uploader.css" rel="stylesheet">
+    <link href="/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <style type="text/css">
+        .thumb-file {
+            font-size: 70px;
+            color: #dadada;
+            padding: 20px 10px;
+        }
+
+        #uploader .placeholder {
+            background: none;
+            padding-top: 120px;
+        }
+
+        #uploader .placeholder .fa-file {
+            font-size: 70px;
+            margin-bottom: 30px;
+        }
+
+        .tabs-container .tabs-left > .nav-tabs {
+            width: 20%;
+        }
+
+        .tabs-container .tabs-left .panel-body {
+            width: 80%;
+            margin-left: 20%;
+        }
+        .mail-body{
+            padding: 20px 0px;
+        }
+        .mail-tools{
+            margin-top: -10px;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" id="eml-upload">
+                <div class="ibox-content">
+                    <form method="get" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">嫌疑人</label>
+                            <div class="col-sm-5">
+                                <select data-placeholder="请选择嫌疑人..." id="suspicious-list"
+                                        class="form-control btn-outline" tabindex="2">
+                                    <option value="">请选择嫌疑人</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" id="file-folder" class="form-control" value="文件">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">标签</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="file-tags" class="form-control" data-role="tagsinput">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </form>
+
+                    <div class="page-container">
+                        <p>您可以尝试文件拖拽，或者点击添加文件按钮，来上传文件.</p>
+                        <div id="uploader" class="wu-example">
+                            <div class="queueList">
+                                <div id="dndArea" class="placeholder">
+                                    <i class="fa fa-file"></i>
+                                    <div id="filePicker"></div>
+                                    <p>或将文件拖到这里，单次最多可选10个文件</p>
+                                </div>
+                            </div>
+                            <div class="statusBar" style="display:none;">
+                                <div class="progress">
+                                    <span class="text">0%</span>
+                                    <span class="percentage"></span>
+                                </div>
+                                <div class="info"></div>
+                                <div class="btns">
+                                    <div id="filePicker2"></div>
+                                    <div id="uploadBtn" class="uploadBtn">开始上传</div>
+                                    <div id="parserEml" class="uploadBtn" style="display: none;">解析文件</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins"  id="eml-parser" style="display: none">
+                <div class="ibox-title">
+                    <div id="saveEml" class="btn btn-primary" >全部保存</div>
+                    <div id="restetEml" class="btn btn-info" >取消</div>
+                </div>
+                <div class="ibox-content">
+                    <div class="tabs-container">
+
+                        <div class="tabs-left">
+                            <ul class="nav nav-tabs" id="eml-tabs">
+                                <!--<li class="active"><a data-toggle="tab" href="#tab-8"> 第一个选项卡</a></li>-->
+                                <!--<li class="active"><a data-toggle="tab" href="#tab-0"> 第二个选项卡</a></li>-->
+                            </ul>
+                            <div class="tab-content " id="eml-content">
+                                <!--<div id="tab-8" class="tab-pane active"><div class="panel-body"></div></div>-->
+                            </div>
+
+                            <script type="text/html" id="eml-template">
+                                <div id="tab-{{index}}" class="tab-pane {{ if index ==0 }}active{{/if}}">
+                                    <div class="panel-body">
+                                        <div class="mail-tools tooltip-demo m-t-md">
+                                            <h5>
+                                                <div data-id="{{index}}" class="btn btn-primary btn-outline save-one" >保存</div>
+                                                <div data-id="{{index}}" class="btn btn-danger btn-outline delete-one">删除</div>
+                                            </h5>
+                                            <h3>
+                                                <span class="font-noraml">主题： </span>{{email.subject}}
+                                            </h3>
+                                            <h5>
+                                                <span class="font-noraml">发件人： </span>{{email.from}} <code>{{email.fromAddress}}</code>
+                                            </h5>
+                                            <h5>
+                                                <span class="pull-right font-noraml">{{email.receivedDate}}</span>
+                                                <span class="font-noraml">收件人： </span>{{email.to}} <code>{{email.toAddress}}</code>
+                                            </h5>
+                                        </div>
+                                        <div class="mail-box">
+                                            <div class="mail-body">
+                                                <!--邮件正文-->
+
+                                                {{each text as zz k}}
+                                                <iframe id="email-{{index}}-{{k}}" name="email-{{index}}-{{k}}"
+                                                        style="width: 100%;min-height: 100%;border: none;"
+                                                        scrolling="auto"></iframe>
+                                                {{/each}}
+                                            </div>
+                                            {{if file && file.length>0}}
+                                            <div class="mail-attachment">
+                                                <p>
+                                                    <span><i class="fa fa-paperclip"></i> {{file.length}} 个附件</span>
+                                                </p>
+
+                                                <div class="attachment">
+                                                    {{each file as ff i}}
+                                                    <div class="file-box">
+                                                        <div class="file">
+                                                            <a href="/upload/{{ff.path}}" target="_blank">
+                                                                <span class="corner"></span>
+
+                                                                {{if ff.type === "image"}}
+                                                                    <div class="image">
+                                                                        <img alt="image" class="img-responsive"src="/upload/{{ff.path}}">
+                                                                    </div>
+                                                                {{else}}
+                                                                    <div class="icon">
+                                                                        <i class="fa fa-file"></i>
+                                                                    </div>
+                                                                {{/if}}
+
+                                                                <div class="file-name">{{ff.name}}</div>
+                                                            </a>
+                                                        </div>
+
+                                                    </div>
+                                                    {{/each}}
+
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </script>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/ajax.proxy.js"></script>
+<script src="/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+<script src="/js/msg.js"></script>
+
+<!-- Chosen -->
+<script src="/js/plugins/chosen/chosen.jquery.js"></script>
+
+<script src="/js/plugins/art-template/template.js"></script>
+
+<!-- Web Uploader -->
+<script src="/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="/js/file/email/file-email.js"></script>
+<script src="/js/file/file-file-uploader.js"></script>
+<script src="/js/suspicious/suspicious-list.js"></script>
+
+</body>
+
+</html>

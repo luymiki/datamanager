@@ -145,7 +145,102 @@ public class ElasticsearchQueryAnalyzeEngine {
         JSONObject bool = new JSONObject();
         query.put("bool", bool);
         JSONArray must = new JSONArray();
+
+        Map<String,List<Configuration>> groupMap = new HashMap<>();
+        List<Configuration> mustList = new ArrayList<>();
+        List<Configuration> notList = new ArrayList<>();
+        //分组
         for (Configuration condition : conditionList) {
+            String groupType = condition.getString("groupType","must");
+            String groupId = condition.getString("groupId");
+            //如果有分组，组内必为的为或者的关系
+            if(StringUtils.isNotBlank(groupId)){
+                //groupType = "should";
+                if(!groupMap.containsKey(groupId)){
+                    List<Configuration> shouldList = new ArrayList<>();
+                    groupMap.put(groupId,shouldList);
+                }
+                groupMap.get(groupId).add(condition);
+            }else if("not".equals(groupType)){//不包含
+                notList.add(condition);
+            }else{//包含
+                mustList.add(condition);
+            }
+        }
+        if(!mustList.isEmpty()){
+            must.add(this.must(mustList));
+        }
+        if(!groupMap.isEmpty()){
+            must.add(this.should(groupMap));
+        }
+        if(!notList.isEmpty()){
+            must.add(this.not(notList));
+        }
+//
+//
+//
+//
+//        for (Configuration condition : conditionList) {
+//            Integer searchType = condition.getInt("searchType", SEARCH_TYPE_EXACTLY);
+//            Integer dataType = condition.getInt("dataType", DATA_TYPE_TEXT);
+//            String field = condition.getString("field");
+//            List<String> values = condition.getList("values", String.class);
+//            JSONObject itemBool = new JSONObject();
+//            JSONObject items = new JSONObject();
+//            itemBool.put("bool", items);
+//            must.add(itemBool);
+//            switch (searchType) {
+//                case SEARCH_TYPE_EXACTLY: {
+//                    items.put("should", this.condition(field, values, dataType, false));
+//                    break;
+//                }
+//                case SEARCH_TYPE_FUZZY: {
+//                    items.put("should", this.condition(field, values, dataType, true));
+//                    break;
+//                }
+//                case SEARCH_TYPE_NOT_INCLUD: {
+//                    items.put("must_not", this.condition(field, values, dataType, true));
+//                    break;
+//                }
+//            }
+//        }
+        bool.put("must", must);
+        return query;
+    }
+
+    private JSONObject should(Map<String,List<Configuration>> groupMap){
+        JSONObject query = new JSONObject();
+        JSONObject bool = new JSONObject();
+        query.put("bool", bool);
+        groupMap.forEach((g,conditionList)->{
+            JSONArray should = new JSONArray();
+            bool.put("should",should);
+            this.dsl(conditionList,should);
+        });
+        return query;
+    }
+
+    private JSONObject must(List<Configuration> mustList){
+        JSONObject query = new JSONObject();
+        JSONObject bool = new JSONObject();
+        query.put("bool", bool);
+        JSONArray must = new JSONArray();
+        bool.put("must",must);
+        this.dsl(mustList,must);
+        return query;
+    }
+    private JSONObject not(List<Configuration> notList){
+        JSONObject query = new JSONObject();
+        JSONObject bool = new JSONObject();
+        query.put("bool", bool);
+        JSONArray must_not = new JSONArray();
+        bool.put("must_not",must_not);
+        this.dsl(notList,must_not);
+        return query;
+    }
+
+    private void dsl(List<Configuration> list,JSONArray item){
+        for (Configuration condition : list) {
             Integer searchType = condition.getInt("searchType", SEARCH_TYPE_EXACTLY);
             Integer dataType = condition.getInt("dataType", DATA_TYPE_TEXT);
             String field = condition.getString("field");
@@ -153,7 +248,7 @@ public class ElasticsearchQueryAnalyzeEngine {
             JSONObject itemBool = new JSONObject();
             JSONObject items = new JSONObject();
             itemBool.put("bool", items);
-            must.add(itemBool);
+            item.add(itemBool);
             switch (searchType) {
                 case SEARCH_TYPE_EXACTLY: {
                     items.put("should", this.condition(field, values, dataType, false));
@@ -169,8 +264,6 @@ public class ElasticsearchQueryAnalyzeEngine {
                 }
             }
         }
-        bool.put("must", must);
-        return query;
     }
 
     private JSONObject aggsDsl(List<Configuration> aggsList) {

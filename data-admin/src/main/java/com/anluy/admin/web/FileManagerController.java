@@ -145,7 +145,7 @@ public class FileManagerController {
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
             }
             if(StringUtils.isBlank(attachment.getPath())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件路径为空"));
             }
             if(StringUtils.isBlank(attachment.getSuffix())){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件类型为空"));
@@ -159,6 +159,11 @@ public class FileManagerController {
                     EmailEmlParser emailEml = new EmailEmlParser(uploadDir,attachment.getId());
                     Email email = emailEml.parser(path);
                     return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(email).setPath(request.getRequestURI()));
+                }
+                case "txt":{//txt文件
+//                    EmailEmlParser emailEml = new EmailEmlParser(uploadDir,attachment.getId());
+//                    Email email = emailEml.parser(path);
+//                    return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(email).setPath(request.getRequestURI()));
                 }
                 default:{
                     break;

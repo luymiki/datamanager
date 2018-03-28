@@ -271,7 +271,7 @@
         var _delete = function (id) {
 
             swalMsg.msg({
-                text:"是否删除嫌疑人信息？",
+                text:"是否删除可疑人员信息？",
                 type:"warning",
                 showCancel:true,
                 confirm:function (f) {

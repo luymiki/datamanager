@@ -7,6 +7,29 @@
     var search = (function ($) {
         var _init = function () {
             $("#search-btn").click(_search);
+            $("#search-list ").on("click",".search-result",function(){
+                var index = $(this).attr("data-index");
+                switch (index){
+                    case "qqreginfo":{
+                        top.contabs.addMenuItem("/view/qq/reg/qq-reg-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        break;
+                    }
+                    case "email":{
+                        top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id="+$(this).attr("data-id"),'查看邮件');
+                        break;
+                    }
+                    case "suspicious":{
+                        top.contabs.addMenuItem("/view/suspicious/suspicious-detail.html?id="+$(this).attr("data-id"),'可疑人员信息');
+                        break;
+                    }
+                    case "attachment":{
+
+                        break;
+                    }
+                }
+                //top.contabs.addMenuItem("/view/search/search-detail.html?id="+$(this).attr("data-id")+"&index="+$(this).attr("data-index"),'查询结果');
+            });
+
         }
 
         var _pageNum=1;
@@ -50,8 +73,8 @@
                                             break;
                                         }
                                     }
-                                    var $sr = $('<div class="search-result"></div>').appendTo($searchList);
-                                    $('<h4></h4>').appendTo($sr).html(str);
+                                    var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="'+f["id"]+'" data-index="'+f["_index"]+'"></div>').appendTo($searchList);
+                                    $('<h4 class="search-info" ></h4>').appendTo($sr).html(str);
                                     $('<div class="hr-line-dashed"></div>').appendTo($searchList);
                                 }
                                 if(total>0){

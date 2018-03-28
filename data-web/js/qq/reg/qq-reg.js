@@ -3,32 +3,21 @@
  */
 "use strict"
 window.accept = {
-    title: 'EMAIL',
-    extensions: 'eml,',
-    mimeTypes: "message/rfc822"
+    title: 'TXT',
+    extensions: 'txt',
+    mimeTypes: "text/plain"
 };
 window.uplader = [
     // {createTime:"2018-03-24T15:09:58.645+0000",
     // folder:"文件",
-    // id:"088f8e46-0ec4-4b3a-8a90-d00663fc4569",
-    // name:"【电子发票】您收到一张新的电子发票[发票号码：08207151]-.eml",
-    // path:"/【电子发票】您收到一张新的电子发票[发票号码：08207151]-.eml",
+    // id:"69048397-a3f2-44ff-91b4-43f2b5a4b3ee",
+    // name:"reg_12344335.txt",
+    // path:"/eb94748f-9de5-4d63-9fcd-93290c27312b/cece1e59-3ad1-45fe-b527-ee475b29fb34-reg_12344335.txt",
     // size:82260,
     // suffix:"eml",
-    // suspId:"15bf33c0-8ec4-4161-ba0e-7887503066fd",
-    // suspName:"张洋洋",
-    // tags:"测试",
-    // type:"文件"},
-    // {createTime:"2018-03-24T15:09:58.645+0000",
-    // folder:"文件",
-    // id:"a9e01e5f-f677-478e-9a9a-f6065a3c7ef8",
-    // name:"现在开始试用Wijmo Enterprise产品- (1).eml",
-    // path:"/现在开始试用Wijmo Enterprise产品- (1).eml",
-    // size:82260,
-    // suffix:"eml",
-    // suspId:"15bf33c0-8ec4-4161-ba0e-7887503066fd",
-    // suspName:"张洋洋",
-    // tags:"测试",
+    // suspId:"eb94748f-9de5-4d63-9fcd-93290c27312b",
+    // suspName:"王五",
+    // tags:"注册",
     // type:"文件"},
     // {createTime:"2018-03-24T15:09:58.645+0000",
     //     folder:"文件",
@@ -54,19 +43,19 @@ window.uplader = [
     //     type:"文件"}
     ];
 
-var emailList=[];
+var list=[];
 
-var emailParser = (function () {
+var parser = (function () {
 
     var _init = function () {
-        $("#parserEml").on("click",_parserEml);
+        $("#parserEml").on("click",_parserFile);
     };
 
     var $tabs = $("#eml-tabs").empty();
     var $contents = $("#eml-content").empty();
 
 
-    var _parserEml = function () {
+    var _parserFile = function () {
         $("#eml-upload").hide();
         $("#eml-parser").show();
          $tabs.empty();
@@ -78,7 +67,7 @@ var emailParser = (function () {
     };
     var _parser = function (_data,i) {
         $.ajax.proxy({
-            url:"/api/admin/file/parser",
+            url:"/api/admin/qq/reg/parser",
             type:"post",
             dataType:"json",
             contentType:"application/json",
@@ -87,50 +76,29 @@ var emailParser = (function () {
             success:function (d) {
                 if(d.status===200){
                     console.log(d.data);
-                    var email = d.data;
-                    emailList[emailList.length] = email;
+                    var file = d.data;
+                    list[list.length] = file;
 
-                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+email['subject']+'</a></li>').appendTo($tabs);
+                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+file['name']+'['+file['qq']+']</a></li>').appendTo($tabs);
                     //$('<div id="tab-'+i+'" class="tab-pane '+(i===0?('active'):(' '))+'"><div class="panel-body">'+ email['from']+'</div></div>').appendTo($contents);
 
-                    var file = [];//附件
-                    var text = email.content;//文本
-                    if(email.fileList){
-                        for(var v = 0 ;v<email.fileList.length;v++){
-                            var cont = email.fileList[v];
-                            var contType=cont["type"];
-                            var fn = contType.split(";")[2].replace("name=","");
-                            var ty = "file";
-                            if(contType.indexOf("image")===0 || contType.indexOf("img")===0){
-                                ty = "image";
-                            }
-                            file[file.length]={"name":fn,"type":ty,"path":cont["path"]};
-                        }
-                    }
+
                     var data = {
-                        email: email,
-                        index: i,
-                        file:file,
-                        text:text
+                        file: file,
+                        index: i
                     };
                      var html = template('eml-template', data);
                     $contents.append(html);
-                    for(var jj = 0 ; jj<text.length ; jj++){
-                        var doc1 = window.frames["email-"+i+"-"+jj].document;
-                        doc1.write(text[jj]);
-                        setIframeHeight(document.getElementById("email-"+i+"-"+jj));
-                    }
-
                 }
                 else {
                     console.log(d);
-                    top.toastrMsg.error("文件"+_data['name']+"解析失败");
+                    top.toastrMsg.error("文件"+data['name']+"解析失败");
                 }
 
             },
             error:function (d) {
                 console.log(d);
-                top.toastrMsg.error("文件"+_data['name']+"解析失败");
+                top.toastrMsg.error("文件"+data['name']+"解析失败");
             }
         });
     }
@@ -139,7 +107,7 @@ var emailParser = (function () {
         init: _init
     };
 })();
-var emailSave = (function () {
+var Opt = (function () {
 
     var _init = function () {
         $("#restetEml").on("click",_restetEml);
@@ -151,16 +119,16 @@ var emailSave = (function () {
 
     var _saveEml = function () {
         var count = 0;
-        for(var i=0;i<emailList.length;i++) {
+        for(var i=0;i<list.length;i++) {
             if(_saveEmlOne(null,i+1)){
                 count++;
             }
         }
-        if(count === emailList.length){
-            toastrMsg.success("邮件保存成功");
+        if(count === list.length){
+            toastrMsg.success("文件保存成功");
             window.location.reload();
         }else {
-            toastrMsg.error("邮件保存失败");
+            toastrMsg.error("文件保存失败");
         }
     };
     var _saveEmlOne = function (o,indx) {
@@ -171,7 +139,7 @@ var emailSave = (function () {
         }else {
             indx = indx-1;//全部保存时加了1防止上面的if判断失败，所以要减1再使用
         }
-        var _data = emailList[indx];
+        var _data = list[indx];
         var up = window.uplader[indx];
 
         //没有保存过，
@@ -181,7 +149,7 @@ var emailSave = (function () {
             _data["suspName"] = up["suspName"];
             var id=_data["id"];
             $.ajax.proxy({
-                url:"/api/admin/email/save",
+                url:"/api/admin/qq/reg/save",
                 type:"post",
                 dataType:"json",
                 contentType:"application/json",
@@ -190,21 +158,22 @@ var emailSave = (function () {
                 success:function (d) {
                     if(d.status===200) {
                         console.log(d.data);
+                        _data["id"]=d.data["id"];
                         _data["save"]=true;//设置已保存标记
                         result = true;
-                        toastrMsg.success("邮件"+_data['subject']+"保存成功");
+                        toastrMsg.success("文件"+_data['name']+"保存成功");
                     }else {
                         console.log(d);
-                        toastrMsg.error("邮件"+_data['subject']+"保存失败");
+                        toastrMsg.error("文件"+_data['name']+"保存失败");
                     }
                 },
                 error:function (d) {
                     console.log(d);
-                    toastrMsg.error("邮件"+_data['subject']+"保存失败");
+                    toastrMsg.error("文件"+_data['name']+"保存失败");
                 }
             });
         }else {
-            toastrMsg.error("邮件"+_data['subject']+"已经保存过");
+            result = true;
         }
         return result;
     };
@@ -213,7 +182,7 @@ var emailSave = (function () {
         for(var i=0;i<window.uplader.length;i++){
             _deleteEmlOne(null,i+1);
         }
-        toastrMsg.success("邮件删除成功");
+        toastrMsg.success("文件删除成功");
         window.location.reload();
 
     };
@@ -226,36 +195,36 @@ var emailSave = (function () {
         }
         var count = 0;
         var _data = window.uplader[indx];
-        var _email = emailList[indx];
+        var _file = list[indx];
+        var id=_data["id"];
 
-
-        if(_email && _email["save"]){
-            //保存过
+        //保存过
+        if(_file && _file["save"]){
             $.ajax.proxy({
-                url:"/api/admin/email/delete",
+                url:"/api/admin/qq/reg/delete",
                 type:"post",
                 dataType:"json",
-                data:{id: _email["id"], fileId:_data["id"]},
+                data:{id: _file["id"], fileId:_data["id"]},
                 async:false,
                 success:function (d) {
                     if(d.status===200) {
                         console.log(d.data);
                         result = true;
-                        emailList[indx] =false;
-                        window.uplader[indx] =false;
-                        toastrMsg.success("邮件"+_data['subject']+"删除成功");
+                        window.uplader[indx] = false;
+                        list[indx] = false;
+                        toastrMsg.success("文件"+_data['name']+"删除成功");
+                        clearHtml();
                     }else {
-                        toastrMsg.error("邮件"+_data['subject']+"删除失败");
+                        toastrMsg.error("文件"+_data['name']+"删除失败");
                     }
 
                 },
                 error:function (d) {
                     console.log(d);
-                    toastrMsg.error("邮件"+_data['name']+"删除失败");
+                    toastrMsg.error("文件"+_data['name']+"删除失败");
                 }
             });
-        }else if(_email){
-            var id=_data["id"];
+        }else if(_file){//没有保存过
             $.ajax.proxy({
                 url:"/api/admin/file/delete",
                 type:"post",
@@ -266,23 +235,25 @@ var emailSave = (function () {
                     if(d.status===200) {
                         console.log(d.data);
                         result =true;
-                        emailList[indx] =false;
-                        window.uplader[indx] =false;
-                        toastrMsg.success("邮件"+_data['subject']+"删除成功");
+                        window.uplader[indx] = false;
+                        list[indx] = false;
+                        toastrMsg.success("文件"+_data['name']+"删除成功");
+                        clearHtml();
                     }else {
-                        toastrMsg.error("邮件"+_data['subject']+"删除失败");
+                        toastrMsg.error("文件"+_data['name']+"删除失败");
                     }
 
                 },
                 error:function (d) {
                     console.log(d);
-                    toastrMsg.error("邮件"+_data['name']+"删除失败");
+                    toastrMsg.error("文件"+_data['name']+"删除失败");
                 }
             });
         }
 
         return result;
     };
+
     var clearHtml = function () {
         //清除tabs
         $("#eml-tabs .active").remove();
@@ -291,23 +262,11 @@ var emailSave = (function () {
         $($("#eml-content .tab-pane").first()).addClass("active");
 
     }
+
     return {
         init: _init
     };
 })();
 
-emailParser.init();
-emailSave.init();
-
-
-
-
-
-function setIframeHeight(iframe) {
-    if (iframe) {
-        var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-        if (iframeWin.document.body) {
-            iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
-        }
-    }
-}
+parser.init();
+Opt.init();

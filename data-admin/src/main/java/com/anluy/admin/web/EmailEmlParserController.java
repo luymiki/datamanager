@@ -114,8 +114,9 @@ public class EmailEmlParserController {
                 if(f.isFile()){
                     f.delete();
                 }
+                attachmentService.delete(fileId);
             }
-            attachmentService.delete(fileId);
+
             elasticsearchRestClient.remove(id,"email");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setPath(request.getRequestURI()));
         } catch (Exception exception) {
