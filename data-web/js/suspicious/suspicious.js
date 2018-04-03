@@ -15,12 +15,7 @@
         };
 
         var params = {"indexName":"suspicious","conditions":[],"sort":"modify_time desc"};
-        var isDelete = {
-            "field": "is_delete",
-            "values": ["1"],
-            "searchType": 3,
-            "dataType":2
-        };
+
 
         var _initListTable = function(){
             $('#suspicious-table').bootstrapTable({
@@ -31,19 +26,20 @@
                 queryParamsType:'',
                 sidePagination:'server',
                 columns: [{field: 'xh',title: '序号',width:'50px'},
+                    {field: 'type',title: '类型',width:'100px',formatter:formatterType},
                     {field: 'name',title: '姓名',width:'100px'},
                     {field: 'gmsfzh',title: '身份证号',sortable:true},
-                    {field: 'qq',title: 'QQ'},
-                    {field: 'weixin',title: '微信'},
-                    {field: 'cft',title: '财付通'},
-                    {field: 'zfb',title: '支付宝'},
-                    {field: 'yhzh',title: '银行账号'},
-                    {field: 'phone',title: '手机号'},//,//formatter:formatterDate
-                    {field: 'imei',title: 'IMEI'},
-                    {field: 'glry',title: '关联人员'},
-                    {field: 'ly',title: '来源'},
+                    {field: 'qq',title: 'QQ',formatter:formatterList},
+                    {field: 'weixin',title: '微信',formatter:formatterList},
+                    {field: 'cft',title: '财付通',formatter:formatterList},
+                    {field: 'zfb',title: '支付宝',formatter:formatterList},
+                    {field: 'yhzh',title: '银行账号',formatter:formatterList},
+                    {field: 'phone',title: '手机号',formatter:formatterList},
+                    {field: 'imei',title: 'IMEI',formatter:formatterList},
+                    {field: 'imsi',title: 'IMSI',formatter:formatterList},
+                    {field: 'email',title: '电子邮箱'},
                     {field: 'gzjd',title: '工作进度'},
-                    {field: 'opt',title: '操作',width:'130px'}
+                    {field: 'opt',title: '操作',width:'110px'}
                 ],
                 ajax : function (request) {
                     var sort = "modify_time desc";
@@ -51,7 +47,7 @@
                         sort = request.data.sortName +" "+request.data.sortOrder;
                     }
                     params["sort"]=sort;
-                    params["conditions"]=[isDelete];
+                    params["conditions"]=[];
                     $.ajax({
                         url:"/api/eqa/query",
                         type:"post",
@@ -63,7 +59,9 @@
                                 var xh =  ((request.data.pageNumber-1)*request.data.pageSize)+1;
                                 for(var i= 0;i<data.length;i++){
                                     data[i]['xh'] = xh++;
-                                    data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs update' data-id='"+data[i]["id"]+"'>修改</div>&nbsp;" +
+                                    data[i]['opt'] = "<div class='btn btn-info btn-outline btn-xs gxr' data-id='"+data[i]["id"]+"'>关系人</div>&nbsp;" +
+                                        "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='"+data[i]["id"]+"'>提取</div>&nbsp;" +
+                                        "<div class='btn btn-primary btn-outline btn-xs update' data-id='"+data[i]["id"]+"'>修改</div>&nbsp;"+
                                         "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'>删除</div>";
                                 }
                                 request.success({
@@ -98,14 +96,21 @@
         };
 
 
-        var formatterDate = function (d){
-            var date = new Date(d);
-            var s = date.getFullYear()+"-"+formatterDateStr(date.getMonth()+1)+"-"+formatterDateStr(date.getDate())+
-                " "+formatterDateStr(date.getHours())+":"+formatterDateStr(date.getMinutes())+":"+formatterDateStr(date.getSeconds());
-            return s;
+        var formatterList = function (d){
+            if(d){
+                var s = "";
+                for(var i=0 ; i<d.length;i++){
+                    s+= d[i]+" ";
+                }
+                return s;
+            }
+            return d;
         };
-        var formatterDateStr = function (d){
-            return d<10?"0"+d:d;
+        var formatterType = function (d){
+            if(d && d ==="2"){
+                return "关系人";
+            }
+            return "可疑人";
         };
 
         var validator;
@@ -138,19 +143,6 @@
                     gzjd: {
                         required: true,
                         minlength: 2
-                    },
-                    qq: {
-                        required: false,
-                        minlength: 5,
-                        maxlength: 15,
-                        digits:true
-                    },
-                    yhzh: {
-                        digits:true
-                    },
-                    phone: {
-                        digits:true,
-                        maxlength: 11
                     }
                 },
                 messages: {
@@ -171,19 +163,6 @@
                     gzjd: {
                         required: icon + "请输入工作进度",
                         minlength: icon + "工作进度必须2个字符以上"
-                    },
-                    qq: {
-                        required: icon + "请输入QQ号码",
-                        minlength: icon + "QQ号码必须5个字符以上",
-                        maxlength:icon + "QQ号码必须15个字符以内",
-                        digits:icon + "请输入正确的QQ号码"
-                    },
-                    yhzh: {
-                        digits:icon + "请输入正确的银行账号"
-                    },
-                    phone: {
-                        maxlength:icon + "手机号码必须11个数字以内",
-                        digits:icon + "请输入正确的手机号码"
                     }
                 },
                 submitHandler:function(form){

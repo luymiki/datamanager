@@ -20,18 +20,27 @@ public class Suspicious extends BaseEntity<String> {
     private String weixin;
     private String cft;
     private String zfb;
-    private Integer yhzh;
-    private Integer phone;
+    private String yhzh;
+    private String phone;
     private String imei;
-    private String glry;
-    private String ly;
+    private String imsi;
+    private String email;
+    private String type;//类型 1：可疑人员 2：关系人
+
+    @JSONField(name = "susp_id")
+    private String suspId;//可疑人员id
+
+    @JSONField(name = "susp_name")
+    private String suspName;//可疑人员姓名
+    private String qkjj;//情况简介
+    private String other; //其他特征
+
     private String gzjd;
     @JSONField(name = "create_time",format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JSONField(name = "modify_time",format = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
-    @JSONField(name = "is_delete")
-    private String isDelete;
+
 
     public String getName() {
         return name;
@@ -91,19 +100,19 @@ public class Suspicious extends BaseEntity<String> {
         this.zfb = zfb;
     }
 
-    public Integer getYhzh() {
+    public String getYhzh() {
         return yhzh;
     }
 
-    public void setYhzh(Integer yhzh) {
+    public void setYhzh(String yhzh) {
         this.yhzh = yhzh;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -113,22 +122,6 @@ public class Suspicious extends BaseEntity<String> {
 
     public void setImei(String imei) {
         this.imei = imei;
-    }
-
-    public String getGlry() {
-        return glry;
-    }
-
-    public void setGlry(String glry) {
-        this.glry = glry;
-    }
-
-    public String getLy() {
-        return ly;
-    }
-
-    public void setLy(String ly) {
-        this.ly = ly;
     }
 
     public String getGzjd() {
@@ -155,11 +148,60 @@ public class Suspicious extends BaseEntity<String> {
         this.modifyTime = modifyTime;
     }
 
-    public String getIsDelete() {
-        return isDelete;
+    public String getImsi() {
+        return imsi;
     }
 
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
+    public void setImsi(String imsi) {
+        this.imsi = imsi;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSuspId() {
+        return suspId;
+    }
+
+    public void setSuspId(String suspId) {
+        this.suspId = suspId;
+    }
+
+    public String getSuspName() {
+        return suspName;
+    }
+
+    public void setSuspName(String suspName) {
+        this.suspName = suspName;
+    }
+
+    public String getQkjj() {
+        return qkjj;
+    }
+
+    public void setQkjj(String qkjj) {
+        this.qkjj = qkjj;
+    }
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
+
 }

@@ -15,7 +15,7 @@ jQuery(function() {
             $info = $statusBar.find('.info'),
 
             // 上传按钮
-            $upload = $wrap.find('.uploadBtn'),
+            $upload = $wrap.find('#uploadBtn'),
 
             // 没选择文件之前的内容。
             $placeHolder = $wrap.find('.placeholder'),
@@ -86,7 +86,7 @@ jQuery(function() {
             server: '/api/admin/file/upload',
             fileNumLimit: 30,//添加文件的总个数
             fileSizeLimit: 150 * 1024 * 1024,    // 150 M
-            fileSingleSizeLimit: 5 * 1024 * 1024    // 2 M
+            fileSingleSizeLimit: 5 * 1024 * 1024    // 5 M
         });
 
         // 添加“添加文件”的按钮，
@@ -255,23 +255,23 @@ jQuery(function() {
             var text = '', stats;
 
             if ( state === 'ready' ) {
-                text = '选中' + fileCount + '个文件，共' +
+                text = '选中' + fileCount + '张图片，共' +
                     WebUploader.formatSize( fileSize ) + '。';
             } else if ( state === 'confirm' ) {
                 stats = uploader.getStats();
                 if ( stats.uploadFailNum ) {
-                    text = '已成功上传' + stats.successNum+ '文件至文件夹'+$("#image-folder").val()+'，'+
-                        stats.uploadFailNum + '个文件上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
+                    text = '已成功上传' + stats.successNum+ '张图片至文件夹'+$("#image-folder").val()+'，'+
+                        stats.uploadFailNum + '张图片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
                 }
 
             } else {
                 stats = uploader.getStats();
-                text = '共' + fileCount + '个（' +
+                text = '共' + fileCount + '张（' +
                     WebUploader.formatSize( fileSize )  +
-                    '），已上传' + stats.successNum + '个';
+                    '），已上传' + stats.successNum + '张';
 
                 if ( stats.uploadFailNum ) {
-                    text += '，失败' + stats.uploadFailNum + '个';
+                    text += '，失败' + stats.uploadFailNum + '张';
                 }
             }
 
@@ -362,7 +362,9 @@ jQuery(function() {
          * @param response
          */
         uploader.onUploadSuccess = function( file, response ) {
-
+            if(window.uplader && response.status===200){
+                window.uplader[window.uplader.length] = response.data;
+            }
         };
         /**
          * 所有文件上传完成之后
@@ -372,6 +374,7 @@ jQuery(function() {
         uploader.onUploadFinished = function() {
             $( '#filePicker2' ).removeClass( 'element-invisible');
             $upload.text( '继续上传' ).removeClass( 'disabled' );
+            $("#parserEml").show();
         };
 
         uploader.onUploadProgress = function( file, percentage ) {
@@ -438,7 +441,21 @@ jQuery(function() {
                 return false;
             }
             if(!suspicious_list.selected.suspName || !suspicious_list.selected.suspId){
-                toastrMsg.error("请选择嫌疑人信息");
+                toastrMsg.error("请选择人员信息");
+                return false;
+            }
+            if(!$("#image-tags").val()){
+                toastrMsg.error("请填写标签");
+                return false;
+            }
+            if(!$("#image-folder").val()){
+                toastrMsg.error("请选择文件夹");
+                return false;
+            }
+            if(window.upladerCHecked){
+                if(!window.upladerCHecked()){
+                    return false;
+                }
             }
             if ( state === 'ready' ) {
                 uploader.upload();

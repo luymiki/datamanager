@@ -84,7 +84,7 @@ jQuery(function() {
             accept: window.accept||null,
             chunked: false,//禁止分片上传
             server: '/api/admin/file/upload',
-            fileNumLimit: 30,//添加文件的总个数
+            fileNumLimit: 10,//添加文件的总个数
             fileSizeLimit: 2048 * 1024 * 1024,    // 2G
             fileSingleSizeLimit: 2048 * 1024 * 1024    // 2G
         });
@@ -257,23 +257,23 @@ jQuery(function() {
             var text = '', stats;
 
             if ( state === 'ready' ) {
-                text = '选中' + fileCount + '张图片，共' +
+                text = '选中' + fileCount + '个文件，共' +
                     WebUploader.formatSize( fileSize ) + '。';
             } else if ( state === 'confirm' ) {
                 stats = uploader.getStats();
                 if ( stats.uploadFailNum ) {
-                    text = '已成功上传' + stats.successNum+ '张照片至XX相册，'+
-                        stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
+                    text = '已成功上传' + stats.successNum+ '个文件至文件夹'+$("#image-folder").val()+'，'+
+                        stats.uploadFailNum + '个文件上传失败，<a class="retry" href="#">重新上传</a>失败文件或<a class="ignore" href="#">忽略</a>'
                 }
 
             } else {
                 stats = uploader.getStats();
-                text = '共' + fileCount + '张（' +
+                text = '共' + fileCount + '个（' +
                     WebUploader.formatSize( fileSize )  +
-                    '），已上传' + stats.successNum + '张';
+                    '），已上传' + stats.successNum + '个';
 
                 if ( stats.uploadFailNum ) {
-                    text += '，失败' + stats.uploadFailNum + '张';
+                    text += '，失败' + stats.uploadFailNum + '个';
                 }
             }
 
@@ -443,7 +443,7 @@ jQuery(function() {
                 return false;
             }
             if(!suspicious_list.selected.suspName || !suspicious_list.selected.suspId){
-                toastrMsg.error("请选择嫌疑人信息");
+                toastrMsg.error("请选择人员信息");
                 return false;
             }
             if(!$("#file-tags").val()){
@@ -455,6 +455,11 @@ jQuery(function() {
                 return false;
             }
 
+            if(window.upladerCHecked){
+                if(!window.upladerCHecked()){
+                    return false;
+                }
+            }
             if ( state === 'ready' ) {
                 uploader.upload();
             } else if ( state === 'paused' ) {

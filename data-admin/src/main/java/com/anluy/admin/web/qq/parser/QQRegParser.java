@@ -75,7 +75,7 @@ public class QQRegParser {
                 } else if (line.startsWith("创建的群：")) {
                     cjqIndex = i + 1;//好友信息的行下标
                     continue;
-                } else if (line.startsWith("加入的群：")) {
+                } else if (line.endsWith("加入的群：")) {
                     jrqIndex = i + 1;//好友信息的行下标
                     continue;
                 }

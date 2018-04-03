@@ -13,29 +13,35 @@
         <result column="yhzh" property="yhzh" jdbcType="INTEGER" />
         <result column="phone" property="phone" jdbcType="INTEGER" />
         <result column="imei" property="imei" jdbcType="VARCHAR" />
-        <result column="glry" property="glry" jdbcType="VARCHAR" />
-        <result column="ly" property="ly" jdbcType="VARCHAR" />
+        <result column="imsi" property="imsi" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="susp_id" property="suspId" jdbcType="VARCHAR" />
+        <result column="susp_name" property="suspName" jdbcType="VARCHAR" />
+        <result column="qkjj" property="qkjj" jdbcType="VARCHAR" />
+        <result column="other" property="other" jdbcType="VARCHAR" />
         <result column="gzjd" property="gzjd" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="DATE" />
         <result column="modify_time" property="modifyTime" jdbcType="DATE" />
-        <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+
+
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, name, gmsfzh, qq, weixin,cft,zfb,yhzh,phone,imei,glry,ly,gzjd,create_time,modify_time,is_delete
+        id, name, gmsfzh, qq, weixin,cft,zfb,yhzh,phone,imei,imsi,email,type,susp_id,susp_name,qkjj,other,gzjd,create_time,modify_time
     </sql>
 
     <select id="getAll" resultMap="BaseResultMap"  >
         SELECT
         <include refid="Base_Column_List" />
-        FROM suspicious where is_delete ='0'
+        FROM suspicious
     </select>
 
     <select id="get" parameterType="java.lang.String" resultMap="BaseResultMap" >
         SELECT
         <include refid="Base_Column_List" />
         FROM suspicious
-        WHERE id = #{id} and is_delete ='0'
+        WHERE id = #{id}
     </select>
 
     <insert id="save" parameterType="com.anluy.admin.entity.Suspicious" >
@@ -43,7 +49,7 @@
         suspicious
         (<include refid="Base_Column_List" />)
         VALUES
-        (#{id}, #{name}, #{gmsfzh}, #{qq}, #{weixin},#{cft},#{zfb},#{yhzh},#{phone},#{imei},#{glry},#{ly},#{gzjd},#{createTime},#{modifyTime},#{isDelete})
+        (#{id}, #{name}, #{gmsfzh}, #{qq}, #{weixin},#{cft},#{zfb},#{yhzh},#{phone},#{imei},#{imsi},#{email},#{type},#{suspId},#{suspName},#{qkjj},#{other},#{gzjd},#{createTime},#{modifyTime})
     </insert>
 
     <update id="update" parameterType="com.anluy.admin.entity.Suspicious" >
@@ -59,12 +65,16 @@
         <if test="yhzh != null">yhzh = #{yhzh},</if>
         <if test="phone != null">phone = #{phone},</if>
         <if test="imei != null">imei = #{imei},</if>
-        <if test="glry != null">glry = #{glry},</if>
-        <if test="ly != null">ly = #{ly},</if>
+        <if test="imsi != null">imsi = #{imsi},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="type != null">type = #{type},</if>
+        <if test="suspId != null">susp_id = #{suspId},</if>
+        <if test="suspName != null">susp_name = #{suspName},</if>
+        <if test="qkjj != null">qkjj = #{qkjj},</if>
+        <if test="other != null">other = #{other},</if>
         <if test="gzjd != null">gzjd = #{gzjd},</if>
         <if test="createTime != null">create_Time = #{createTime},</if>
         <if test="modifyTime != null">modify_Time = #{modifyTime},</if>
-        <if test="isDelete != null">is_Delete = #{isDelete},</if>
         id = #{id}
         WHERE
         id = #{id}

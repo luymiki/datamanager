@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Spliterators;
 
 /**
  * 功能说明：嫌疑人信息管理
@@ -35,6 +36,17 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
                 case "create_time":
                 case "modify_time": {
                     return DateFormatUtils.format((Date) value, "yyyy-MM-dd HH:mm:ss");
+                }
+                case "qq":
+                case "weixin":
+                case "cft":
+                case "zfb":
+                case "yhzh":
+                case "phone":
+                case "imei":
+                case "glry": {
+                    String [] ss = value.toString().split(" |,|，");
+                    return ss;
                 }
             }
         }

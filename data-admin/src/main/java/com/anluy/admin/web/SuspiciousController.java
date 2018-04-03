@@ -51,14 +51,12 @@ public class SuspiciousController {
             if(StringUtils.isBlank(suspicious.getId())){
                 suspicious.setCreateTime(new Date());
                 suspicious.setModifyTime(new Date());
-                suspicious.setIsDelete("0");
                 suspiciousService.save(suspicious);
                 return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(suspicious).setPath(request.getRequestURI()));
             }else {//修改
                 Suspicious susp = suspiciousService.get(suspicious.getId());
                 suspicious.setCreateTime(susp.getCreateTime());
                 suspicious.setModifyTime(new Date());
-                suspicious.setIsDelete("0");
                 suspiciousService.update(suspicious);
                 return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("修改成功").setData(suspicious).setPath(request.getRequestURI()));
             }
@@ -79,10 +77,27 @@ public class SuspiciousController {
             if(suspicious == null || StringUtils.isBlank(suspicious.getId()) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"待删除的数据ID为空"));
             }
-//            suspicious = suspiciousService.get(suspicious.getId());
-//            suspicious.setModifyTime(new Date());
-//            suspicious.setIsDelete("1");
             suspiciousService.delete(suspicious.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setData(suspicious).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("删除失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+        }
+    }
+    /**
+     * 分析可疑人信息接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "分析可疑人信息", response = Result.class)
+    @RequestMapping(value = "/analyze",method = {RequestMethod.GET,RequestMethod.POST})
+    public Object analyze(HttpServletRequest request,Suspicious suspicious) {
+        try {
+            if(suspicious == null || StringUtils.isBlank(suspicious.getId()) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"待删除的数据ID为空"));
+            }
+
+            //suspiciousService.delete(suspicious.getId());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setData(suspicious).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("删除失败:" + exception.getMessage(), exception);

@@ -14,7 +14,7 @@ var suspicious_list = (function () {
     };
     var params = {
         "indexName": "suspicious",
-        "conditions": [{"field": "is_delete", "values": ["1"], "searchType": 3, "dataType": 2}],
+        "conditions": [],
         "sort": "modify_time desc"
     };
 
@@ -31,10 +31,10 @@ var suspicious_list = (function () {
                     if(data && data.length>0){
 
                         var $list= $("#suspicious-list").empty();
-                        $('<option value="">请选择嫌疑人</option>').appendTo($list);
+                        $('<option value="">请选择人员</option>').appendTo($list);
                         for(var i=0; i<data.length;i++){
                             var f = data[i];
-                            $("<option value='"+f["name"]+"!!"+f["id"]+"' data-id='"+f["id"]+"'>"+f["name"]+" | "+f["gmsfzh"]+"</option>").appendTo($list);
+                            $("<option value='"+f["name"]+"!!"+f["id"]+"' data-id='"+f["id"]+"'>"+f["name"]+" | "+f["gmsfzh"]+" | "+formatterType(f["type"])+"</option>").appendTo($list);
                         }
                         $("#suspicious-list").chosen({}).change(function(){
                             var v = $(this).val();
@@ -68,7 +68,12 @@ var suspicious_list = (function () {
         // });
     };
 
-
+    var formatterType = function (d){
+        if(d && d ==="2"){
+            return "关系人";
+        }
+        return "可疑人";
+    };
     return {
         init: _init,
         selected: selected

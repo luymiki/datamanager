@@ -32,7 +32,7 @@
                 queryParamsType:'',
                 sidePagination:'server',
                 columns: [{field: 'xh',title: '序号',width:'50px'},
-                    {field: 'susp_name',title: '嫌疑人姓名',sortable:true,width:'100px'},
+                    {field: 'susp_name',title: '姓名',sortable:true,width:'100px'},
                     {field: 'to',title: '接收人',sortable:true},
                     {field: 'to_address',title: '接收地址',sortable:true},
                     {field: 'from',title: '发送人'},

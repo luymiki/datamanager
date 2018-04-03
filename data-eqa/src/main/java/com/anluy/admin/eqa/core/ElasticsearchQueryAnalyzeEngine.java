@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -365,15 +366,20 @@ public class ElasticsearchQueryAnalyzeEngine {
      * @return
      * @throws IOException
      */
-    public Map fulltext(String keyword, Integer pageNum, Integer pageSize) throws IOException {
+    public Map fulltext(String keyword, Integer pageNum, Integer pageSize,String indexName) throws IOException {
         JSONObject dsl = createDsl(pageNum, pageSize);
         JSONObject query = new JSONObject();
         JSONObject queryString = new JSONObject();
-        queryString.put("query",keyword);
+        StringBuffer sb = new StringBuffer();
+        String[] ss = keyword.split(" |,|，");
+        for (String k :ss             ) {
+            sb.append("*").append(k).append("* ");
+        }
+        queryString.put("query",sb.toString());
         query.put("query_string",queryString);
         dsl.put("query", query);
         LOGGER.info(dsl.toJSONString());
-        Map result = elasticsearchRestClient.query(dsl.toJSONString(), null);
+        Map result = elasticsearchRestClient.query(dsl.toJSONString(), indexName);
         return  this.setMetaList(result);
     }
 

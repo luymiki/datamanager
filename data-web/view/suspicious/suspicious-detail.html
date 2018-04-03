@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <title>嫌疑人信息 | 数据管理系统</title>
+    <title>人员信息 | 数据管理系统</title>
 
-    <meta name="keywords" content="嫌疑人信息 | 数据管理系统">
-    <meta name="description" content="嫌疑人信息 | 数据管理系统">
+    <meta name="keywords" content="人员信息 | 数据管理系统">
+    <meta name="description" content="人员信息 | 数据管理系统">
 
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
@@ -34,10 +34,21 @@
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <h3>
-                                            <span class="font-noraml">QQ号码： </span>{{file.qq}}
+                                            <span class="font-noraml">类型： </span>{{file.type}}
+                                        </h3>
+                                        <h3>
+                                            <span class="font-noraml">姓名： </span>{{file.name}}
                                         </h3>
                                         <h5>
-                                            <span class="font-noraml">昵称： </span>{{file.name}}
+                                            <span class="font-noraml">身份证号： </span>{{file.gmsfzh}}
+                                        </h5>
+                                        {{if file.susp_name}}
+                                        <h5>
+                                            <span class="font-noraml">关联可疑人员： </span>{{file.susp_name}}
+                                        </h5>
+                                        {{/if}}
+                                        <h5>
+                                            <span class="font-noraml">工作进度： </span>{{file.gzjd}}
                                         </h5>
                                     </div>
                                 </div>
@@ -45,29 +56,11 @@
 
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
-                                        <h5><span class="font-noraml">国家： </span>{{file.gj}}</h5>
-                                        <h5><span class="font-noraml">省份： </span>{{file.sf}}</h5>
-                                        <h5><span class="font-noraml">城市： </span>{{file.cs}}</h5>
-                                        <h5><span class="font-noraml">邮编： </span>{{file.yzbm}}</h5>
-                                        <h5><span class="font-noraml">地址： </span>{{file.dz}}</h5>
-                                        <h5><span class="font-noraml">电话： </span>{{file.dh}}</h5>
-                                        <h5><span class="font-noraml">生日： </span>{{file.csrq}}</h5>
-                                        <h5><span class="font-noraml">性别： </span>{{file.xb}}</h5>
-                                        <h5><span class="font-noraml">真实姓名： </span>{{file.xm}}</h5>
-                                        <h5><span class="font-noraml">Email： </span>{{file.email}}</h5>
-                                        <h5><span class="font-noraml">主页： </span>{{file.home}}</h5>
-                                        <h5><span class="font-noraml">毕业院校： </span>{{file.bycs}}</h5>
-                                        <h5><span class="font-noraml">星座： </span>{{file.xz}}</h5>
-                                        <h5><span class="font-noraml">注册时间： </span>{{file.zcsj}}</h5>
-                                    </div>
-                                </div>
-                                <div class="feed-activity-list">
-                                    <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>QQ好友</strong>：
+                                            <strong>QQ</strong>：
                                             <br>
                                             <small class="text-muted">
-                                                {{each file.qqhy as ff i}}
+                                                {{each file.qq as ff i}}
                                                 {{ff}}&nbsp;
                                                 {{/each}}
                                             </small>
@@ -77,10 +70,10 @@
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>创建的群</strong>：
+                                            <strong>微信</strong>：
                                             <br>
                                             <small class="text-muted">
-                                                {{each file.cjqh as ff i}}
+                                                {{each file.weixin as ff i}}
                                                 {{ff}}&nbsp;
                                                 {{/each}}
                                             </small>
@@ -90,17 +83,105 @@
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>加入的群</strong>：
+                                            <strong>财付通</strong>：
                                             <br>
                                             <small class="text-muted">
-                                                {{each file.jrqh as ff i}}
+                                                {{each file.cft as ff i}}
                                                 {{ff}}&nbsp;
                                                 {{/each}}
                                             </small>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>支付宝</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.zfb as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>银行账号</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.yhzh as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>手机号</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.phone as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>IMEI</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.imei as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>IMSI</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.imsi as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>电子邮箱</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.email as ff i}}
+                                                {{ff}}&nbsp;
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>情况简介</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{ file.qkjj}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -119,7 +200,7 @@
 <script src="/js/msg.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/plugins/art-template/template.js"></script>
-<script src="/js/qq/reg/qq-reg-detail.js"></script>
+<script src="/js/suspicious/suspicious-detail.js"></script>
 
 </body>
 

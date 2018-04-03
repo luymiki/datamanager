@@ -10,6 +10,14 @@
             $("#search-list ").on("click",".search-result",function(){
                 var index = $(this).attr("data-index");
                 switch (index){
+                    case "qqloginip":{
+                        top.contabs.addMenuItem("/view/qq/loginip/qq-loginip-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        break;
+                    }
+                    case "qqzone":{
+                        top.contabs.addMenuItem("/view/qq/qzone/qq-qzone-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        break;
+                    }
                     case "qqreginfo":{
                         top.contabs.addMenuItem("/view/qq/reg/qq-reg-detail.html?id="+$(this).attr("data-id"),'查看信息');
                         break;
@@ -23,7 +31,7 @@
                         break;
                     }
                     case "attachment":{
-
+                        top.contabs.addMenuItem("/view/file/file-detail.html?id="+$(this).attr("data-id"),'文件信息');
                         break;
                     }
                 }
@@ -37,10 +45,14 @@
         var _pagination;
         var _pagination_reload=false;
         var _search = function (page) {
+            if(!page){
+                _pagination_reload = true;
+            }
             page = page|| _pageNum;
 
             var val = $("#search").val();
             if(val !== "" ){
+                var vals = val.split(" ");
                 $.ajax.proxy({
                     url:"/api/eqa/fulltext",
                     type:"post",
@@ -73,8 +85,12 @@
                                             break;
                                         }
                                     }
+                                    for(var kk = 0;kk <vals.length; kk++){
+                                        str = str.replace(vals[kk],"<code>"+vals[kk]+"</code>");
+                                    }
+                                    str.replace(",",", ");
                                     var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="'+f["id"]+'" data-index="'+f["_index"]+'"></div>').appendTo($searchList);
-                                    $('<h4 class="search-info" ></h4>').appendTo($sr).html(str);
+                                    $('<div class="search-info" ></div>').appendTo($sr).html(str);
                                     $('<div class="hr-line-dashed"></div>').appendTo($searchList);
                                 }
                                 if(total>0){

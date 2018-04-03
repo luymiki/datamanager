@@ -136,7 +136,7 @@ $(function() {
                 url:"/api/eqa/aggs",
                 type:"post",
                 dataType:"json",
-                data:{"pageNum":1,"pageSize":10,"paramsStr":JSON.stringify(tagParams)},
+                data:{"pageNum":1,"pageSize":1000,"paramsStr":JSON.stringify(tagParams)},
                 async:true,
                 success:function (d) {
                     console.log(d);
@@ -218,7 +218,7 @@ $(function() {
         };
         var _btnEvent = function () {
             $("#file-list").on("click",".file-name .detail",function () {
-                alert(1);
+                top.contabs.addMenuItem("/view/file/file-detail.html?id="+$(this).attr("data-id"),'文件信息');
                 return false;
             });
             $("#file-list").on("click",".file-name .delete",function () {

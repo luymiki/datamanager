@@ -26,7 +26,7 @@
                 queryParamsType:'',
                 sidePagination:'server',
                 columns: [{field: 'xh',title: '序号',width:'50px'},
-                    {field: 'susp_name',title: '嫌疑人姓名',sortable:true,width:'100px'},
+                    {field: 'susp_name',title: '姓名',sortable:true,width:'100px'},
                     {field: 'qq',title: 'QQ号',sortable:true},
                     {field: 'name',title: '昵称',sortable:true},
                     {field: 'xm',title: '真实姓名'},
