@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class FileManagerConfig {
 
     private String uploadDir;
+    private String backDir;
 
     public String getUploadDir() {
         return uploadDir;
@@ -20,5 +21,13 @@ public class FileManagerConfig {
 
     public void setUploadDir(String uploadDir) {
         this.uploadDir = uploadDir;
+    }
+
+    public String getBackDir() {
+        return backDir;
+    }
+
+    public void setBackDir(String backDir) {
+        this.backDir = backDir;
     }
 }

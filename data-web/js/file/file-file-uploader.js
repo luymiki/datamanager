@@ -84,7 +84,7 @@ jQuery(function() {
             accept: window.accept||null,
             chunked: false,//禁止分片上传
             server: '/api/admin/file/upload',
-            fileNumLimit: 10,//添加文件的总个数
+            fileNumLimit: window.fileNumLimit || 10,//添加文件的总个数
             fileSizeLimit: 2048 * 1024 * 1024,    // 2G
             fileSingleSizeLimit: 2048 * 1024 * 1024    // 2G
         });
@@ -107,6 +107,8 @@ jQuery(function() {
                     return '文件重复';
                 case 'q_type_denied':
                     return '不支持的文件格式，请重新选择';
+                case 'q_exceed_num_limit':
+                    return '超过最大支持文件数';
                 default:
                     return '上传失败，请重试';
             }

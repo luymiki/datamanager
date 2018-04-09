@@ -19,13 +19,14 @@
                 "field": "id",
                 "values": [id],
                 "searchType": 1,
-                "dataType":1,
+                "dataType":2,
             }];
             $.ajax({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",
                 data:{"pageNum":1,"pageSize":1,"paramsStr":JSON.stringify(params)},
+                async:false,
                 success : function (d) {
                     console.log(d);
                     if(d.status===200){

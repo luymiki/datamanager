@@ -10,18 +10,53 @@
             $("#search-list ").on("click",".search-result",function(){
                 var index = $(this).attr("data-index");
                 switch (index){
+                    case "xndw_wsk":{
+                        top.contabs.addMenuItem("/view/xndw/wsk/xndw-wsk-detail.html?id="+$(this).attr("data-id"),'查看WSK定位信息');
+                        break;
+                    }
+                    case "xndw_sx":{
+                        top.contabs.addMenuItem("/view/xndw/sx/xndw-sx-detail.html?id="+$(this).attr("data-id"),'查看神行定位信息');
+                        break;
+                    }
+                    case "huaduan_list":{
+                        top.contabs.addMenuItem("/view/huaduan/huadan-liushui-list.html?id="+$(this).attr("data-infoid"),'查看话单信息');
+                        break;
+                    }
+                    case "huaduan":{
+                        top.contabs.addMenuItem("/view/huaduan/huadan-liushui-list.html?id="+$(this).attr("data-id"),'查看话单信息');
+                        break;
+                    }
+                    case "cfttrades":{
+                        top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-list.html?id="+$(this).attr("data-infoid"),'查看财付通流水信息');
+                        break;
+                    }
+                    case "cftreginfo":{
+                        top.contabs.addMenuItem("/view/cft/cft-reg-detail.html?id="+$(this).attr("data-id"),'查看财付通信息');
+                        break;
+                    }
+                    case "wxloginip":
+                    case "wxqun":
+                    case "wxlxr":{
+                        top.contabs.addMenuItem("/view/weixin/weixin-reg-detail.html?id="+$(this).attr("data-infoid"),'查看微信信息');
+                        break;
+                    }
+                    case "wxreginfo":{
+                        top.contabs.addMenuItem("/view/weixin/weixin-reg-detail.html?id="+$(this).attr("data-id"),'查看微信注册信息');
+                        break;
+                    }
                     case "qqloginip":{
-                        top.contabs.addMenuItem("/view/qq/loginip/qq-loginip-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        top.contabs.addMenuItem("/view/qq/loginip/qq-loginip-detail.html?id="+$(this).attr("data-id"),'查看QQ登录IP信息');
                         break;
                     }
                     case "qqzone":{
-                        top.contabs.addMenuItem("/view/qq/qzone/qq-qzone-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        top.contabs.addMenuItem("/view/qq/qzone/qq-qzone-detail.html?id="+$(this).attr("data-id"),'查看QQ空间信息');
                         break;
                     }
                     case "qqreginfo":{
-                        top.contabs.addMenuItem("/view/qq/reg/qq-reg-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                        top.contabs.addMenuItem("/view/qq/reg/qq-reg-detail.html?id="+$(this).attr("data-id"),'查看QQ注册信息');
                         break;
                     }
+
                     case "email":{
                         top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id="+$(this).attr("data-id"),'查看邮件');
                         break;
@@ -89,7 +124,7 @@
                                         str = str.replace(vals[kk],"<code>"+vals[kk]+"</code>");
                                     }
                                     str.replace(",",", ");
-                                    var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="'+f["id"]+'" data-index="'+f["_index"]+'"></div>').appendTo($searchList);
+                                    var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="'+f["id"]+'" data-index="'+f["_index"]+'"  data-infoid="'+(f["info_id"] || f["cft_id"] || f["hd_id"])+'"></div>').appendTo($searchList);
                                     $('<div class="search-info" ></div>').appendTo($sr).html(str);
                                     $('<div class="hr-line-dashed"></div>').appendTo($searchList);
                                 }

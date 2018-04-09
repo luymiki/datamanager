@@ -78,7 +78,7 @@ var emailParser = (function () {
     };
     var _parser = function (_data,i) {
         $.ajax.proxy({
-            url:"/api/admin/file/parser",
+            url:"/api/admin/email/parser",
             type:"post",
             dataType:"json",
             contentType:"application/json",
@@ -156,12 +156,6 @@ var emailSave = (function () {
                 count++;
             }
         }
-        if(count === emailList.length){
-            toastrMsg.success("邮件保存成功");
-            window.location.reload();
-        }else {
-            toastrMsg.error("邮件保存失败");
-        }
     };
     var _saveEmlOne = function (o,indx) {
         var result = false;
@@ -209,7 +203,6 @@ var emailSave = (function () {
         return result;
     };
     var _restetEml = function () {
-        var count = 0;
         for(var i=0;i<window.uplader.length;i++){
             _deleteEmlOne(null,i+1);
         }
@@ -244,6 +237,7 @@ var emailSave = (function () {
                         emailList[indx] =false;
                         window.uplader[indx] =false;
                         toastrMsg.success("邮件"+_data['subject']+"删除成功");
+                        clearHtml();
                     }else {
                         toastrMsg.error("邮件"+_data['subject']+"删除失败");
                     }
@@ -269,6 +263,7 @@ var emailSave = (function () {
                         emailList[indx] =false;
                         window.uplader[indx] =false;
                         toastrMsg.success("邮件"+_data['subject']+"删除成功");
+                        clearHtml();
                     }else {
                         toastrMsg.error("邮件"+_data['subject']+"删除失败");
                     }

@@ -9,14 +9,14 @@ window.accept = {
 };
 window.uplader = [];
 var list=[];
-window.upladerCHecked = function () {
-    var qq = $.trim($("#qq-num").val());
-    if(qq===""){
-        toastrMsg.error("请选择或填写QQ号码");
-        return false;
-    }
-    return true;
-}
+// window.upladerCHecked = function () {
+//     var qq = $.trim($("#qq-num").val());
+//     if(qq===""){
+//         toastrMsg.error("请选择或填写QQ号码");
+//         return false;
+//     }
+//     return true;
+// }
 
 
 var parser = (function () {
@@ -52,7 +52,7 @@ var parser = (function () {
                     console.log(d.data);
                     var file = d.data;
                     list[list.length] = file;
-                    file["qq"] = $.trim($("#qq-num").val());
+                    //file["qq"] = $.trim($("#qq-num").val());
                     $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+_data['name']+'</a></li>').appendTo($tabs);
                     //$('<div id="tab-'+i+'" class="tab-pane '+(i===0?('active'):(' '))+'"><div class="panel-body">'+ email['from']+'</div></div>').appendTo($contents);
                     var data = {
@@ -95,12 +95,7 @@ var Opt = (function () {
                 count++;
             }
         }
-        if(count === list.length){
-            toastrMsg.success("文件保存成功");
-            window.location.reload();
-        }else {
-            toastrMsg.error("文件保存失败");
-        }
+
     };
     var _saveEmlOne = function (o,indx) {
         var result = false;
@@ -119,14 +114,14 @@ var Opt = (function () {
             _data["suspId"] = up["suspId"];
             _data["suspName"] = up["suspName"];
             var id=_data["id"];
-            toastrMsg.info("数据量比较大，正在保存中，请等待提示信息。。");
+            //toastrMsg.info("数据量比较大，正在保存中，请等待提示信息。。");
             $.ajax.proxy({
                 url:"/api/admin/qq/loginip/save",
                 type:"post",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(_data),
-                async:true,
+                async:false,
                 success:function (d) {
                     if(d.status===200) {
                         console.log(d.data);

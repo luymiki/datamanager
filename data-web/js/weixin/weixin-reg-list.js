@@ -65,6 +65,14 @@
                             {
                                 "groupId":"1",
                                 "groupType":"should",
+                                "field": "weixin",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"1",
+                                "groupType":"should",
                                 "field": "name",
                                 "values": [_search],
                                 "searchType": 2,

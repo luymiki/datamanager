@@ -70,12 +70,12 @@ var Opt = (function () {
                 "field": "susp_id",
                 "values": [suspicious_list.selected.suspId],
                 "searchType": 1,
-                "dataType":1,
+                "dataType":2,
             },{
                 "field": "qq",
                 "values": [$("#qq-num").val()],
                 "searchType": 1,
-                "dataType":1,
+                "dataType":2,
             }
             ];
             $.ajax({
@@ -145,7 +145,8 @@ var Opt = (function () {
                 suspName:qzone["susp_name"],
                 qq:qzone["qq"],
                 fileId:fileIds,
-                pic:fileIds.length
+                pic:fileIds.length,
+                tags:$("#image-tags").val()
             };
         }
 

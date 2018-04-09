@@ -28,6 +28,8 @@ public class QQZone extends BaseEntity<String> {
     @JSONField(name = "susp_name")
     private String suspName;
 
+    private String tags;//标签
+
     public String getQq() {
         return qq;
     }
@@ -74,5 +76,13 @@ public class QQZone extends BaseEntity<String> {
 
     public void setSuspName(String suspName) {
         this.suspName = suspName;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

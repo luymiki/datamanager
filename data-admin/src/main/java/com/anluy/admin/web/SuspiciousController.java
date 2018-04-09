@@ -94,13 +94,12 @@ public class SuspiciousController {
     public Object analyze(HttpServletRequest request,Suspicious suspicious) {
         try {
             if(suspicious == null || StringUtils.isBlank(suspicious.getId()) ){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"待删除的数据ID为空"));
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"待提取的数据ID为空"));
             }
-
-            //suspiciousService.delete(suspicious.getId());
-            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setData(suspicious).setPath(request.getRequestURI()));
+            suspiciousService.analyze(suspicious.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("提取成功").setData(suspicious).setPath(request.getRequestURI()));
         } catch (Exception exception) {
-            LOGGER.error("删除失败:" + exception.getMessage(), exception);
+            LOGGER.error("提取失败:" + exception.getMessage(), exception);
             return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
         }
     }

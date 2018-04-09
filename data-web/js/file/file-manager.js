@@ -27,16 +27,7 @@ $(function() {
                     "field": "folder",
                     "values": [_folder],
                     "searchType": 1,
-                    "dataType":1,
-                };
-                con[con.length]=v;
-            }
-            if(_type){
-                var v = {
-                    "field": "folder",
-                    "values": [_type],
-                    "searchType": 1,
-                    "dataType":1,
+                    "dataType":2,
                 };
                 con[con.length]=v;
             }

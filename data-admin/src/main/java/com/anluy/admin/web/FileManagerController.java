@@ -128,53 +128,6 @@ public class FileManagerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
-    /**
-     * 解析
-     *
-     * @return
-     */
-    @ApiOperation(value = "解析文件", response = Result.class)
-    @ApiResponses(value = {@ApiResponse(code = 500, message = "解析文件失败")})//错误码说明
-    @RequestMapping(value = "/parser", method = RequestMethod.POST)
-    public @ResponseBody Object parser(HttpServletRequest request, @RequestBody  Attachment attachment) {
-        try {
-            if(attachment == null  ){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件为空"));
-            }
-            if(StringUtils.isBlank(attachment.getId())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
-            }
-            if(StringUtils.isBlank(attachment.getPath())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件路径为空"));
-            }
-            if(StringUtils.isBlank(attachment.getSuffix())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件类型为空"));
-            }
-            String uploadDir = fileManagerConfig.getUploadDir();
-            String path = uploadDir + attachment.getPath();
-
-            //读取文件
-            switch (attachment.getSuffix().toLowerCase()){
-                case "eml":{//邮件
-                    EmailEmlParser emailEml = new EmailEmlParser(uploadDir,attachment.getId());
-                    Email email = emailEml.parser(path);
-                    return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(email).setPath(request.getRequestURI()));
-                }
-                case "txt":{//txt文件
-//                    EmailEmlParser emailEml = new EmailEmlParser(uploadDir,attachment.getId());
-//                    Email email = emailEml.parser(path);
-//                    return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(email).setPath(request.getRequestURI()));
-                }
-                default:{
-                    break;
-                }
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(attachment).setPath(request.getRequestURI()));
-        } catch (Exception exception) {
-            LOGGER.error(exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
-        }
-    }
 
     /**
      * 根据文件id查询文件

@@ -71,6 +71,7 @@ public class QQRegParserController {
             String path = uploadDir + attachment.getPath();
             QQRegParser parser = new QQRegParser(attachment.getId());
             QQRegInfo regInfo = parser.parser(path);
+            regInfo.setTags(attachment.getTags());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
@@ -110,18 +111,12 @@ public class QQRegParserController {
                         }
                         break;
                     }
-//                    case "qqhy":
-//                    case "jrqh":
-//                    case "cjqh":{
-//                        if(v!=null){
-//                            List<String> fileList= new ArrayList();
-//                            for (Object file:(List)v) {
-//                                fileList.add(JSON.toJSONString(file));
-//                            }
-//                            jsonMap.put(k, fileList);
-//                        }
-//                        break;
-//                    }
+                    case "tags":{
+                        if(v!=null){
+                            jsonMap.put(k,((String)v).split(","));
+                        }
+                        break;
+                    }
                 }
             });
             elasticsearchRestClient.save(jsonMap,regInfo.getId(),"qqreginfo");

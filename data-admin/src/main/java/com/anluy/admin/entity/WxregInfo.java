@@ -26,6 +26,7 @@ public class WxregInfo extends BaseEntity<String> {
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    private String tags;//标签
 
     private String weixin;//微信号
     private String qq;
@@ -176,5 +177,13 @@ public class WxregInfo extends BaseEntity<String> {
 
     public void setWxloginipList(List<Wxloginip> wxloginipList) {
         this.wxloginipList = wxloginipList;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

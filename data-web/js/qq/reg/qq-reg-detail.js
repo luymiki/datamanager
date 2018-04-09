@@ -19,7 +19,7 @@
                 "field": "id",
                 "values": [id],
                 "searchType": 1,
-                "dataType":1,
+                "dataType":2,
             }];
             $.ajax({
                 url:"/api/eqa/query",

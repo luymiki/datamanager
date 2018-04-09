@@ -80,6 +80,9 @@ public class QQLoginIpParser {
                     ipInfo.setSuspId(attachment.getSuspId());
                     ipInfo.setSuspName(attachment.getSuspName());
                     ipset.add(ipInfo.getIp());
+                    if(StringUtils.isBlank(loginInfo.getQq())){
+                        loginInfo.setQq(ipInfo.getQq());
+                    }
                     iplist.add(ipInfo);
                 }
             }

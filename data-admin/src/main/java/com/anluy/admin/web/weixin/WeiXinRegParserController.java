@@ -70,6 +70,7 @@ public class WeiXinRegParserController {
             String path = uploadDir + attachment.getPath();
             WeiXinRegParser parser = new WeiXinRegParser(attachment.getId());
             WxregInfo regInfo = parser.parser(attachment,path);
+            regInfo.setTags(attachment.getTags());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
@@ -117,6 +118,12 @@ public class WeiXinRegParserController {
                     case "create_time":{
                         if(v!=null){
                             jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
+                        }
+                        break;
+                    }
+                    case "tags":{
+                        if(v!=null){
+                            jsonMap.put(k,((String)v).split(","));
                         }
                         break;
                     }

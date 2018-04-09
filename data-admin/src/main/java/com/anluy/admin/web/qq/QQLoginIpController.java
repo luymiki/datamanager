@@ -68,6 +68,7 @@ public class QQLoginIpController {
             String path = uploadDir + attachment.getPath();
             QQLoginIpParser parser = new QQLoginIpParser(attachment.getId());
             QQLoginInfo loginInfo = parser.parser(attachment,path);
+            loginInfo.setTags(attachment.getTags());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(loginInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
@@ -146,6 +147,12 @@ public class QQLoginIpController {
                         case "create_time":{
                             if(v!=null){
                                 jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
+                            }
+                            break;
+                        }
+                        case "tags":{
+                            if(v!=null){
+                                jsonMap.put(k,((String)v).split(","));
                             }
                             break;
                         }

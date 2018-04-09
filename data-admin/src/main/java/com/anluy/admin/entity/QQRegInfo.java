@@ -45,6 +45,8 @@ public class QQRegInfo extends BaseEntity<String> {
     @JSONField(name = "susp_name")
     private String suspName;
 
+    private String tags;//标签
+
     public String getQq() {
         return qq;
     }
@@ -228,5 +230,13 @@ public class QQRegInfo extends BaseEntity<String> {
 
     public void setZcsj(String zcsj) {
         this.zcsj = zcsj;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

@@ -30,6 +30,8 @@ public class QQLoginInfo extends BaseEntity<String> {
     @JSONField(name = "susp_name")
     private String suspName;
 
+    private String tags;//标签
+
     private List<QQLoginIpInfo> ipinfoList;//ip详细列表不入库
 
     public String getQq() {
@@ -94,5 +96,13 @@ public class QQLoginInfo extends BaseEntity<String> {
 
     public void setIpinfoList(List<QQLoginIpInfo> ipinfoList) {
         this.ipinfoList = ipinfoList;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

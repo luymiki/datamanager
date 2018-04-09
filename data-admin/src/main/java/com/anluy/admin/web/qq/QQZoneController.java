@@ -78,6 +78,12 @@ public class QQZoneController {
                         }
                         break;
                     }
+                    case "tags":{
+                        if(v!=null){
+                            jsonMap.put(k,((String)v).split(","));
+                        }
+                        break;
+                    }
                 }
             });
 

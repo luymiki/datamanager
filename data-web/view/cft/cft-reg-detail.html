@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>财付通注册信息 | 数据管理系统</title>
+
+    <meta name="keywords" content="财付通注册信息 | 数据管理系统">
+    <meta name="description" content="财付通注册信息 | 数据管理系统">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" id="eml-upload">
+                <div class="ibox-content" id="eml-content">
+
+                    <script type="text/html" id="eml-template">
+                        <div class="panel-body">
+                            <div class="mail-tools tooltip-demo m-t-md">
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <h3>
+                                            <span class="font-noraml">财付通账号： </span>{{file.zh}}
+                                        </h3>
+                                        <h5>
+                                            <span class="font-noraml">账户状态： </span>{{file.zhzt}}
+                                        </h5>
+                                        <h5>
+                                            <span class="font-noraml">注册姓名： </span>{{file.name}}
+                                        </h5>
+                                    </div>
+                                </div>
+
+
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <h5><span class="font-noraml">注册时间： </span>{{file.zcsj}}</h5>
+                                        <h5><span class="font-noraml">注册身份证号： </span>{{file.sfzh}}</h5>
+                                        <h5><span class="font-noraml">绑定手机： </span>{{file.dh}}</h5>
+                                    </div>
+                                </div>
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <div class="media-body ">
+                                            <strong>开户信息</strong>：
+                                            <br>
+                                            <small class="text-muted">
+                                                {{each file.khxx_list as ff i}}
+                                                <code>{{i+1}}</code>{{ff}}&emsp;{{file.yhzh_list[i]}}</br>
+                                                {{/each}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/ajax.proxy.js"></script>
+<script src="/js/msg.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/plugins/art-template/template.js"></script>
+<script src="/js/cft/cft-reg-detail.js"></script>
+
+</body>
+
+</html>

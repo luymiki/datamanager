@@ -91,6 +91,17 @@
 			<version>${guava-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+
 		<!-- swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>

@@ -15,7 +15,12 @@
         };
 
         var params = {"indexName":"suspicious","conditions":[],"sort":"modify_time desc"};
-
+        var kyr= {
+            "field": "type",
+            "values": ['2'],
+            "searchType": 3,
+            "dataType":2,
+        };
 
         var _initListTable = function(){
             $('#suspicious-table').bootstrapTable({
@@ -47,7 +52,7 @@
                         sort = request.data.sortName +" "+request.data.sortOrder;
                     }
                     params["sort"]=sort;
-                    params["conditions"]=[];
+                    params["conditions"]=[kyr];
                     $.ajax({
                         url:"/api/eqa/query",
                         type:"post",
@@ -76,7 +81,7 @@
                             }
                         },
                         error:function(){
-                            alert("错误");
+                            toastrMsg.error("错误！");
                         }
                     });
                 }
@@ -92,6 +97,12 @@
             });
             $("#suspicious-table").on('click','.delete',function () {
                 _delete($(this).attr("data-id"));
+            });
+            $("#suspicious-table").on('click','.gxr',function () {
+                top.contabs.addMenuItem("/view/suspicious/suspicious-gxr.html?id="+$(this).attr("data-id"),'关系人列表');
+            });
+            $("#suspicious-table").on('click','.tiqu',function () {
+                toastrMsg.success("提取中。。。");
             });
         };
 
@@ -136,10 +147,6 @@
                         minlength: 6,
                         maxlength:18
                     },
-                    ly: {
-                        required: true,
-                        minlength: 2
-                    },
                     gzjd: {
                         required: true,
                         minlength: 2
@@ -155,10 +162,6 @@
                         required: icon + "请输入证件号码",
                         minlength: icon + "证件号码必须5个字符以上",
                         maxlength:icon + "姓名必须18个字符以内"
-                    },
-                    ly: {
-                        required: icon + "请输入来源信息",
-                        minlength: icon + "来源信息必须2个字符以上"
                     },
                     gzjd: {
                         required: icon + "请输入工作进度",
@@ -219,7 +222,7 @@
                 "field": "id",
                 "values": [id],
                 "searchType": 1,
-                "dataType":1,
+                "dataType":2,
             }];
             $.ajax({
                 url:"/api/eqa/query",
