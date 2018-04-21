@@ -25,6 +25,7 @@ public class Suspicious extends BaseEntity<String> {
     private String imei;
     private String imsi;
     private String email;
+    private String ip;
     private String type;//类型 1：可疑人员 2：关系人
 
     @JSONField(name = "susp_id")
@@ -212,5 +213,13 @@ public class Suspicious extends BaseEntity<String> {
 
     public void setKyrId(String kyrId) {
         this.kyrId = kyrId;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

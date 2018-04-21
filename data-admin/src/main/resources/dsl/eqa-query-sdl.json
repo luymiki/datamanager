@@ -1,0 +1,16 @@
+{
+  "indexName": "%s",
+  "conditions": [
+    {
+      "groupId":"1",
+      "groupType":"should",
+      "field": "qq",
+      "values": [
+        "123"
+      ],
+      "searchType": 1,
+      "dataType":2
+    }
+
+  ]
+}
