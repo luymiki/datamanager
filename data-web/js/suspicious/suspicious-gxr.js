@@ -44,7 +44,7 @@
                     {field: 'phone',title: '手机号',formatter:formatterList},
                     {field: 'imei',title: 'IMEI',formatter:formatterList},
                     {field: 'imsi',title: 'IMSI',formatter:formatterList},
-                    {field: 'email',title: '电子邮箱'},
+                    {field: 'email',title: '电子邮箱',formatter:formatterList},
                     {field: 'opt',title: '操作',width:'110px'}
                 ],
                 ajax : function (request) {
@@ -109,7 +109,7 @@
                 top.contabs.addMenuItem("/view/suspicious/suspicious-gxr.html?id="+$(this).attr("data-id"),'关系人列表');
             });
             $("#suspicious-table").on('click','.tiqu',function () {
-                toastrMsg.success("提取中。。。");
+                _tiqu($(this).attr("data-id"));
             });
         };
 
@@ -321,7 +321,33 @@
                 }
             });
         };
+        var _tiqu = function (id) {
+            // toastrMsg.success("提取信息中，请稍后。。。");
+            $.ajax.proxy({
+                url:"/api/admin/suspicious/analyze",
+                type:"post",
+                dataType:"json",
+                data:{"id":id},
+                async:true,
+                success:function (d) {
 
+                    if(d.status===200){
+                        toastrMsg.success("提取完成");
+                        $('#suspicious-table').bootstrapTable("refresh");
+                    }
+                    else {
+                        console.log(d);
+                        toastrMsg.error("提取失败");
+                        $( '#addModal' ).modal( 'hide' );
+                    }
+
+                },
+                error:function (d) {
+                    console.log(d);
+                    top.toastrMsg.error("提取失败");
+                }
+            });
+        }
         return {
             init:_init
         };
