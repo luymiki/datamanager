@@ -9,11 +9,13 @@ window.accept = {
 };
 window.uplader = [];
 window.fileNumLimit =1;
-
+var suspicious_list={selected:{}};
 var parser = (function () {
 
     var _init = function () {
         $("#parserEml").on("click",_saveEmlOne);
+        suspicious_list.selected.suspName="公共人员";
+        suspicious_list.selected.suspId="0155acf5-e2bc-472a-b7bc-01ac81cee56f";
     };
 
 

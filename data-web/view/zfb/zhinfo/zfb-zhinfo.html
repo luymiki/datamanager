@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <title>虚拟定位神行信息导入 | 数据管理系统</title>
+    <title>支付宝账户明细信息导入 | 数据管理系统</title>
 
-    <meta name="keywords" content="虚拟定位神行信息导入 | 数据管理系统">
-    <meta name="description" content="虚拟定位神行信息导入 | 数据管理系统">
+    <meta name="keywords" content="支付宝账户明细信息导入 | 数据管理系统">
+    <meta name="description" content="支付宝账户明细信息导入 | 数据管理系统">
 
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
@@ -62,16 +62,7 @@
             <div class="ibox float-e-margins" id="eml-upload" >
                 <div class="ibox-content">
                     <form method="get" class="form-horizontal">
-                        <!--<div class="form-group">-->
-                            <!--<label class="col-sm-1 control-label">人员</label>-->
-                            <!--<div class="col-sm-5">-->
-                                <!--<select data-placeholder="请选择人员..." id="suspicious-list"-->
-                                        <!--class="form-control btn-outline" tabindex="2">-->
-                                    <!--<option value="">请选择人员</option>-->
-                                <!--</select>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <input type="hidden" id="file-folder" class="form-control" value="SQL文件">
+                        <input type="hidden" id="file-folder" class="form-control" value="文件">
                         <div class="form-group">
                             <label class="col-sm-1 control-label">标签</label>
                             <div class="col-sm-5">
@@ -88,7 +79,7 @@
                                 <div id="dndArea" class="placeholder">
                                     <i class="fa fa-file"></i>
                                     <div id="filePicker"></div>
-                                    <p>定位数据导入只能选择1个文件</p>
+                                    <p>支付宝数据导入只能选择1个文件</p>
                                 </div>
                             </div>
                             <div class="statusBar" style="display:none;">
@@ -100,13 +91,14 @@
                                 <div class="btns">
                                     <div id="filePicker2"></div>
                                     <div id="uploadBtn" class="uploadBtn">开始上传</div>
-                                    <div id="parserEml" class="uploadBtn" style="display: none;">保存文件</div>
+                                    <div id="parserEml" class="uploadBtn" style="display: none;">保存</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -117,7 +109,6 @@
 <script src="/js/ajax.proxy.js"></script>
 <script src="/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
 <script src="/js/msg.js"></script>
-<script src="/js/utils.js"></script>
 
 <!-- Chosen -->
 <script src="/js/plugins/chosen/chosen.jquery.js"></script>
@@ -126,9 +117,8 @@
 
 <!-- Web Uploader -->
 <script src="/js/plugins/webuploader/webuploader.min.js"></script>
-<script src="/js/xndw/sx/xndw-sx.js"></script>
+<script src="/js/zfb/zhinfo/zfb-zhinfo.js"></script>
 <script src="/js/file/file-file-uploader.js"></script>
-<!--<script src="/js/suspicious/suspicious-list.js"></script>-->
 
 </body>
 

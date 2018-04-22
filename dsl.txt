@@ -1,0 +1,1508 @@
+{
+  "attachment": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "folder": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text"
+          },
+          "path": {
+            "type": "keyword"
+          },
+          "size": {
+            "type": "long"
+          },
+          "suffix": {
+            "type": "keyword"
+          },
+          "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+{
+  "suspicious": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "cft": {
+            "type": "keyword"
+          },
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "glry": {
+            "type": "keyword"
+          },
+          "gmsfzh": {
+            "type": "keyword"
+          },
+          "gzjd": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "imei": {
+            "type": "keyword"
+          },
+          
+         
+          "modify_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "name": {
+            "type": "text"
+          },
+          "name_na": {
+            "type": "keyword"
+          },
+          "phone": {
+            "type": "long"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+          "weixin": {
+            "type": "keyword"
+          },
+          "yhzh": {
+            "type": "long"
+          },
+          "zfb": {
+            "type": "keyword"
+          },
+		  
+		  "imsi": {
+            "type": "keyword"
+          },
+		   "email": {
+            "type": "keyword"
+          }, 
+		  "type": {
+            "type": "keyword"
+          },
+		  "susp_id": {
+            "type": "keyword"
+          }, 
+		  "susp_name": {
+            "type": "keyword"
+          }, 
+		  "qkjj": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+{
+  "email": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "from": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "from_address": {
+            "type": "keyword"
+          },
+          "to": {
+            "type": "keyword"
+          },
+          "to_address": {
+            "type": "keyword"
+          },
+          "received_date": {
+             "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "subject": {
+            "type": "text"
+          },
+          "file_list": {
+            "type": "text"
+          },
+		   "content": {
+            "type": "text"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	  
+	  
+{
+  "qqreginfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "gj": {
+            "type": "keyword"
+          },
+          "sf": {
+            "type": "keyword"
+          },
+		  "yzbm": {
+            "type": "keyword"
+          },
+		  "dz": {
+            "type": "text"
+          },
+		  "dh": {
+            "type": "keyword"
+          },
+          "csrq": {
+             "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "xb": {
+            "type": "keyword"
+          },
+		  "xm": {
+            "type": "keyword"
+          },
+		  "email": {
+            "type": "keyword"
+          },
+		  "home": {
+            "type": "keyword"
+          },
+		  "cs": {
+            "type": "keyword"
+          },
+          "bycs": {
+            "type": "text"
+          },
+		  "xz": {
+            "type": "text"
+          },
+		  "zcsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "qqhy": {
+            "type": "text"
+          },
+		   "jrqh": {
+            "type": "text"
+          },
+		   "cjqh": {
+            "type": "text"
+          }
+		  
+        }
+      }
+    }
+  }
+}	 	  
+	
+{
+  "qqzone": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+          "pic": {
+            "type": "long"
+          },
+		  "file_id": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+{
+  "qqloginip": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+          "size": {
+            "type": "long"
+          },
+		  "ip_list": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+{
+  "qqloginip_list": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+		  "ip": {
+            "type": "keyword"
+          },
+         "login_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "logout_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "login_type": {
+            "type": "keyword"
+          },
+		  "login_id": {
+            "type": "keyword"
+          } ,
+		  "file_id": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+
+{
+  "wxreginfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+          "weixin": {
+            "type": "keyword"
+          },
+		   "qq": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "email": {
+            "type": "keyword"
+          },
+		  "bm": {
+            "type": "keyword"
+          },
+		  "qm": {
+            "type": "keyword"
+          },
+		  "dh": {
+            "type": "keyword"
+          },
+          "xb": {
+            "type": "keyword"
+          },
+		  "sf": {
+            "type": "keyword"
+          },
+		  "cs": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "wxlxr": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "info_id": {
+            "type": "keyword"
+          },
+          "weixin": {
+            "type": "keyword"
+          },
+		   
+          "zh": {
+            "type": "keyword"
+          },
+          "qq": {
+            "type": "keyword"
+          },
+		   "dh": {
+            "type": "keyword"
+          },
+		   "email": {
+            "type": "keyword"
+          },
+		  "bm": {
+            "type": "keyword"
+          },
+		  "wbo": {
+            "type": "keyword"
+          },
+		 
+          "nc": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "wxqun": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "info_id": {
+            "type": "keyword"
+          },
+          "weixin": {
+            "type": "keyword"
+          },
+		   
+          "zh": {
+            "type": "keyword"
+          },
+          "mc": {
+            "type": "keyword"
+          },
+		    "cjsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "wxloginip": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  "info_id": {
+            "type": "keyword"
+          },
+          "weixin": {
+            "type": "keyword"
+          },
+		   
+          "ip": {
+            "type": "keyword"
+          },
+           "cjsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "cftreginfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+		  
+          "tags": {
+            "type": "keyword"
+          },
+		   
+          "zhzt": {
+            "type": "keyword"
+          },
+		  "zh": {
+            "type": "keyword"
+          },  
+		  "name": {
+            "type": "keyword"
+          },
+		  "sfzh": {
+            "type": "keyword"
+          },
+           "zcsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "dh": {
+            "type": "keyword"
+          },
+		  "khxx_list": {
+            "type": "keyword"
+          },
+		  "yhzh_list": {
+            "type": "keyword"
+          },
+        }
+      }
+    }
+  }
+}	
+
+
+{
+  "cfttrades": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+		   "cft_id": {
+            "type": "keyword"
+          },
+          "zh": {
+            "type": "keyword"
+          },
+		  "jydh": {
+            "type": "keyword"
+          },  
+		  "jdlx": {
+            "type": "keyword"
+          },
+		  "jylx": {
+            "type": "keyword"
+          },
+		  "jyje": {
+            "type": "double"
+          },
+          
+		  "jyye": {
+            "type": "double"
+          },
+		  "jysj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "yhlx": {
+            "type": "keyword"
+          },
+		  "jysm": {
+            "type": "keyword"
+          },
+		  "shmc": {
+            "type": "keyword"
+          },
+		  "fsf": {
+            "type": "keyword"
+          },
+		  "fsje": {
+            "type": "double"
+          },
+		  "jsf": {
+            "type": "keyword"
+          },
+		  "jssj": {
+             "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "jsje": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "huaduan": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+		  "yys": {
+			"type": "keyword"
+		  },
+		  "zjhm": {
+            "type": "keyword"
+          },
+		   "size": {
+            "type": "long"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "huaduan_list": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		   "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+		   "hd_id": {
+            "type": "keyword"
+          },
+		  "yys": {
+			"type": "keyword"
+		  },
+		   "thlx": {
+            "type": "keyword"
+          },
+          "thdd": {
+            "type": "keyword"
+          },
+		  "zjhm": {
+            "type": "keyword"
+          },  
+		  "ddhm": {
+            "type": "keyword"
+          },
+		  "ddhmgsd": {
+            "type": "keyword"
+          },
+		  "kssj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "jssj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          
+		  "thsc": {
+            "type": "long"
+          },
+		  "hjlx": {
+            "type": "keyword"
+          },
+		  "xqh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "xndw_sx": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "created_at": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "real_lat_e6": {
+            "type": "long"
+          },
+		   "real_lon_e6": {
+            "type": "long"
+          },
+          "real_addr": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+		   "mock_info": {
+            "type": "keyword"
+          },
+		  "imei": {
+			"type": "keyword"
+		  },
+		   "imsi": {
+            "type": "keyword"
+          },
+          "model_type": {
+            "type": "keyword"
+          },
+		  "ip": {
+            "type": "keyword"
+          },  
+		  "phone_num": {
+            "type": "keyword"
+          },
+		  "email": {
+            "type": "keyword"
+          },
+		  "contacts": {
+            "type": "keyword"
+          },
+		  "sms": {
+            "type": "keyword"
+          },
+		  "call_log": {
+            "type": "keyword"
+          },
+		  "lang": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "xndw_wsk": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "wechat_id": {
+            "type": "keyword"
+          },
+		   "mobilephone": {
+            "type": "keyword"
+          },
+          "imei": {
+            "type": "keyword"
+          },
+          
+		   "qq": {
+            "type": "keyword"
+          },
+		  "email": {
+			"type": "keyword"
+		  },
+		   "facebook": {
+            "type": "keyword"
+          },
+          "token": {
+            "type": "keyword"
+          },
+		  "ip": {
+            "type": "keyword"
+          },  
+		  "latitude": {
+            "type": "keyword"
+          },
+		  "longtude": {
+            "type": "keyword"
+          },
+		  "vaddr": {
+            "type": "keyword"
+          },
+		  "adword": {
+            "type": "keyword"
+          },
+		  "address": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+{
+  "zfbreginfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		   "email": {
+            "type": "keyword"
+          },
+          "dlsj": {
+            "type": "keyword"
+          },
+          
+		   "name": {
+            "type": "keyword"
+          },
+		  "zjlx": {
+			"type": "keyword"
+		  },
+		   "sfzh": {
+            "type": "keyword"
+          },
+          "ye": {
+            "type": "double"
+          },
+		  "bdsj": {
+            "type": "keyword"
+          },  
+		  "khxx_list": {
+            "type": "keyword"
+          },
+		  "yhzh_list": {
+            "type": "keyword"
+          },
+		   "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+
+{
+  "zfblogininfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		   "dlzh": {
+            "type": "keyword"
+          },
+		   "name": {
+            "type": "keyword"
+          },
+		  "ip": {
+			"type": "keyword"
+		  },
+		  "czsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+
+{
+  "zfbzhinfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		   
+		   "name": {
+            "type": "keyword"
+          },
+		  "jyh": {
+            "type": "keyword"
+          },
+		  "shddh": {
+			"type": "keyword"
+		  },
+		  "jycjsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "fksj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "zjxgsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  
+		   "jylyd": {
+            "type": "keyword"
+          },
+		  
+		   "jylx": {
+            "type": "keyword"
+          },
+		  
+		   "df_user_id": {
+            "type": "keyword"
+          },
+		   "df_name": {
+            "type": "keyword"
+          },
+		   "xfmc": {
+            "type": "keyword"
+          },
+		  
+		   "je": {
+            "type": "double"
+          },
+		  
+		   "sjbj": {
+            "type": "keyword"
+          },
+		  
+		   "jyzt": {
+            "type": "keyword"
+          },
+		  "bz": {
+            "type": "keyword"
+          },
+		   "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}	
+
+
+{
+  "zfbtxinfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		   
+		   "txlx": {
+            "type": "keyword"
+          },
+		  "txlsh": {
+            "type": "keyword"
+          },
+		  "khyh": {
+			"type": "keyword"
+		  },
+		  "yhzh": {
+            "type": "keyword"
+          },
+		  "sqsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		 "clsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "je": {
+            "type": "double"
+          },
+		   "zt": {
+            "type": "keyword"
+          },
+		   "jyzt": {
+            "type": "keyword"
+          },
+		   "sbyy": {
+            "type": "keyword"
+          },
+		  "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+{
+  "zfbjyjlinfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		 "name": {
+            "type": "keyword"
+          },
+		  
+		  "jyh": {
+            "type": "keyword"
+          },
+		  "wbjyh": {
+            "type": "keyword"
+          },
+		  "jyzt": {
+			"type": "keyword"
+		  },
+		  "hzhb_id": {
+            "type": "keyword"
+          },
+		  "mj_id": {
+            "type": "keyword"
+          }, 
+		  "mjxx": {
+            "type": "keyword"
+          },		  
+		  "maijia_id": {
+            "type": "keyword"
+          },
+		  "maijiaxx": {
+            "type": "keyword"
+          },
+		   "je": {
+            "type": "double"
+          },
+		  "sksj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "zhxgsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "cjsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		 
+		   "jylx": {
+            "type": "keyword"
+          },
+		   "lyd": {
+            "type": "keyword"
+          },
+		   "spmc": {
+            "type": "keyword"
+          },
+		  "shrdz": {
+            "type": "keyword"
+          },
+		  "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+{
+  "zfbzzinfo": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+		  "file_id": {
+            "type": "keyword"
+          },
+		  "tags": {
+            "type": "keyword"
+          },
+		  "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		  "user_id": {
+            "type": "keyword"
+          },
+		 "jyh": {
+            "type": "keyword"
+          },
+		  "fkf_id": {
+            "type": "keyword"
+          },
+		  "skf_id": {
+            "type": "keyword"
+          },
+		  "skjgmc": {
+			"type": "keyword"
+		  },
+		  "dzsj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+		   "je": {
+            "type": "double"
+          },
+		  "zzcpmc": {
+            "type": "keyword"
+          },
+		  "jyfsd": {
+            "type": "keyword"
+          }, 
+		  "txlsh": {
+            "type": "keyword"
+          },		  
+		  
+		  "xcbh": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+===================================================
+{
+    
+    "query": {
+        "query_string" : {
+            
+            "query" : "button*"
+        }
+    }
+    
+}
+
+
+
+
+
+##查询
+{
+  "indexName": "attachment",
+  "conditions": [
+    {
+      "field": "folder",
+      "values": [
+        "文件",
+        "图片"
+      ],
+      "searchType": 1,
+	  "dataType":1,
+    },
+    {
+      "field": "tags",
+      "values": [
+        "em"
+      ],
+      "searchType": 3,
+	   "dataType":2,
+    }
+  ],
+  "sort":"create_time desc"
+}
+
+###聚合查询
+{
+  "indexName": "attachment",
+  "conditions": [
+    {
+      "field": "folder",
+      "values": [
+        "文件",
+        "图片"
+      ],
+      "searchType": 1,
+	  "dataType":1,
+    },
+    {
+      "field": "tags",
+      "values": [
+        "em"
+      ],
+      "searchType": 3,
+	   "dataType":2,
+    }
+  ],
+  "aggs": [
+    {
+      "field": "folder",
+      "aggsType": 1,
+	  "dataType":1,
+    }
+  ],
+  "sort":"create_time desc"
+}
+
+170
+##查询嫌疑人列表
+{
+  "indexName": "suspicious",
+  "conditions": [
+    {
+      "field": "is_delete",
+      "values": ["1",],
+      "searchType": 3,
+	  "dataType":2,
+    }
+  ],
+  "aggs": [
+    {
+      "field": "name_na",
+      "aggsType": 1,
+	  "dataType":1,
+    }
+  ],
+  "sort":"modify_time desc"
+}
+
+
+
+
+
+
+
+
+
+
+{
+  "aggs": {
+    "tags_count": {
+      "terms": {
+        "field": "tags"
+      }
+    },
+     "type_count": {
+      "terms": {
+        "field": "type"
+      }
+    }
+  }
+}
+{
+  "aggs": {
+  "tags_count": {
+      "bool":{"must":[{"bool":{"should":[{"wildcard":{"folder":"视频"}}]}}]}
+    }
+  }
+}

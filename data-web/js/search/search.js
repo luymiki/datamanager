@@ -10,6 +10,30 @@
             $("#search-list ").on("click",".search-result",function(){
                 var index = $(this).attr("data-index");
                 switch (index){
+                    case "zfbzzinfo":{
+                        top.contabs.addMenuItem("/view/zfb/zzinfo/zfb-zzinfo-detail.html?id="+$(this).attr("data-id"),'查看支付宝转账明细');
+                        break;
+                    }
+                    case "zfbjyjlinfo":{
+                        top.contabs.addMenuItem("/view/zfb/jyjl/zfb-jyjl-detail.html?id="+$(this).attr("data-id"),'查看支付宝交易记录');
+                        break;
+                    }
+                    case "zfbtxinfo":{
+                        top.contabs.addMenuItem("/view/zfb/txinfo/zfb-txinfo-detail.html?id="+$(this).attr("data-id"),'查看支付宝提现记录');
+                        break;
+                    }
+                    case "zfbzhinfo":{
+                        top.contabs.addMenuItem("/view/zfb/zhinfo/zfb-zhinfo-detail.html?id="+$(this).attr("data-id"),'查看支付宝账户明细');
+                        break;
+                    }
+                    case "zfblogininfo":{
+                        top.contabs.addMenuItem("/view/zfb/logininfo/zfb-logininfo-detail.html?id="+$(this).attr("data-id"),'查看支付宝登录日志');
+                        break;
+                    }
+                    case "zfbreginfo":{
+                        top.contabs.addMenuItem("/view/zfb/zfb-reg-detail.html?id="+$(this).attr("data-id"),'查看支付宝注册信息');
+                        break;
+                    }
                     case "xndw_wsk":{
                         top.contabs.addMenuItem("/view/xndw/wsk/xndw-wsk-detail.html?id="+$(this).attr("data-id"),'查看WSK定位信息');
                         break;
