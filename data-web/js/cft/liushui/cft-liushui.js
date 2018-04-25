@@ -28,7 +28,7 @@ var cft = (function () {
             "searchType": 1,
             "dataType":2,
         }];
-        $.ajax({
+        $.ajax.proxy({
             url:"/api/eqa/query",
             type:"post",
             dataType:"json",

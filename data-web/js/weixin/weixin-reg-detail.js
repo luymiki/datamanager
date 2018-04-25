@@ -33,7 +33,7 @@
             params_lxr["conditions"]=infoId;
             params_qun["conditions"]=infoId;
             params_ip["conditions"]=infoId;
-            $.ajax({
+            $.ajax.proxy({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",
@@ -45,7 +45,7 @@
                         if(file && file.length===1){
                             file =file[0];
                             //查询联系人
-                            $.ajax({
+                            $.ajax.proxy({
                                 url:"/api/eqa/query",
                                 type:"post",
                                 dataType:"json",
@@ -67,7 +67,7 @@
                                 }
                             });
                             //查询群
-                            $.ajax({
+                            $.ajax.proxy({
                                 url:"/api/eqa/query",
                                 type:"post",
                                 dataType:"json",
@@ -89,7 +89,7 @@
                                 }
                             });
                             //查询ip
-                            $.ajax({
+                            $.ajax.proxy({
                                 url:"/api/eqa/query",
                                 type:"post",
                                 dataType:"json",

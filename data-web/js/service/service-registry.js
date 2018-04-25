@@ -4,7 +4,7 @@
 (function (e, t, $) {
     "use strict";
 
-    $.ajax({url:"/registry/list",
+    $.ajax.proxy({url:"/registry/list",
         method:"POST",
         contentType:"application/json",
         dataType:"json",

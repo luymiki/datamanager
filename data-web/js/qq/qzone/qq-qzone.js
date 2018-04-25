@@ -78,7 +78,7 @@ var Opt = (function () {
                 "dataType":2,
             }
             ];
-            $.ajax({
+            $.ajax.proxy({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",

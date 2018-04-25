@@ -19,7 +19,7 @@
                 "searchType": 1,
                 "dataType":2,
             }];
-            $.ajax({
+            $.ajax.proxy({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",
@@ -52,8 +52,10 @@
     var reg = (function () {
 
 
-
+        var cftid ;
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            cftid = params["id"];
             _initListTable();
             _event();
         };
@@ -66,7 +68,7 @@
             $('#data-table').bootstrapTable({
                 pagination:true,
                 pageSize:10,
-                //height: "445",
+                height: utils.getWidowHeight()-135,
                 pageList: [5, 10, 15, 20, 25],  //记录数可选列表
                 queryParamsType:'',
                 sidePagination:'server',
@@ -137,7 +139,7 @@
                     };
                     params["sort"]=sort;
                     params["conditions"]=con;
-                    $.ajax({
+                    $.ajax.proxy({
                         url:"/api/eqa/query",
                         type:"post",
                         dataType:"json",
@@ -174,7 +176,9 @@
             $("#data-table").on('click','.detail',function () {
                 top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-detail.html?id="+$(this).attr("data-id"),'查看流水信息');
             });
-
+            $("#addBtn").on('click',function () {
+                top.contabs.addMenuItem("/view/cft/liushui/cft-liushui.html?id="+cftid,'导入财付通流水信息');
+            });
             $("#search-btn").on('click',function () {
                 _search = $("#search-input").val();
                 if(_search && $.trim(_search) !== ""){

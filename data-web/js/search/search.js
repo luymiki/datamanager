@@ -43,11 +43,11 @@
                         break;
                     }
                     case "huaduan_list":{
-                        top.contabs.addMenuItem("/view/huaduan/huadan-liushui-list.html?id="+$(this).attr("data-infoid"),'查看话单信息');
+                        top.contabs.addMenuItem("/view/huadan/huadan-liushui-list.html?id="+$(this).attr("data-infoid"),'查看话单信息');
                         break;
                     }
                     case "huaduan":{
-                        top.contabs.addMenuItem("/view/huaduan/huadan-liushui-list.html?id="+$(this).attr("data-id"),'查看话单信息');
+                        top.contabs.addMenuItem("/view/huadan/huadan-liushui-list.html?id="+$(this).attr("data-id"),'查看话单信息');
                         break;
                     }
                     case "cfttrades":{

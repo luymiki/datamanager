@@ -19,7 +19,7 @@ var suspicious_list = (function () {
     };
 
     var _list = function () {
-        $.ajax({
+        $.ajax.proxy({
             url:"/api/eqa/query",
             type:"post",
             dataType:"json",

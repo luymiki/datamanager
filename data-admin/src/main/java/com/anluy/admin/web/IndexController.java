@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
+
     /**
      * 首页接口
      *

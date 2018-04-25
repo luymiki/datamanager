@@ -23,8 +23,13 @@ var utils = (function () {
         return params;
     };
 
+    var _getWidowHeight=function () {
+        var h = document.body.offsetHeight;
+        return h;
+    };
 
     return {
-        getURLParams: _getURLParams
+        getURLParams: _getURLParams,
+        getWidowHeight: _getWidowHeight
     };
 })();

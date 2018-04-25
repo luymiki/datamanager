@@ -369,6 +369,8 @@ jQuery(function() {
         uploader.onUploadSuccess = function( file, response ) {
             if(window.uplader && response.status===200){
                 window.uplader[window.uplader.length] = response.data;
+            }else if(response.status===401){
+                window.top.location.href="/index.html";
             }
         };
         /**

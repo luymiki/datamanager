@@ -20,7 +20,7 @@
                 "searchType": 1,
                 "dataType":2,
             }];
-            $.ajax({
+            $.ajax.proxy({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",
@@ -67,7 +67,7 @@
             $('#data-table').bootstrapTable({
                 pagination:true,
                 pageSize:10,
-                //height: "445",
+                height: utils.getWidowHeight()-135,
                 pageList: [5, 10, 15, 20, 25],  //记录数可选列表
                 queryParamsType:'',
                 sidePagination:'server',
@@ -134,7 +134,7 @@
                     };
                     params["sort"]=sort;
                     params["conditions"]=con;
-                    $.ajax({
+                    $.ajax.proxy({
                         url:"/api/eqa/query",
                         type:"post",
                         dataType:"json",

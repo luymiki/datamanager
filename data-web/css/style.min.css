@@ -3003,7 +3003,7 @@ video {
 }
 
 .wrapper-content {
-    padding: 20px
+    padding: 0px
 }
 
 #page-wrapper {
@@ -3425,7 +3425,7 @@ code {
 
 .ibox {
     clear: both;
-    margin-bottom: 25px;
+    margin-bottom: 0px;
     margin-top: 0;
     padding: 0
 }
@@ -3467,7 +3467,7 @@ code {
 .ibox-content {
     background-color: #fff;
     color: inherit;
-    padding: 15px 20px 20px;
+    padding: 15px 20px 0px;
     border-color: #e7eaec;
     -webkit-border-image: none;
     -o-border-image: none;
@@ -4166,7 +4166,7 @@ body.modal-open {
 }
 
 .loginscreen.middle-box {
-    width: 300px
+    width: 350px
 }
 
 .loginColumns {
@@ -4182,15 +4182,15 @@ body.modal-open {
 }
 
 .logo-name {
-    color: #e6e6e6;
-    font-size: 180px;
+    color: #5f5f5f;
+    font-size: 40px;
     font-weight: 800;
-    letter-spacing: -10px;
+    /*letter-spacing: -10px;*/
     margin-bottom: 0
 }
 
 .logo-name-system {
-    font-family: 'Microsoft YaHei', '����' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    font-family: 'Microsoft YaHei', '微软雅黑' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     color: #ffffff;
     font-size: 28px;
     margin-left: -10px;

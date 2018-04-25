@@ -26,7 +26,7 @@
             $('#suspicious-table').bootstrapTable({
                 pagination:true,
                 pageSize:10,
-                //height: "445",
+                height: utils.getWidowHeight()-135,
                 pageList: [5, 10, 15, 20, 25],  //记录数可选列表
                 queryParamsType:'',
                 sidePagination:'server',
@@ -36,12 +36,13 @@
                     {field: 'gmsfzh',title: '身份证号',sortable:true},
                     {field: 'qq',title: 'QQ',formatter:formatterList},
                     {field: 'weixin',title: '微信',formatter:formatterList},
+					 {field: 'phone',title: '手机号',formatter:formatterList},
+                    {field: 'imei',title: 'IMEI',formatter:formatterList},
+                    {field: 'imsi',title: 'IMSI',formatter:formatterList},
                     {field: 'cft',title: '财付通',formatter:formatterList},
                     {field: 'zfb',title: '支付宝',formatter:formatterList},
                     {field: 'yhzh',title: '银行账号',formatter:formatterList},
-                    {field: 'phone',title: '手机号',formatter:formatterList},
-                    {field: 'imei',title: 'IMEI',formatter:formatterList},
-                    {field: 'imsi',title: 'IMSI',formatter:formatterList},
+                   
                     {field: 'ip',title: 'IP',formatter:formatterList},
                     {field: 'email',title: '电子邮箱',formatter:formatterList},
                     {field: 'gzjd',title: '工作进度'},
@@ -54,7 +55,7 @@
                     }
                     params["sort"]=sort;
                     params["conditions"]=[kyr];
-                    $.ajax({
+                    $.ajax.proxy({
                         url:"/api/eqa/query",
                         type:"post",
                         dataType:"json",
@@ -228,7 +229,7 @@
                 "searchType": 1,
                 "dataType":2,
             }];
-            $.ajax({
+            $.ajax.proxy({
                 url:"/api/eqa/query",
                 type:"post",
                 dataType:"json",
@@ -263,7 +264,7 @@
                 confirm:function (f) {
                     if(f) {
 
-                        $.ajax({
+                        $.ajax.proxy({
                             url: "/api/admin/suspicious/delete",
                             type: "post",
                             dataType: "json",
