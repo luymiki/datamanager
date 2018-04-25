@@ -29,7 +29,7 @@
             $('#suspicious-table').bootstrapTable({
                 pagination:true,
                 pageSize:10,
-                height: utils.getWidowHeight()-135,
+                height: utils.getWidowHeight()-75,
                 pageList: [5, 10, 15, 20, 25],  //记录数可选列表
                 queryParamsType:'',
                 sidePagination:'server',

@@ -66,7 +66,7 @@
             $('#data-table').bootstrapTable({
                 pagination:true,
                 pageSize:20,
-                height: utils.getWidowHeight()-135,
+                height: utils.getWidowHeight()-75,
                 pageList: [10, 20, 50],  //记录数可选列表
                 queryParamsType:'',
                 sidePagination:'server',
