@@ -44,7 +44,6 @@ window.uplader = [
     ];
 
 var list=[];
-
 var parser = (function () {
 
     var _init = function () {

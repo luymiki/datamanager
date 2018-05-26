@@ -2,6 +2,7 @@ package com.anluy.admin.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -36,7 +37,7 @@ public class HTTPUtils {
      * @param encoding 编码utf-8
      * @return
      */
-    public static JSONObject getJSONObjectByPost(String url,Map<String, String> paramsHashMap,  String encoding) {
+    public static JSONObject getJSONObjectByPost(String url, Map<String, String> paramsHashMap, Header[] headers, String encoding) {
         //创建httpClient连接
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
@@ -56,6 +57,11 @@ public class HTTPUtils {
             HttpPost httpPost = new HttpPost(url);
             // 为HttpPost设置实体数据
             httpPost.setEntity(entity);
+
+            if(headers!=null){
+                httpPost.setHeaders(headers);
+            }
+
             // HttpClient 发送Post请求
             CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
             if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {

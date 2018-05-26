@@ -1,0 +1,111 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>自定义查询 | 数据管理系统</title>
+
+    <meta name="keywords" content="自定义查询,数据管理系统">
+    <meta name="description" content="自定义查询 | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+    <link href="/css/zdycx.css" rel="stylesheet">
+</head>
+<body class="">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content" id="zdyjm-box">
+                        <div>
+                            <label >数据源：</label>
+                            <select id="meta-index" class="form-control meta-index" style="width: 200px;display: inline;">
+                                <option value="">---请选择---</option>
+                            </select>
+                            <label id="meta-index-field-label" style="display: none;">数据字段：</label>
+                            <select id="meta-index-field" class="form-control meta-index" style="width: 200px;display: none">
+                                <option value="">---请选择---</option>
+                            </select>
+                        </div>
+                        <div class="opt-bar" style="border: 0px;padding-top: 0px;text-align: right;">
+                            <a id="add-must-field">添加必要条件</a>&emsp;
+                            <a id="add-not-field" >添加排除条件</a>&emsp;
+                            <input type="checkbox" id="add-group" ><label id="add-group-label"  for="add-group">高级条件</label>
+                        </div>
+
+                        <fieldset class="table-bordered" id="must-field">
+                            <legend>必要条件</legend>
+                        </fieldset>
+                        <fieldset class="table-bordered"  id="not-field">
+                            <legend>排除条件</legend>
+                        </fieldset>
+                        <br>
+                        <fieldset class="table-bordered" id="group-box" style="display: none;">
+                            <legend>可能条件组</legend>
+                            <div class="opt-bar" style="border: 0px;padding-top: 0px;text-align: right;">
+                                <a id="add-should-field">添加一组条件</a>&emsp;
+                            </div>
+                            <div id="should-group-box">
+                                <!--<fieldset class="table-bordered">-->
+                                <!--<legend>可能条件</legend>-->
+                                    <!--<div class="opt-bar" style="border: 0px;padding-top: 0px;text-align: right;">-->
+                                        <!--<a class="add-must-field-for-should">添加条件</a>&emsp;-->
+                                    <!--</div>-->
+                                    <!--&lt;!&ndash;<div class="condtion-item">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<select id="x" class="form-control meta-index" style="width: 200px;display: inline;">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<option value="">-&#45;&#45;请选择-&#45;&#45;</option>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--</fieldset>-->
+                            </div>
+
+
+                        </fieldset>
+
+                    </div>
+
+                </div>
+
+                <div class="ibox float-e-margins" id="data-show-box" style="display: none;">
+                    <div class="ibox-title" style="border-top: 1px;padding-top: 2px;min-height: 37px;">
+                        <div class="ibox-tools">
+                            <div class="btn btn-primary btn-sm" id="copy-row" data-clipboard-target="copyText">复制行</div>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="border: 0px;padding-top: 0px;">
+                        <table id="data-table" data-mobile-responsive="true" >
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 全局js -->
+    <script type="text/javascript">
+        BASE_JS();
+        BOOTSTRAP_TABLE_JS();
+    </script>
+    <!-- Data picker -->
+    <script src="/js/plugins/moment/moment-with-locales.js"></script>
+    <script src="/js/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
+    <script src="/js/mxfx/zdyjm/zdycx.js"></script>
+
+
+</body>
+</html>

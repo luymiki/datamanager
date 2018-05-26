@@ -1,7 +1,9 @@
 package com.anluy.admin.eqa;
 
 import com.anluy.admin.eqa.core.EqaMetaMap;
+import com.anluy.admin.eqa.entity.EqaIndex;
 import com.anluy.admin.eqa.entity.EqaMeta;
+import com.anluy.admin.eqa.service.EqaIndexService;
 import com.anluy.admin.eqa.service.EqaMetaService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +24,14 @@ public class ElasticsearchQueryAnalyzeApplication {
 	}
 
 	@Bean
-	public EqaMetaMap getEqaMeatMap(EqaMetaService eqaMetaService){
+	public EqaMetaMap getEqaMeatMap(EqaIndexService eqaIndexService, EqaMetaService eqaMetaService){
 		EqaMetaMap eqaMetaMap = new EqaMetaMap();
-		List<EqaMeta> list = eqaMetaService.getAll();
-		list.forEach(eqaMeta -> {
+		List<EqaIndex> indexs =  eqaIndexService.getAll();
+		indexs.forEach(index -> {
+			eqaMetaMap.addEqaIndex(index);
+		});
+		List<EqaMeta> metas = eqaMetaService.getAll();
+		metas.forEach(eqaMeta -> {
 			eqaMetaMap.addEqaMeta(eqaMeta);
 		});
 		return eqaMetaMap;

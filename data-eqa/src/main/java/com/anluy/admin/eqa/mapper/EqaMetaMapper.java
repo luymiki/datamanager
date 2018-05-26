@@ -15,13 +15,14 @@ import java.util.List;
  */
 @Component
 public interface EqaMetaMapper  {
-    @Select("SELECT * FROM Eqa_Meta")
+    @Select("SELECT * FROM Eqa_Meta order by index_Name,sort")
     @Results({
             @Result(property = "indexName", column = "index_name"),
-            @Result(property = "indexNameCn", column = "index_name_cn"),
             @Result(property = "fieldName", column = "field_name"),
             @Result(property = "fieldCode", column = "field_code"),
-            @Result(property = "fieldType", column = "field_type")
+            @Result(property = "fieldType", column = "field_type"),
+            @Result(property = "isFx", column = "is_fx"),
+            @Result(property = "sort", column = "sort")
     })
     List<EqaMeta> getAll();
 

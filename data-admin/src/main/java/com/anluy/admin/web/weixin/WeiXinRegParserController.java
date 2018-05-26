@@ -109,6 +109,15 @@ public class WeiXinRegParserController {
             regInfo.setWxqunList(null);
             regInfo.setWxloginipList(null);
 
+            Set<String> ipSet = new HashSet<>();
+            if(wxloginipList!=null && !wxloginipList.isEmpty()){
+                wxloginipList.forEach(wxloginip -> {
+                    if(!ipSet.contains(wxloginip.getIp())){
+                        ipSet.add(wxloginip.getIp());
+                    }
+                });
+            }
+
             Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(regInfo);
             jsonMap.remove("wxloginipList");
             jsonMap.remove("wxqunList");
@@ -129,6 +138,7 @@ public class WeiXinRegParserController {
                     }
                 }
             });
+            jsonMap.put("ip_list",ipSet);
 
             if(wxlxrList!=null && !wxlxrList.isEmpty()){
                 List<Map> wxlxrMapList = new ArrayList<>();

@@ -11,8 +11,7 @@
         var _init = function init(_data) {
             var params = utils.getURLParams();
             var id = params["id"];
-            var ip = params["ip"];
-            _initListTable(id,ip);
+            _initListTable(id);
             _event();
         };
 
@@ -20,15 +19,12 @@
 
         var _search;//查询的值
 
-        var _initListTable = function(id,ip){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
+        var _initListTable = function(id){
+            $('#data-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
+                    {field: 'id',title: 'ID',visible:false},
                     {field: 'susp_name',title: '姓名',sortable:true},
                     {field: 'qq',title: 'QQ号',sortable:true},
                     {field: 'ip',title: '登录IP',sortable:true},
@@ -53,9 +49,16 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "qq",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },{
+                                "groupId":"3",
+                                "groupType":"should",
+                                "field": "ip",
                                 "values": [_search],
                                 "searchType": 2,
                                 "dataType":1,
@@ -68,12 +71,12 @@
                             "searchType": 1,
                             "dataType":2,
                         };
-                    con[con.length]={
-                            "field": "ip",
-                            "values": [ip],
-                            "searchType": 1,
-                            "dataType":2,
-                        };
+                    // con[con.length]={
+                    //         "field": "ip",
+                    //         "values": [ip],
+                    //         "searchType": 1,
+                    //         "dataType":2,
+                    //     };
                     params["sort"]=sort;
                     params["conditions"]=con;
                     $.ajax.proxy({
@@ -106,6 +109,7 @@
                         }
                     });
                 }
+
             });
         };
 

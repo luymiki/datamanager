@@ -359,7 +359,7 @@ jQuery(function() {
             data["folder"]=$("#file-folder").val();
             data["suspName"]= suspicious_list.selected.suspName;
             data["suspId"]=suspicious_list.selected.suspId;
-
+            headers["Authorization"] = sessionStorage.getItem("token");
         };
         /**
          * 上传之后处理返回值

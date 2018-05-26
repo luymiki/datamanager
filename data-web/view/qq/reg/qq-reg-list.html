@@ -14,31 +14,12 @@
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
 
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link href="/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
-    <link href="/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="/css/animate.min.css" rel="stylesheet">
-    <link href="/css/style.min.css?v=4.0.0" rel="stylesheet">
-    <link href="/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <style>
-        .search-input{
-            width: 160px;
-            height: 34px;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #555;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        }
-    </style>
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content  animated fadeInRight">
@@ -49,6 +30,7 @@
                     <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
                     <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
                     <div class="ibox-tools" >
+                        <div class="btn btn-primary btn-sm" id="copy-row" data-clipboard-target="copyText">复制行</div>
                         <div class="btn btn-primary btn-sm" id="addBtn" >新增</div>
                     </div>
                 </div>
@@ -61,106 +43,13 @@
         </div>
     </div>
 </div>
-
-<div class="modal inmodal" id="email-detail" tabindex="-1" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content animated fadeIn">
-            <div class="modal-header" style="padding: 15px;">
-                <strong>邮件信息</strong>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body" id="email-detail-body">
-                <script type="text/html" id="email-detail-template">
-                    <input id="id" name="id" class="form-control" type="hidden">
-                    <div class="panel-body">
-                        <div class="mail-tools tooltip-demo m-t-md">
-                            <h3>
-                                <span class="font-noraml">主题： </span>{{email.subject}}
-                            </h3>
-                            <h5>
-                                <span class="font-noraml">发件人： </span>{{email.from}} <code>{{email.fromAddress}}</code>
-                            </h5>
-                            <h5>
-                                <span class="pull-right font-noraml">{{email.receivedDate}}</span>
-                                <span class="font-noraml">收件人： </span>{{email.to}} <code>{{email.toAddress}}</code>
-                            </h5>
-                        </div>
-                        <div class="mail-box">
-                            <div class="mail-body">
-                                <!--邮件正文-->
-
-                                {{each text as zz k}}
-                                <iframe id="email-{{k}}" name="email-{{k}}"
-                                        style="width: 100%;min-height: 100%;border: none;"
-                                        scrolling="auto"></iframe>
-                                {{/each}}
-                            </div>
-                            {{if file && file.length>0}}
-                            <div class="mail-attachment">
-                                <p>
-                                    <span><i class="fa fa-paperclip"></i> {{file.length}} 个附件</span>
-                                </p>
-
-                                <div class="attachment">
-                                    {{each file as ff i}}
-                                    <div class="file-box">
-                                        <div class="file">
-                                            <a href="/upload/{{ff.path}}" target="_blank">
-                                                <span class="corner"></span>
-
-                                                {{if ff.type === "image"}}
-                                                <div class="image">
-                                                    <img alt="image" class="img-responsive"src="/upload/{{ff.path}}">
-                                                </div>
-                                                {{else}}
-                                                <div class="icon">
-                                                    <i class="fa fa-file"></i>
-                                                </div>
-                                                {{/if}}
-
-                                                <div class="file-name">{{ff.name}}</div>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                    {{/each}}
-
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                            {{/if}}
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </script>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="submit" >保存</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- 全局js -->
-<script src="/js/jquery-3.3.1.js"></script>
-<script src="/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="/js/ajax.proxy.js"></script>
-<script src="/js/plugins/twbsPagination/jquery.twbsPagination.js"></script>
-<script src="/js/plugins/bootstrap-table/bootstrap-table.js"></script>
-<script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="/js/msg.js"></script>
-<script src="/js/utils.js"></script>
-<!-- jQuery Validation plugin javascript-->
-<script src="/js/plugins/validate/jquery.validate.min.js"></script>
-<script src="/js/plugins/validate/messages_zh.min.js"></script>
-<script src="/js/plugins/art-template/template.js"></script>
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
 
 <script src="/js/qq/reg/qq-reg-list.js"></script>
-
-<!-- 自定义js -->
-<script src="/js/content.js?v=1.0.0"></script>
 
 
 </body>

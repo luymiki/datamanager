@@ -6,31 +6,34 @@
 
     var email = (function () {
 
-
+        var suspid;
+        var type;
+        var code;
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            suspid = params["suspid"];
+            type = params["type"];
+            code = params["code"];
             _initListTable();
             _event();
         };
 
         var params = {"indexName": "email", "conditions": [], "sort": "create_time desc"};
-        var isDelete = {
-            "field": "is_delete",
-            "values": ["1"],
-            "searchType": 3,
-            "dataType": 2
-        };
+        // var isDelete = {
+        //     "field": "is_delete",
+        //     "values": ["1"],
+        //     "searchType": 3,
+        //     "dataType": 2
+        // };
 
         var _search;//查询的值
 
         var _initListTable = function () {
-            $('#email-table').bootstrapTable({
-                pagination: true,
-                pageSize: 10,
-                height: utils.getWidowHeight() - 135,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType: '',
-                sidePagination: 'server',
-                columns: [{field: 'xh', title: '序号', width: '50px'},
+            $('#email-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
+                    {field: 'id',title: 'ID',visible:false},
                     {field: 'susp_name', title: '姓名', sortable: true, width: '100px'},
                     {field: 'to', title: '接收人', sortable: true},
                     {field: 'to_address', title: '接收地址', sortable: true},
@@ -88,7 +91,32 @@
                             // }
                         ];
                     }
-                    con[con.length] = isDelete;
+                    //con[con.length] = isDelete;
+                    if(suspid && type && code){
+                        con[con.length]={
+                            "field": "susp_id",
+                            "values": [suspid],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
+                        if("qq" === type){
+                            con[con.length]={
+                                "field": "to_address",
+                                "values": [code],
+                                "searchType": 2,
+                                "dataType":1,
+                            };
+                        }else if("email" === type){
+                            con[con.length]={
+                                "field": "to_address",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }
+
+
+                    }
                     params["sort"] = sort;
                     params["conditions"] = con;
                     $.ajax.proxy({
@@ -121,12 +149,10 @@
                             }
                         },
                         error: function () {
-                            alert("错误");
+                            toastrMsg.error("错误！");
                         }
                     });
                 }
-                // data:[{'xh':1,'name':'张三','gmsfzh':'ssss','qq':'232132312','weixin':'fsdfdsf','ly':'舆情','gzjd':'5'},
-                //     {'xh':2,'name':'李四','gmsfzh':'ssss','qq':'232132312','weixin':'fsdfdsf','ly':'舆情','gzjd':'5'}]
             });
         };
 
@@ -135,6 +161,13 @@
             $("#addBtn").on('click', function () {
                 top.contabs.addMenuItem("/view/file/email/file-email.html", '导入邮件');
             });
+            /**
+             * 批注
+             */
+            $("#pizhu").on('click',function () {
+                $("#email-table").myTable("comment");
+            });
+
             $("#email-table").on('click', '.detail', function () {
                 top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id=" + $(this).attr("data-id"), '查看邮件');
             });

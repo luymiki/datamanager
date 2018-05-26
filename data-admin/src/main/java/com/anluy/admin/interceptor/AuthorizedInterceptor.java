@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCache;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -37,16 +38,16 @@ public class AuthorizedInterceptor implements HandlerInterceptor {
     //在请求处理之前进行调用（Controller方法调用之前
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        String auth = httpServletRequest.getHeader(AUTHORIZATION);
-        if (StringUtils.isBlank(auth)) {
-            auth = httpServletRequest.getParameter(AUTHORIZATION);
+        String token = httpServletRequest.getHeader(AUTHORIZATION);
+        if (StringUtils.isBlank(token)) {
+            token = httpServletRequest.getParameter(AUTHORIZATION);
         }
-        if (StringUtils.isNotBlank(auth)) {
+        if (StringUtils.isNotBlank(token)) {
 
-            Cache cache = (Cache) cacheManager.getCache(CACHE_NAME);
-            Element authCache = cache.get(auth);
+            EhCacheCache cache = (EhCacheCache)  cacheManager.getCache(CACHE_NAME);
+            Object authCache = cache.get(token);
             if (authCache != null) {
-                authCache.setVersion(authCache.getVersion() + 1);
+                cache.put(token,token);
                 return true;
             }
         }

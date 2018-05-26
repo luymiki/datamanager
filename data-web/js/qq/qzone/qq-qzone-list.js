@@ -7,8 +7,14 @@
     var reg = (function () {
 
 
-
+        var suspid;
+        var type;
+        var code;
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            suspid = params["suspid"];
+            type = params["type"];
+            code = params["code"];
             _initListTable();
             _event();
         };
@@ -48,7 +54,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "qq",
                                 "values": [_search],
@@ -56,6 +62,20 @@
                                 "dataType":1,
                             }
                         ];
+                    }
+                    if(suspid && type && code){
+                        con[con.length]={
+                            "field": "susp_id",
+                            "values": [suspid],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
+                        con[con.length]={
+                            "field": "qq",
+                            "values": [code],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
                     }
                     params["sort"]=sort;
                     params["conditions"]=con;

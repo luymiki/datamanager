@@ -3,8 +3,10 @@
  */
 
 var suspicious_list = (function () {
-
+    var suspid;
     var _init = function init() {
+        var params = utils.getURLParams();
+        suspid = params["suspid"];
         _event();
         _list();
     };
@@ -19,13 +21,14 @@ var suspicious_list = (function () {
     };
 
     var _list = function () {
+        //alert(suspid)
         $.ajax.proxy({
             url:"/api/eqa/query",
             type:"post",
             dataType:"json",
             data:{"pageNum":1,"pageSize":1000,"paramsStr":JSON.stringify(params)},
             success : function (d) {
-                console.log(d);
+                //console.log(d);
                 if(d.status===200){
                     var data = d.data.data;
                     if(data && data.length>0){
@@ -34,7 +37,11 @@ var suspicious_list = (function () {
                         $('<option value="">请选择人员</option>').appendTo($list);
                         for(var i=0; i<data.length;i++){
                             var f = data[i];
-                            $("<option value='"+f["name"]+"!!"+f["id"]+"' data-id='"+f["id"]+"'>"+f["name"]+" | "+f["gmsfzh"]+" | "+formatterType(f["type"])+"</option>").appendTo($list);
+                            $("<option value='"+f["name"]+"!!"+f["id"]+"' data-id='"+f["id"]+"'  "+(suspid === f["id"] ? "selected" : "" ) + ">"+f["name"]+" | "+f["gmsfzh"]+" | "+formatterType(f["type"])+"</option>").appendTo($list);
+                            if(suspid === f["id"]){
+                                selected.suspName = f["name"];
+                                selected.suspId = f["id"];
+                            }
                         }
                         $("#suspicious-list").chosen({}).change(function(){
                             var v = $(this).val();

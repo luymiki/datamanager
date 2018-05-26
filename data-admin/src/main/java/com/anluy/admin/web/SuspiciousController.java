@@ -96,7 +96,8 @@ public class SuspiciousController {
             if(suspicious == null || StringUtils.isBlank(suspicious.getId()) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"待提取的数据ID为空"));
             }
-            suspiciousService.analyze(suspicious.getId());
+            String token = request.getHeader(AuthorizationController.AUTHORIZATION);
+            suspiciousService.analyze(suspicious.getId(),token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("提取成功").setData(suspicious).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("提取失败:" + exception.getMessage(), exception);

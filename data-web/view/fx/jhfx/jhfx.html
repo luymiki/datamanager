@@ -1,0 +1,176 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>集合分析 | 数据管理系统</title>
+
+    <meta name="keywords" content="集合分析,数据管理系统">
+    <meta name="description" content="集合分析 | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link href="/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+    <style>
+        #suspicious-table #fix_head{
+            background: #FFFFFF;
+            box-shadow: 0px 0px 5px #888888;
+        }
+        .qkjj-cell{
+            width: 200px;
+        }
+        .ibox-title{
+            text-align: center;
+        }
+        .J_mainContent{
+            border-bottom: solid 1px rgb(200, 200, 200);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <!--<form class="form-horizontal m-t" id="selectForm">-->
+
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-xs-2 control-label">数据源：</label>-->
+                                <!--<div class="col-xs-4">-->
+                                    <!--<select id="meta-index-1" class="form-control meta-index">-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-4">-->
+                                    <!--<select id="meta-index-1-field" class="form-control meta-field">-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-2">-->
+                                    <!--<div id="add-index" class="btn btn-primary btn-sm" style="font-size: 20px;padding-top: 0px;padding-bottom: 0px;"><i class="fa fa-plus" aria-hidden="true"></i></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<label class="col-xs-2 control-label">数据源：</label>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<select id="name3" name="name" class="form-control" type="text">&ndash;&gt;-->
+
+                                    <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<select id="name5" name="name" class="form-control" type="text">&ndash;&gt;-->
+
+                                    <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+                        <!--</form>-->
+
+                        <!--<a id="add-not-field" >添加排除条件</a>&emsp;-->
+                        <div class="row J_mainContent" >
+                            <iframe class="J_iframe" id="iframe0" width="100%" height="200px" src="/view/mxfx/zdyjm/zdycx.html" frameborder="0" seamless></iframe>
+                        </div>
+                        <!--<a id="add-not-field" >添加排除条件</a>&emsp;-->
+                        <div class="row J_mainContent">
+                            <iframe class="J_iframe" id="iframe1" width="100%" height="200px" src="/view/mxfx/zdyjm/zdycx.html" frameborder="0" seamless></iframe>
+                        </div>
+                        <div id="more-data-source">
+                            <!--<a class="delete-btn" >删除数据源</a>&emsp;-->
+                            <!--<div class="row J_mainContent">-->
+                                <!--<iframe class="J_iframe" id="iframe2" width="100%" height="200px" src="/view/mxfx/zdyjm/zdycx.html" frameborder="0" seamless></iframe>-->
+                            <!--</div>-->
+                            <!--<a class="delete-btn" >删除数据源</a>&emsp;-->
+                            <!--<div class="row J_mainContent">-->
+                                <!--<iframe class="J_iframe" id="iframe3" width="100%" height="200px" src="/view/mxfx/zdyjm/zdycx.html" frameborder="0" seamless></iframe>-->
+                            <!--</div>-->
+                        </div>
+
+                        <br>
+                    </div>
+                    <div class="ibox-title" style="border: 0px;padding-top: 0px;">
+                        <div id="source-btn" class="btn btn-primary btn-sm">添加数据</div>&emsp;
+                        <div id="query-btn" class="btn btn-primary btn-sm" >&nbsp;查&nbsp;询&nbsp;</div>&emsp;
+                        <div id="rest-btn" class="btn btn-danger btn-sm" >&nbsp;重&nbsp;置&nbsp;</div>
+                    </div>
+                    <div class="ibox-content" style="border: 0px;padding-top: 0px;">
+                        <div class="ibox-content" style="border: 0px;padding-top: 0px;padding-bottom: 15px;">
+                            <table  class="table table-bordered" data-mobile-responsive="true">
+                               <tbody id="data-table">
+
+                               </tbody >
+                                <!--<tr>-->
+                                    <!--<td style="width: 100px;">序号</td>-->
+                                    <!--<td>ip</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>1</td>-->
+                                    <!--<td>223.104.105.57</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>2</td>-->
+                                    <!--<td>223.104.105.75</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>3</td>-->
+                                    <!--<td>125.46.18.110</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>4</td>-->
+                                    <!--<td>223.104.105.248</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>42.236.219.8</td>-->
+                                <!--</tr>-->
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">-->
+            <!--<div class="col-sm-12">-->
+                <!--<div class="ibox float-e-margins">-->
+                    <!--<div class="ibox-title">-->
+                        <!--<div class="ibox-tools" style="margin-top: -7px;">-->
+                            <!--<div class="btn btn-primary btn-sm" id="copy-row" data-clipboard-target="copyText">复制行</div>-->
+                            <!--&lt;!&ndash;<div class="btn btn-primary btn-sm" id="addBtn" data-toggle="modal" data-target="#addModal">新增</div>&ndash;&gt;-->
+                            <!--<div class="btn btn-primary btn-sm" id="addBtn" >新增</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="ibox-content">-->
+                        <!--&lt;!&ndash;<div id="suspicious-table"></div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div id="page_bar">123</div>&ndash;&gt;-->
+                        <!--<table id="suspicious-table" data-mobile-responsive="true" >-->
+                        <!--</table>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+
+
+    <!-- 全局js -->
+    <script type="text/javascript">
+        BASE_JS();
+        BOOTSTRAP_TABLE_JS();
+    </script>
+
+    <script src="/js/fx/jhfx/jhfx2.js"></script>
+
+
+</body>
+</html>

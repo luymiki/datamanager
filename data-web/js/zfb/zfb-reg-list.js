@@ -18,13 +18,7 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
+            $('#data-table').myTable({
                 columns: [{field: 'xh',title: '序号',width:'50px'},
                     {field: 'user_id',title: '账号',sortable:true},
                     {field: 'dlsj',title: '登陆手机',sortable:true},
@@ -53,7 +47,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "dlsj",
                                 "values": [_search],
@@ -61,7 +55,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "email",
                                 "values": [_search],
@@ -69,7 +63,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"4",
                                 "groupType":"should",
                                 "field": "bdsj",
                                 "values": [_search],
@@ -77,7 +71,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"5",
                                 "groupType":"should",
                                 "field": "name",
                                 "values": [_search],

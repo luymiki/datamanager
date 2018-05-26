@@ -1,0 +1,16 @@
+{
+  "indexName": "huaduan_list",
+  "conditions": [
+    {
+      "field": "hd_id",
+      "values": [
+        "%s"
+      ],
+      "searchType": 1,
+      "dataType":2
+    }
+
+  ],
+  "aggs": [],
+  "sort":"create_time desc"
+}

@@ -5,10 +5,14 @@
     "use strict";
 
     var reg = (function () {
-
-
-
+        var suspid;
+        var type;
+        var code;
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            suspid = params["suspid"];
+            type = params["type"];
+            code = params["code"];
             _initListTable();
             _event();
         };
@@ -16,16 +20,12 @@
         var params = {"indexName":"qqreginfo","conditions":[],"sort":"create_time desc"};
 
         var _search;//查询的值
-
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
+            $('#data-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
+                    {field: 'id',title: 'ID',visible:false},
                     {field: 'susp_name',title: '姓名',sortable:true,width:'100px'},
                     {field: 'qq',title: 'QQ号',sortable:true},
                     {field: 'name',title: '昵称',sortable:true},
@@ -55,7 +55,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "qq",
                                 "values": [_search],
@@ -63,7 +63,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "name",
                                 "values": [_search],
@@ -71,6 +71,37 @@
                                 "dataType":1,
                             }
                         ];
+                    }
+                    if(suspid && type && code){
+                        con[con.length]={
+                            "field": "susp_id",
+                            "values": [suspid],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
+                        if("qq" === type || "weixin" === type){
+                            con[con.length]={
+                                "field": "qq",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("dh" === type){
+                            con[con.length]={
+                                "field": "dh",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("email" === type){
+                            con[con.length]={
+                                "field": "email",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }
+
                     }
                     params["sort"]=sort;
                     params["conditions"]=con;

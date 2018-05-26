@@ -102,7 +102,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "khyh",
                                 "values": [_search],
@@ -110,7 +110,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "yhzh",
                                 "values": [_search],
@@ -118,7 +118,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"4",
                                 "groupType":"should",
                                 "field": "zt",
                                 "values": [_search],

@@ -1,0 +1,16 @@
+{
+  "indexName": "cfttrades",
+  "conditions": [
+    {
+      "field": "cft_id",
+      "values": [
+        "%s"
+      ],
+      "searchType": 1,
+      "dataType":2
+    }
+
+  ],
+  "aggs": [],
+  "sort":"create_time desc"
+}

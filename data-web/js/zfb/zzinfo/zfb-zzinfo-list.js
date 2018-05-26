@@ -101,7 +101,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "skf_id",
                                 "values": [_search],
@@ -109,7 +109,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "skjgmc",
                                 "values": [_search],
@@ -117,7 +117,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"4",
                                 "groupType":"should",
                                 "field": "zt",
                                 "values": [_search],

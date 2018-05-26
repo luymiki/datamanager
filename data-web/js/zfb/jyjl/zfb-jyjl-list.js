@@ -100,7 +100,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "hzhb_id",
                                 "values": [_search],
@@ -108,7 +108,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "maijiaxx",
                                 "values": [_search],
@@ -116,7 +116,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"4",
                                 "groupType":"should",
                                 "field": "maijia_id",
                                 "values": [_search],

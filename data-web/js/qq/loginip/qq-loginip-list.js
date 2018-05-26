@@ -6,9 +6,15 @@
 
     var reg = (function () {
 
-
+        var suspid;
+        var type;
+        var code;
 
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            suspid = params["suspid"];
+            type = params["type"];
+            code = params["code"];
             _initListTable();
             _event();
         };
@@ -18,14 +24,11 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
+            $('#data-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
+                    {field: 'id',title: 'ID',visible:false},
                     {field: 'susp_name',title: '姓名',sortable:true},
                     {field: 'qq',title: 'QQ号',sortable:true},
                     {field: 'size',title: '记录条数',sortable:true},
@@ -49,14 +52,45 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "qq",
                                 "values": [_search],
                                 "searchType": 2,
                                 "dataType":1,
+                            },{
+                                "groupId":"3",
+                                "groupType":"should",
+                                "field": "ip_list",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
                             }
                         ];
+                    }
+                    if(suspid && type && code){
+                        con[con.length]={
+                            "field": "susp_id",
+                            "values": [suspid],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
+                        if("qq" === type){
+                            con[con.length]={
+                                "field": "qq",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("ip" === type){
+                            con[con.length]={
+                                "field": "ip_list",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }
+
                     }
                     params["sort"]=sort;
                     params["conditions"]=con;
@@ -99,7 +133,7 @@
                 top.contabs.addMenuItem("/view/qq/loginip/qq-loginip.html",'导入登录信息');
             });
             $("#data-table").on('click','.detail',function () {
-                top.contabs.addMenuItem("/view/qq/loginip/qq-loginip-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                top.contabs.addMenuItem("/view/qq/loginip/qq-loginiplist-list.html?id="+$(this).attr("data-id"),'查看信息');
             });
             $("#data-table").on('click','.delete',function () {
                 _delete($(this).attr("data-id"),$(this).attr("data-fileId"));

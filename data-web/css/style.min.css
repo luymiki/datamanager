@@ -1772,7 +1772,7 @@ table.dataTable thead .sorting:after {
     border: 1px solid #e7eaec;
     border-radius: 2px;
     padding: 20px;
-    position: relative
+    position: relative;
 }
 
 .tabs-container .nav-tabs > li.active > a, .tabs-container .nav-tabs > li.active > a:focus, .tabs-container .nav-tabs > li.active > a:hover {
@@ -1797,6 +1797,7 @@ table.dataTable thead .sorting:after {
     border-top: none
 }
 
+
 .tabs-container .tabs-left .tab-pane .panel-body, .tabs-container .tabs-right .tab-pane .panel-body {
     border-top: 1px solid #e7eaec
 }
@@ -1815,12 +1816,12 @@ table.dataTable thead .sorting:after {
 }
 
 .tabs-container .tabs-left > .nav-tabs, .tabs-container .tabs-right > .nav-tabs {
-    width: 20%
+    width: 150px
 }
 
 .tabs-container .tabs-left .panel-body {
-    width: 80%;
-    margin-left: 20%
+    width:  calc(100% - 150px);
+    margin-left:  150px;
 }
 
 .tabs-container .tabs-right .panel-body {
@@ -6924,4 +6925,22 @@ body.skin-3 {
         width: 12.5%;
         font-size: 12px
     }
+}
+
+.search-input{
+    width: 160px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }

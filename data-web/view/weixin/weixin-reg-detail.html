@@ -12,12 +12,12 @@
     <meta name="keywords" content="微信注册信息 | 数据管理系统">
     <meta name="description" content="微信注册信息 | 数据管理系统">
 
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-
-    <link href="/css/animate.css" rel="stylesheet">
-    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
 
 </head>
 
@@ -58,39 +58,52 @@
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>微信好友</strong>：
-                                            <br>
-                                            <small class="text-muted">
-                                                {{each file.wxlxrList as ff i}}
-                                                <code>{{i+1}}</code>{{ff.zh}}&emsp;{{ff.nc}}</br>
-                                                {{/each}}
-                                            </small>
+                                            <h4>微信好友</h4>
+                                            <table id="wxlxrList-table" data-mobile-responsive="true">
+                                                <tr><td>无</td></tr>
+                                            </table>
+
+                                            <!--<br>-->
+                                            <!--<small class="text-muted">-->
+                                                <!--{{each file.wxlxrList as ff i}}-->
+                                                <!--<code>{{i+1}}</code>{{ff.zh}}&emsp;{{ff.nc}}</br>-->
+                                                <!--{{/each}}-->
+                                            <!--</small>-->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>微信群</strong>：
-                                            <br>
-                                            <small class="text-muted">
-                                                {{each file.wxqunList as ff i}}
-                                                <code>{{i+1}}</code>{{ff.zh}}&emsp;{{ff.mc}}</br>
-                                                {{/each}}
-                                            </small>
+                                            <h4>微信群</h4>
+                                            <table id="wxqunList-table" data-mobile-responsive="true">
+                                                <tr><td>无</td></tr>
+                                            </table>
+
+                                            <!--<strong>微信群</strong>：-->
+                                            <!--<br>-->
+                                            <!--<small class="text-muted">-->
+                                                <!--{{each file.wxqunList as ff i}}-->
+                                                <!--<code>{{i+1}}</code>{{ff.zh}}&emsp;{{ff.mc}}</br>-->
+                                                <!--{{/each}}-->
+                                            <!--</small>-->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="feed-activity-list">
                                     <div class="feed-element">
                                         <div class="media-body ">
-                                            <strong>登录IP</strong>：
-                                            <br>
-                                            <small class="text-muted">
-                                                {{each file.wxloginipList as ff i}}
-                                                <code>{{i+1}}</code>{{ff.ip}}&emsp;{{ff.cjsj}}</br>
-                                                {{/each}}
-                                            </small>
+                                            <h4>登录记录</h4>
+                                            <table id="wxloginipList-table" data-mobile-responsive="true">
+                                                <tr><td>无</td></tr>
+                                            </table>
+                                            <!--<strong>登录IP</strong>：-->
+                                            <!--<br>-->
+                                            <!--<small class="text-muted">-->
+                                                <!--{{each file.wxloginipList as ff i}}-->
+                                                <!--<code>{{i+1}}</code>{{ff.ip}}&emsp;{{ff.cjsj}}</br>-->
+                                                <!--{{/each}}-->
+                                            <!--</small>-->
                                         </div>
                                     </div>
                                 </div>
@@ -106,12 +119,10 @@
 
 </div>
 <!-- 全局js -->
-<script src="/js/jquery-3.3.1.js"></script>
-<script src="/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="/js/ajax.proxy.js"></script>
-<script src="/js/msg.js"></script>
-<script src="/js/utils.js"></script>
-<script src="/js/plugins/art-template/template.js"></script>
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
 <script src="/js/weixin/weixin-reg-detail.js"></script>
 
 </body>

@@ -43,14 +43,15 @@ public class AuthorizationController {
     private static final String SECRET = "www.anluy.com";
     private static final String ISSUER = "www.anluy.com";
     private static final String LOGININFO = "loginInfo";
-    private static final String AUTHORIZATION = "Authorization";
-    private final static String CACHE_NAME = "Authorization-Cache";
+    public static String AUTHORIZATION = "Authorization";
+    public static final String CACHE_NAME = "Authorization-Cache";
 
     @Resource
     private Environment environment;
 
     @Resource
     private CacheManager cacheManager;
+
     /**
      * 授权接口
      *
@@ -68,9 +69,9 @@ public class AuthorizationController {
     public Object authorize(@RequestParam(name = "userName") String userName,
                             @RequestParam(name = "password") String password) {
         try {
-            String _userName = environment.getProperty("admin.userName","admin");
-            String _password = environment.getProperty("admin.password","admin123");
-            if(_userName.equals(userName)&_password.equals(password)){
+            String _userName = environment.getProperty("admin.userName", "admin");
+            String _password = environment.getProperty("admin.password", "admin123");
+            if (_userName.equals(userName) & _password.equals(password)) {
 
                 //获取授权算法，并生成token
                 Algorithm algorithm = Algorithm.HMAC256(SECRET);
@@ -78,16 +79,16 @@ public class AuthorizationController {
                         .withIssuer(ISSUER).withClaim(LOGININFO, _userName)
                         .sign(algorithm);
                 EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
-                cache.put(token,token);
+                cache.put(token, token);
                 return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("认证成功").setData(token));
             }
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(401,"认证失败"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(401, "认证失败"));
         } catch (UnsupportedEncodingException exception) {
             LOGGER.error("认证失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"认证失败").setData(exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "认证失败").setData(exception.getMessage()));
         } catch (JWTCreationException exception) {
             LOGGER.error("认证失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"认证失败").setData(exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "认证失败").setData(exception.getMessage()));
         }
     }
 
@@ -111,7 +112,7 @@ public class AuthorizationController {
             }
             if (StringUtils.isBlank(token)) {
                 LOGGER.error("验证失败，没有认证令牌信息");
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"验证失败，没有认证令牌信息"));
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "验证失败，没有认证令牌信息"));
             }
             //获取授权算法，并解析token
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
@@ -125,16 +126,17 @@ public class AuthorizationController {
             EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
             Object authCache = cache.get(token);
             if (authCache != null) {
+                cache.put(token, token);
                 return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("验证成功").setData(claim.asString()));
             }
             LOGGER.error("令牌已过期");
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"令牌已过期"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "令牌已过期"));
         } catch (UnsupportedEncodingException exception) {
             LOGGER.error("验证失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"认证失败，无效的令牌"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "认证失败，无效的令牌"));
         } catch (JWTVerificationException exception) {
             LOGGER.error("验证失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(),"认证失败，无效的令牌"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.UNAUTHORIZED.value(), "认证失败，无效的令牌"));
         }
     }
 
@@ -179,10 +181,10 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("注销成功"));
         } catch (UnsupportedEncodingException exception) {
             LOGGER.error("注销失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),"注销失败，无效的令牌"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "注销失败，无效的令牌"));
         } catch (JWTVerificationException exception) {
             LOGGER.error("注销失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),"注销失败，无效的令牌"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "注销失败，无效的令牌"));
         }
     }
 }

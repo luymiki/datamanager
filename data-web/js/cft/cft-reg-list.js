@@ -6,9 +6,15 @@
 
     var reg = (function () {
 
-
+        var suspid;
+        var type;
+        var code;
 
         var _init = function init(_data) {
+            var params = utils.getURLParams();
+            suspid = params["suspid"];
+            type = params["type"];
+            code = params["code"];
             _initListTable();
             _event();
         };
@@ -18,13 +24,7 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
+            $('#data-table').myTable({
                 columns: [{field: 'xh',title: '序号',width:'50px'},
                     {field: 'susp_name',title: '姓名',sortable:true,width:'100px'},
                     {field: 'zh',title: '账号',sortable:true},
@@ -54,7 +54,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "qq",
                                 "values": [_search],
@@ -62,7 +62,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "name",
                                 "values": [_search],
@@ -70,6 +70,44 @@
                                 "dataType":1,
                             }
                         ];
+                    }
+                    if(suspid && type && code){
+                        con[con.length]={
+                            "field": "susp_id",
+                            "values": [suspid],
+                            "searchType": 1,
+                            "dataType":1,
+                        };
+                        if("dh" === type){
+                            con[con.length]={
+                                "field": "dh",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("cft" === type){
+                            con[con.length]={
+                                "field": "zh",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("yhzh" === type){
+                            con[con.length]={
+                                "field": "yhzh_list",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }else if("email" === type){
+                            con[con.length]={
+                                "field": "email",
+                                "values": [code],
+                                "searchType": 1,
+                                "dataType":1,
+                            };
+                        }
+
                     }
                     params["sort"]=sort;
                     params["conditions"]=con;
@@ -86,7 +124,8 @@
                                     data[i]['xh'] = xh++;
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;" +
                                         "<div class='btn btn-info btn-outline btn-xs liushui' data-id='"+data[i]["id"]+"'>流水</div>&nbsp;" +
-                                        "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>";
+                                        "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>&nbsp;"+
+                                        "<div class='btn btn-info btn-outline btn-xs analyze' data-id='"+data[i]["id"]+"'>分析</div>";
                                 }
                                 request.success({
                                     rows : data,
@@ -120,6 +159,9 @@
             });
             $("#data-table").on('click','.delete',function () {
                 _delete($(this).attr("data-id"),$(this).attr("data-fileId"));
+            });
+            $("#data-table").on('click','.analyze',function () {
+                top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-list-analyze.html?id="+$(this).attr("data-id"),'财付通流水信息分析');
             });
             $("#search-btn").on('click',function () {
                 _search = $("#search-input").val();

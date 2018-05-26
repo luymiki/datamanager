@@ -15,7 +15,6 @@
         };
 
         var params = {"indexName":"qqloginip","conditions":[],"sort":"create_time desc"};
-        var paramsFile =  {"indexName":"attachment","conditions":[],"sort":"create_time desc"};
 
         var _get = function (id) {
             params["conditions"]=[{

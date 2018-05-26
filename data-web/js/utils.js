@@ -4,6 +4,7 @@
 var utils = (function () {
     'use strict';
 
+
     /**
      * 获取url的参数列表
      * @returns {{}}
@@ -23,10 +24,11 @@ var utils = (function () {
         return params;
     };
 
-    var _getWidowHeight=function () {
-        var h = document.body.offsetHeight;
+    var _getWidowHeight = function () {
+        var h = document.body.offsetHeight ||window.screen.availHeight-240;
         return h;
     };
+
 
     return {
         getURLParams: _getURLParams,

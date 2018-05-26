@@ -26,25 +26,27 @@
 
         var _initListTable = function(){
 
-            $('#suspicious-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
-                    {field: 'name',title: '姓名',width:'100px'},
+            $('#suspicious-table').myTable({
+                columns:[
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
+                    {field: 'id',title: 'ID',visible:false},
+                    {field: 'type',title: '类型',width:'100px',formatter:formatterType},
+                    {field: 'name',title: '姓名'},
                     {field: 'gmsfzh',title: '身份证号',sortable:true},
+                    {field: 'qkjj',title: '情况简介',class:'qkjj-cell',formatter:formatterStr},
                     {field: 'qq',title: 'QQ',formatter:formatterList},
                     {field: 'weixin',title: '微信',formatter:formatterList},
-                    {field: 'cft',title: '财付通',formatter:formatterList},
-                    {field: 'zfb',title: '支付宝',formatter:formatterList},
-                    {field: 'yhzh',title: '银行账号',formatter:formatterList},
                     {field: 'phone',title: '手机号',formatter:formatterList},
                     {field: 'imei',title: 'IMEI',formatter:formatterList},
                     {field: 'imsi',title: 'IMSI',formatter:formatterList},
+                    {field: 'cft',title: '财付通',formatter:formatterList},
+                    {field: 'zfb',title: '支付宝',formatter:formatterList},
+                    {field: 'yhzh',title: '银行账号',formatter:formatterList},
+                    {field: 'ip',title: 'IP',formatter:formatterList},
                     {field: 'email',title: '电子邮箱',formatter:formatterList},
+                    {field: 'other',title: '其他码值',formatter:formatterList},
+                    {field: 'gzjd',title: '工作进度'},
                     {field: 'opt',title: '操作',width:'110px'}
                 ],
                 ajax : function (request) {
@@ -91,9 +93,32 @@
                             toastrMsg.error("错误！");
                         }
                     });
+                },
+                onDblClickCell:function(field, value, row, $element) {
+                    //console.log(row);
+                    var val = row[field];
+                    if(field === "type"){
+                        val = formatterType(val);
+                    }
+                    if(val instanceof Array){
+                        var s = "";
+                        for(var i=0 ; i< val.length;i++){
+                            var d = val[i];
+                            s += formatter(field,row["id"],d);
+                        }
+                        //val =  val.join("&emsp;");
+                        val = s;
+                    }
+                    if(val!==""){
+                        layer.open({
+                            // time: 2000, //不自动关闭
+                            type: 1,
+                            skin: 'layui-layer-rim', //加上边框
+                            area: ['420px', '340px'], //宽高
+                            content: val
+                        });
+                    }
                 }
-                // data:[{'xh':1,'name':'张三','gmsfzh':'ssss','qq':'232132312','weixin':'fsdfdsf','ly':'舆情','gzjd':'5'},
-                //     {'xh':2,'name':'李四','gmsfzh':'ssss','qq':'232132312','weixin':'fsdfdsf','ly':'舆情','gzjd':'5'}]
             });
         };
 
@@ -101,6 +126,7 @@
         var _event = function () {
             $("#suspicious-table").on('click','.update',function () {
                 _get($(this).attr("data-id"));
+                layer.tips('Hi，我是tips', '吸附元素选择器，如#id');
             });
             $("#suspicious-table").on('click','.delete',function () {
                 _delete($(this).attr("data-id"));
@@ -111,16 +137,89 @@
             $("#suspicious-table").on('click','.tiqu',function () {
                 _tiqu($(this).attr("data-id"));
             });
+            $("#suspicious-table").on('dblclick','.tiqu',function () {
+                _tiqu($(this).attr("data-id"));
+            });
+            $("body").on('click','.data-qq',function () {
+                var qq = $(this).attr("data-qq");
+                _addItem($(this).attr("data-id"),qq,"qq",'QQ['+qq+']信息列表');
+            });
+            $("body").on('click','.data-weixin',function () {
+                var weixin = $(this).attr("data-weixin");
+                _addItem($(this).attr("data-id"),weixin,"weixin",'微信['+weixin+']信息列表');
+            });
+            $("body").on('click','.data-dh',function () {
+                var dh = $(this).attr("data-dh");
+                _addItem($(this).attr("data-id"),dh,"dh",'手机号['+dh+']信息列表');
+            });
+            $("body").on('click','.data-cft',function () {
+                var cft = $(this).attr("data-cft");
+                _addItem($(this).attr("data-id"),cft,"cft",'财付通['+cft+']信息列表');
+            });
+            $("body").on('click','.data-yhzh',function () {
+                var yhzh = $(this).attr("data-yhzh");
+                _addItem($(this).attr("data-id"),yhzh,"yhzh",'银行账号['+yhzh+']信息列表');
+            });
+            $("body").on('click','.data-email',function () {
+                var email = $(this).attr("data-email");
+                _addItem($(this).attr("data-id"),email,"email",'电子邮件['+email+']信息列表');
+            });
+            $("body").on('click','.data-ip',function () {
+                var ip = $(this).attr("data-ip");
+                _addItem($(this).attr("data-id"),ip,"ip",'IP['+ip+']信息列表');
+            });
         };
+        var _addItem =function (id,val,type,title) {
+            top.contabs.addMenuItem("/view/suspicious/suspicious-page.html?id="+id+"&type="+type+"&code="+val,title);
+        }
 
+        var formatter = function (field,id,val) {
+            switch (field){
+                case "qq":
+                    return _formatter(id,val,'data-qq');
+                case "weixin":
+                    return _formatter(id,val,'data-weixin');
+                case "phone":
+                    return _formatter(id,val,'data-dh');
+                case "cft":
+                    return _formatter(id,val,'data-cft');
+                case "yhzh":
+                    return _formatter(id,val,'data-yhzh');
+                case "email":
+                    return _formatter(id,val,'data-email');
+                case "ip":
+                    return _formatter(id,val,'data-ip');
+                default:
+                    return val +" ";
+            }
+        }
+        var _formatter = function (id,val,clazz) {
+            return "<a class='"+clazz+"' data-id='"+id+"' "+clazz+"='"+val+"' >"+val+"</a> ";
+        }
 
-        var formatterList = function (d){
+        var formatterList = function (d,item, idx, field){
             if(d){
                 var s = "";
-                for(var i=0 ; i<d.length;i++){
-                    s+= d[i]+" ";
+                for(var i=0 ; i< d.length && i<5;i++){
+                    s += formatter(field,item["id"],d[i]);
                 }
+                if(d.length >5){
+                    s += "...";
+                }
+                // for(var i=0 ; i< d.length;i++){
+                //     s+= d[i]+" ";
+                // }
                 return s;
+            }
+            return d;
+        };
+        var formatterStr = function (d){
+            if(d){
+                var s = d;
+                if(d.length >50){
+                    s = d.substring(0,50)+"...";
+                }
+                return "<div class='qkjj-cell'>"+s+"</div>";
             }
             return d;
         };

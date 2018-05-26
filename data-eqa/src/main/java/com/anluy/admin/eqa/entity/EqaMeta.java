@@ -10,10 +10,11 @@ import com.anluy.commons.BaseEntity;
 public class EqaMeta  {
     private int id;
     private String indexName;
-    private String indexNameCn;
     private String fieldName;
     private String fieldCode;
     private String fieldType;
+    private int isFx;
+    private int sort;
 
     public int getId() {
         return id;
@@ -55,11 +56,19 @@ public class EqaMeta  {
         this.fieldType = fieldType;
     }
 
-    public String getIndexNameCn() {
-        return indexNameCn;
+    public int getIsFx() {
+        return isFx;
     }
 
-    public void setIndexNameCn(String indexNameCn) {
-        this.indexNameCn = indexNameCn;
+    public void setIsFx(int isFx) {
+        this.isFx = isFx;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 }

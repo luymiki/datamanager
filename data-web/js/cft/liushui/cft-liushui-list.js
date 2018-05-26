@@ -65,27 +65,21 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-105,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
+            $('#data-table').myTable({
                 columns: [{field: 'xh',title: '序号',width:'50px'},
                     // {field: 'susp_name',title: '姓名',sortable:true,width:'100px'},
                     {field: 'zh',title: '账号',sortable:true},
                     {field: 'jdlx',title: '借贷类型',sortable:true},
                     {field: 'jyje',title: '交易金额',sortable:true},
-                    {field: 'jyye',title: '交易余额'},
-                    {field: 'jysj',title: '交易时间'},
+                    {field: 'jyye',title: '交易余额',sortable:true},
+                    {field: 'jysj',title: '交易时间',sortable:true},
                     // {field: 'yhlx',title: '交易类型'},
                     // {field: 'jysm',title: '描述'},
-                    {field: 'shmc',title: '商户名称'},
-                    {field: 'fsf',title: '发送方'},
-                    {field: 'fsje',title: '发送金额'},
-                    {field: 'jsf',title: '接收方'},
-                    {field: 'jsje',title: '接收金额'},
+                    {field: 'shmc',title: '商户名称',sortable:true},
+                    {field: 'fsf',title: '发送方',sortable:true},
+                    {field: 'fsje',title: '发送金额',sortable:true},
+                    {field: 'jsf',title: '接收方',sortable:true},
+                    {field: 'jsje',title: '接收金额',sortable:true},
                     {field: 'opt',title: '操作',width:'50px'}
                 ],
                 ajax : function (request) {
@@ -106,7 +100,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"2",
                                 "groupType":"should",
                                 "field": "shmc",
                                 "values": [_search],
@@ -114,7 +108,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"3",
                                 "groupType":"should",
                                 "field": "fsf",
                                 "values": [_search],
@@ -122,7 +116,7 @@
                                 "dataType":1,
                             },
                             {
-                                "groupId":"1",
+                                "groupId":"4",
                                 "groupType":"should",
                                 "field": "jsf",
                                 "values": [_search],
@@ -178,6 +172,9 @@
             });
             $("#addBtn").on('click',function () {
                 top.contabs.addMenuItem("/view/cft/liushui/cft-liushui.html?id="+cftid,'导入财付通流水信息');
+            });
+            $("#analyze-btn").on('click',function () {
+                top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-list-analyze.html?id="+cftid,'财付通流水信息分析');
             });
             $("#search-btn").on('click',function () {
                 _search = $("#search-input").val();

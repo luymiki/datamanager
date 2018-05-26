@@ -5,10 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -52,10 +55,18 @@ public class SwaggerConfig {
      */
     @Bean
     public Docket api() {
+        //添加head参数start
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        List<Parameter> pars = new ArrayList<Parameter>();
+        tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        pars.add(tokenPar.build());
+
         List<ResponseMessage> messageList = new ArrayList<>();
         messageList.add(new ResponseMessageBuilder().code(1001).message("参数为空或格式不正确").build());
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .globalOperationParameters(pars)
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)) // 注解了 ApiOperation的方法纳入扫描范围
                 .build()

@@ -16,6 +16,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +89,7 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      */
     @Override
-    public void analyze(String suspId) throws IOException {
+    public void analyze(String suspId,String token) throws IOException {
         Map suspObject = elasticsearchRestClient.get(this.getIndexName(), suspId, null, null);
         //dsl查询语句
         if (StringUtils.isBlank(queryDsl)) {
@@ -96,29 +98,29 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
 
         //1、根据可疑人员来同步的
         //提取QQ号 qqreginfo：qq;email:qq.com;qqzone:qq；qqloginip：qq ；wxreginfo：qq
-        this.tiquQQ(suspId, suspObject);
+        this.tiquQQ(suspId, token,suspObject);
 
         //提取微信号 wxreginfo：weixin
-        this.tiquWixin(suspId, suspObject);
+        this.tiquWixin(suspId,token, suspObject);
 
         //提取财付通 cftreginfo：zh
-        this.tiquCft(suspId, suspObject);
+        this.tiquCft(suspId,token, suspObject);
 
         //提取银行账号 cftreginfo：yhzh_list
-        this.tiquYhzh(suspId, suspObject);
+        this.tiquYhzh(suspId,token, suspObject);
 
         //提取手机号 qqreginfo：dh;wxreginfo:dh;cftreginfo:dh ;huaduan:zjhm;
-        this.tiquSjhm(suspId, suspObject);
+        this.tiquSjhm(suspId,token, suspObject);
 
         //提取电子邮箱 email：to_address; qqreginfo:email;wxreginfo:email
-        this.tiquEmail(suspId, suspObject);
+        this.tiquEmail(suspId,token, suspObject);
 
-        //提取IP wxloginip：ip[]; qqloginip:ip_list[]
-        this.tiquIp(suspId, suspObject);
+        //提取IP wxreginfo：ip_list[]; qqloginip:ip_list[]
+        this.tiquIp(suspId,token, suspObject);
 
         //2、通过关联关系提取
         //提取IMEI xndw_sx：imei; xndw_wsk:imei，通过手机号和微信号提取
-        this.tiquIMEI(suspId, suspObject);
+        this.tiquIMEI(suspId,token, suspObject);
 
     }
 
@@ -129,26 +131,14 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param indexNames
      * @return
      */
-    private JSONObject get(String suspId, String indexNames) {
-        Map params = new HashMap<>();
-        params.put("pageNum", "1");
-        params.put("pageSize", "10000");
-        params.put("paramsStr", String.format(queryDsl, indexNames, suspId));
-        return HTTPUtils.getJSONObjectByPost(eqaConfig.getQueryUrl(), params, "utf-8");
-    }
-
-    /**
-     * 查询es
-     *
-     * @param dsl
-     * @return
-     */
-    private JSONObject getByDsl(String dsl) {
-        Map params = new HashMap<>();
-        params.put("pageNum", "1");
-        params.put("pageSize", "10000");
-        params.put("paramsStr", dsl);
-        return HTTPUtils.getJSONObjectByPost(eqaConfig.getQueryUrl(), params, "utf-8");
+    private JSONObject get(String suspId,String token, String indexNames) {
+//        Map params = new HashMap<>();
+//        params.put("pageNum", "1");
+//        params.put("pageSize", "10000");
+//        params.put("paramsStr", String.format(queryDsl, indexNames, suspId));
+//        Header[] headers = new Header[]{new BasicHeader("Authorization",token)};
+//        return HTTPUtils.getJSONObjectByPost(eqaConfig.getQueryUrl(), params, headers,"utf-8");
+        return getByDsl(eqaConfig.getQueryUrl(),String.format(queryDsl, indexNames, suspId),token);
     }
 
     /**
@@ -185,8 +175,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquQQ(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "qqreginfo,email,qqzone,qqloginip,wxreginfo");
+    private void tiquQQ(String suspId,String token, Map suspObject) {
+        JSONObject resultJson = get(suspId, token,"qqreginfo,email,qqzone,qqloginip,wxreginfo");
         //提取QQ号 qqreginfo：qq;email:qq.com;qqzone:qq；qqloginip：qq ；wxreginfo：qq
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -232,8 +222,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquWixin(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "wxreginfo");
+    private void tiquWixin(String suspId,String token, Map suspObject) {
+        JSONObject resultJson = get(suspId, token,"wxreginfo");
         //提取微信号 wxreginfo：weixin
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -265,8 +255,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquCft(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "cftreginfo");
+    private void tiquCft(String suspId,String token, Map suspObject) {
+        JSONObject resultJson = get(suspId, token,"cftreginfo");
         //提取财付通 cftreginfo：zh
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -298,8 +288,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquYhzh(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "cftreginfo");
+    private void tiquYhzh(String suspId, String token,Map suspObject) {
+        JSONObject resultJson = get(suspId,token, "cftreginfo");
         //提取银行账号 cftreginfo：yhzh_list
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -334,8 +324,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquSjhm(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "qqreginfo,wxreginfo,cftreginfo,huaduan");
+    private void tiquSjhm(String suspId, String token,Map suspObject) {
+        JSONObject resultJson = get(suspId, token,"qqreginfo,wxreginfo,cftreginfo,huaduan");
         //提取手机号 qqreginfo：dh;wxreginfo:dh;cftreginfo:dh ;huaduan:zjhm;
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -376,8 +366,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquEmail(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "email,qqreginfo,wxreginfo");
+    private void tiquEmail(String suspId, String token,Map suspObject) {
+        JSONObject resultJson = get(suspId, token,"email,qqreginfo,wxreginfo");
         //提取电子邮箱 email：to_address; qqreginfo:email;wxreginfo:email
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -416,22 +406,16 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquIp(String suspId, Map suspObject) {
-        JSONObject resultJson = get(suspId, "wxloginip,qqloginip");
-        //提取IP wxloginip：ip[]; qqloginip:ip_list[]
+    private void tiquIp(String suspId,String token, Map suspObject) {
+        JSONObject resultJson = get(suspId,token, "wxreginfo,qqloginip");
+        //提取IP wxreginfo：ip_list[]; qqloginip:ip_list[]
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
             Set<String> nset = this.getDataSet(suspObject, "ip");
             dataList.forEach(o -> {
                 JSONObject jo = (JSONObject) o;
                 switch ((String) jo.get("_index")) {
-                    case "wxloginip": {
-                        String value = (String) jo.get("ip");
-                        if (StringUtils.isNotBlank(value)) {
-                            nset.add(value);
-                        }
-                        break;
-                    }
+                    case "wxloginip":
                     case "qqloginip": {
                         JSONArray value = (JSONArray) jo.get("ip_list");
                         if (value !=null && !value.isEmpty()) {
@@ -458,7 +442,7 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspId
      * @param suspObject
      */
-    private void tiquIMEI(String suspId, Map suspObject) throws IOException {
+    private void tiquIMEI(String suspId,String token, Map suspObject) throws IOException {
         JSONArray dataList = new JSONArray();
         //提取提取IMEI xndw_sx：imei; xndw_wsk:imei，通过手机号和微信号提取
 
@@ -491,7 +475,7 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
             conditions.add(con4);
         }
         if (!conditions.isEmpty()) {
-            queryByDsl(JSON.toJSONString(jo1),dataList);
+            queryByDsl(eqaConfig.getQueryUrl(),JSON.toJSONString(jo1),token,dataList);
         }
 
         dsl = String.format(dslStr, "xndw_sx");
@@ -511,7 +495,7 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
         }
 
         if (!conditions.isEmpty()) {
-            queryByDsl(JSON.toJSONString(jo1),dataList);
+            queryByDsl(eqaConfig.getQueryUrl(),JSON.toJSONString(jo1),token,dataList);
         }
 
         if (!dataList.isEmpty()) {
@@ -549,17 +533,4 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
             elasticsearchRestClient.update(updateMap, suspId, this.getIndexName());
         }
     }
-
-    private void queryByDsl(String dsl,JSONArray dataList){
-        if (StringUtils.isNotBlank(dsl)) {
-            JSONObject resultJson = getByDsl(dsl);
-            if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
-                JSONArray list = resultJson.getJSONObject("data").getJSONArray("data");
-                if (list != null) {
-                    dataList.addAll(list);
-                }
-            }
-        }
-    }
-
 }
