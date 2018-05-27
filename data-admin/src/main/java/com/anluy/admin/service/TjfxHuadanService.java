@@ -32,4 +32,11 @@ public interface TjfxHuadanService  extends TjfxService{
      */
     Object analyzeThsc(String hdId, String token) ;
 
+    /**
+     * 通话时间点统计
+     * @param hdId
+     * @param token
+     * @return
+     */
+    Object analyzeThsjd(String hdId, String token) ;
 }

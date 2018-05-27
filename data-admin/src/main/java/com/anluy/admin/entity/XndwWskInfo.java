@@ -32,8 +32,8 @@ public class XndwWskInfo extends BaseEntity<String> {
 
     private String adword;//发送内容
 
-    @JSONField(name = "time", format = "yyyy-MM-dd HH:mm:ss")
-    private Date time;//时间
+    @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;//时间
     private String address;//真实地址
     private String tags;//标签
 
@@ -134,12 +134,12 @@ public class XndwWskInfo extends BaseEntity<String> {
         this.adword = adword;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getAddress() {

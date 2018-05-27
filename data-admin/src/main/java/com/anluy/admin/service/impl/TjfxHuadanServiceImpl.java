@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -29,6 +30,9 @@ import java.util.*;
 @Service
 public class TjfxHuadanServiceImpl extends BaseServiceImpl implements TjfxHuadanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjfxHuadanServiceImpl.class);
+
+    @Resource
+    private ElasticsearchRestClient elasticsearchRestClient;
 
     @Resource
     private EqaConfig eqaConfig;
@@ -133,6 +137,23 @@ public class TjfxHuadanServiceImpl extends BaseServiceImpl implements TjfxHuadan
 
             resultList.add(jyds);
         });
+        Collections.sort(resultList, new Comparator<TjfxHuadanDs>() {
+            @Override
+            public int compare(TjfxHuadanDs o1, TjfxHuadanDs o2) {
+                if(o2.getZthcs()==null){
+                    return -1;
+                }
+                if(o1.getZthcs()==null){
+                    return 1;
+                }
+                if (o1.getZthcs() > o2.getZthcs()) {
+                    return -1;
+                } else if (o1.getZthcs() < o2.getZthcs()) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
         return resultList;
     }
 
@@ -179,6 +200,53 @@ public class TjfxHuadanServiceImpl extends BaseServiceImpl implements TjfxHuadan
     }
 
     /**
+     * 通话时间点统计
+     *
+     * @param hdId
+     * @param token
+     * @return
+     */
+    @Override
+    public Object analyzeThsjd(String hdId, String token) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        String dsl = String.format(queryDsl, hdId);
+        JSONObject dslJson = (JSONObject) JSON.parse(dsl);
+        JSONArray dataResult = this.queryByDsl(eqaConfig.getQueryUrl(), dslJson.toJSONString(), token);
+        List<Map> updateList = new ArrayList<>();
+        for (Object obj : dataResult) {
+            Map map = new HashMap();
+            JSONObject row = (JSONObject) obj;
+            map.put("_id",row.getString("_id"));
+            String hh = row.getString("kssj_hh");
+            if(StringUtils.isBlank(hh)){
+                Date kssj = row.getDate("kssj");
+                if(kssj!=null){
+                    hh = sdf.format(kssj);
+                }
+                map.put("kssj_hh",hh);
+                updateList.add(map);
+            }
+            if(updateList.size()== 500){
+                elasticsearchRestClient.batchUpdate(updateList,"huaduan_list");
+                updateList.clear();
+            }
+        }
+        if(!updateList.isEmpty()){
+            elasticsearchRestClient.batchUpdate(updateList,"huaduan_list");
+        }
+        //开始统计
+        JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
+        aggsJSONArray.clear();
+        JSONObject max = new JSONObject();
+        max.put("groupName", "group_kssj_hh");
+        max.put("field", "kssj_hh");
+        max.put("aggsType", 1);
+        aggsJSONArray.add(max);
+        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(), JSON.toJSONString(dslJson), token);
+        return aggsObj;
+    }
+
+    /**
      * 统计通话流水信息
      *
      * @param dslJson
@@ -216,9 +284,17 @@ public class TjfxHuadanServiceImpl extends BaseServiceImpl implements TjfxHuadan
             thls.setBjzcthsc(aggsObj.getInteger("max_thsc"));
             thls.setBjzdthsc(aggsObj.getInteger("min_thsc"));
         }
+        conditions.remove(conditions.size() - 1);
         return thls;
     }
 
+    /**
+     * 查询对端号码集合
+     *
+     * @param dslJson
+     * @param token
+     * @return
+     */
     private Set<String> aggDdhm(JSONObject dslJson, String token) {
         Set<String> jydsZh = new HashSet<>();
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
@@ -276,7 +352,7 @@ public class TjfxHuadanServiceImpl extends BaseServiceImpl implements TjfxHuadan
         //计数
         JSONObject count = new JSONObject();
         count.put("groupName", "count_thsc");
-        count.put("field", "thsc");
+        count.put("field", "id");
         count.put("aggsType", 7);
         aggsJSONArray.add(count);
         return aggs(eqaConfig.getAggsUrl(), dslJson.toJSONString(), token);

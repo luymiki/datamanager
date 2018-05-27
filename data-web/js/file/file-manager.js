@@ -122,7 +122,7 @@ $(function() {
         };
 
         var _listTags = function () {
-            var tagParams={"aggs": [{ "field": "tags","aggsType": 1,"dataType":1} ],"sort":"create_time desc" };
+            var tagParams={"indexName":"attachment","aggs": [{ "field": "tags","aggsType": 1,"dataType":1} ],"sort":"create_time desc" };
             $.ajax.proxy({
                 url:"/api/eqa/aggs",
                 type:"post",

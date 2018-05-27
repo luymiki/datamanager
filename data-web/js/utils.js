@@ -1,6 +1,11 @@
 /**
  * Created by hc.zeng on 2018/3/18.
  */
+var getStorage = function () {
+    return sessionStorage;
+    //return localStorage;
+};
+
 var utils = (function () {
     'use strict';
 

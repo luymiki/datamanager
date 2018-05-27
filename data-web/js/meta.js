@@ -13,9 +13,10 @@ var BASE_CSS = function(){
 var BASE_JS = function(){
     document.write('<script src="/js/jquery-3.3.1.js"></script>');
     document.write('<script src="/js/bootstrap.min.js?v=3.3.6"></script>');
-    document.write('<script src="/js/ajax.proxy.js"></script>');
+    // document.write('<script src="/js/storage.js"></script>');
     document.write('<script src="/js/msg.js"></script>');
     document.write('<script src="/js/utils.js"></script>');
+    document.write('<script src="/js/ajax.proxy.js"></script>');
     //<!-- 自定义js -->
     document.write('<script src="/js/content.js?v=1.0.0"></script>');
     document.write('<script src="/js/plugins/art-template/template.js"></script>');
@@ -54,10 +55,15 @@ var UPDLOAD_CSS = function(){
 }
 
 var UPDLOAD_FILE_JS = function(){
-    document.write('<script src="/js/file/file-img-uploader.js"></script>"></script>');
+    //<!-- Web Uploader -->
+    document.write('<script src="/js/plugins/webuploader/webuploader.min.js"></script>');
+    document.write('<script src="/js/file/file-file-uploader.js"></script>"></script>');
+    document.write('<script src="/js/suspicious/suspicious-list.js"></script>');
 }
 
 var UPDLOAD_IMAGE_JS = function(){
     //<!-- Web Uploader -->
     document.write('<script src="/js/plugins/webuploader/webuploader.min.js"></script>');
+    document.write('<script src="/js/file/file-img-uploader.js"></script>"></script>');
+    document.write('<script src="/js/suspicious/suspicious-list.js"></script>');
 }

@@ -79,7 +79,7 @@ public class XndwWskParser {
                 regInfo.setVaddr(line.get(11));
                 regInfo.setAdword(line.get(12));
                 if(StringUtils.isNotBlank(line.get(13))){
-                    regInfo.setTime(simpleDateFormat2.parse(line.get(13)));
+                    regInfo.setCreateTime(simpleDateFormat2.parse(line.get(13)));
                 }
                 regInfo.setAddress(line.get(14));
                 regInfo.setTags(attachment.getTags());

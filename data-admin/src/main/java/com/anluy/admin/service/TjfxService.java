@@ -30,6 +30,11 @@ public interface TjfxService {
             }
         }
     }
+    default JSONArray queryByDsl(String url,String dsl, String token) {
+        JSONArray dataList = new JSONArray();
+        this.queryByDsl(url,dsl,token,dataList);
+        return dataList;
+    }
 
     /**
      * 查询es

@@ -5,7 +5,7 @@
 $.ajax.proxy = function(option){
     'use strict';
 
-    var token = sessionStorage.getItem("token");
+    var token = getStorage().getItem("token");
     option["headers"] = {
         "Authorization":token
     };

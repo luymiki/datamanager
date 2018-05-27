@@ -364,10 +364,9 @@ public class ElasticsearchQueryAnalyzeEngine {
         return conditions;
     }
 
+
     public Map aggs(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
         JSONObject dsl = createDsl(pageNum, 0);
-        //JSONArray aggs = new JSONArray();
-        //dsl.put("aggs",aggs);
         Configuration root = Configuration.from(paramsStr);
         String indexName = root.getString("indexName");
         List<Configuration> conditionList = root.getListConfiguration("conditions");

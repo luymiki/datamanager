@@ -53,6 +53,7 @@
     <!-- 全局js -->
     <script src="/js/jquery-3.3.1.js"></script>
     <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/utils.js"></script>
     <script type="text/javascript">
         $(function () {
             $("#okbtn").on("click",function () {
@@ -74,7 +75,7 @@
                         console.log(d);
                         if(d.status===200){
                             var token = d.data;
-                            sessionStorage.setItem("token",token);
+                            getStorage().setItem("token",token);
                             window.top.location.href="/home.html";
                         }else {
                             alert(d.message);

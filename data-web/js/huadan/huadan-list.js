@@ -30,7 +30,7 @@
                     {field: 'yys',title: '运营商',sortable:true},
                     {field: 'zjhm',title: '手机号码',sortable:true},
                     {field: 'size',title: '流水数量',sortable:true},
-                    {field: 'opt',title: '操作',width:'130px'}
+                    {field: 'opt',title: '操作',width:'100px'}
                 ],
                 ajax : function (request) {
                     var sort = "create_time desc";
@@ -97,7 +97,8 @@
                                 for(var i= 0;i<data.length;i++){
                                     data[i]['xh'] = xh++;
                                     data[i]['opt'] = "<div class='btn btn-info btn-outline btn-xs liushui' data-id='"+data[i]["id"]+"'>流水</div>&nbsp;" +
-                                        "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>";
+                                        "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>&nbsp;"+
+                                        "<div class='btn btn-info btn-outline btn-xs analyze' data-id='"+data[i]["id"]+"'>分析</div>";
                                 }
                                 request.success({
                                     rows : data,
@@ -125,6 +126,9 @@
             });
             $("#data-table").on('click','.liushui',function () {
                 top.contabs.addMenuItem("/view/huadan/huadan-liushui-list.html?id="+$(this).attr("data-id"),'话单流水列表');
+            });
+            $("#data-table").on('click','.analyze',function () {
+                top.contabs.addMenuItem("/view/huadan/huadan-liushui-list-analyze.html?id="+$(this).attr("data-id"),'话单流水分析');
             });
             $("#data-table").on('click','.delete',function () {
                 _delete($(this).attr("data-id"),$(this).attr("data-fileId"));

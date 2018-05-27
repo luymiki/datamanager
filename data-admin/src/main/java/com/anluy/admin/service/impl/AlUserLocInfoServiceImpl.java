@@ -139,7 +139,7 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
             }
         });
         String[] tagsArr = tags.split(",");
-        //读取新时出具
+        //读取新的数据
         List<Map> savelist = jdbcTemplate.query("select * from al_user_loc_infoa", new RowMapper<Map>() {
             @Override
             public Map mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -151,7 +151,15 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
                     if (o instanceof java.sql.Timestamp) {
                         o = DateFormatUtils.format(new Date(((java.sql.Timestamp) o).getTime()), "yyyy-MM-dd HH:mm:ss");
                     }
-                    map.put(resultSet.getMetaData().getColumnName(j).toLowerCase(),o);
+                    if (o instanceof String && o!=null) {
+                        o = ((String)o).trim();
+                    }
+                    String colName = resultSet.getMetaData().getColumnName(j).toLowerCase();
+                    if("created_at".equals(colName)){
+                        map.put("create_time",o);
+                    }else {
+                        map.put(colName,o);
+                    }
                 }
                 map.put("_id",map.get("id"));
                 map.put("tags",tagsArr);

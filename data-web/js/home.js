@@ -14,12 +14,12 @@
         success:function (d) {
             console.log(d);
             if(d.status!==200){
-                sessionStorage.clear();
+                getStorage().clear();
                 window.top.location.href="/index.html";
             }
         },
         error:function (d) {
-            sessionStorage.clear();
+            getStorage().clear();
             window.top.location.href="/index.html";
         }
     });
@@ -43,7 +43,7 @@
                 success:function (d) {
                     console.log(d);
                     if(d.status===200){
-                        sessionStorage.clear();
+                        getStorage().clear();
                         window.top.location.href="/index.html";
                     }else {
                         toastrMsg.error(d.message);

@@ -97,4 +97,25 @@ public class TjfxHuadanController {
             return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
         }
     }
+    /**
+     * 话单流水时间点分组
+     *
+     * @return
+     */
+    @ApiOperation(value = "话单流水时间点分组", response = Result.class)
+    @RequestMapping(value = "/thsjd",method = {RequestMethod.GET,RequestMethod.POST})
+    @ApiImplicitParams({@ApiImplicitParam(name="hdId",value = "话单记录编号")})
+    public Object analyzeThsjd(HttpServletRequest request,String hdId) {
+        try {
+            if(StringUtils.isBlank(hdId) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"话单记录编号为空"));
+            }
+            String token = request.getHeader(AuthorizationController.AUTHORIZATION);
+            Object result = tjfxHuadanService.analyzeThsjd(hdId,token);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("统计失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+        }
+    }
 }

@@ -59,6 +59,7 @@
             _initThlsTable();
             _initDdxxTable();
             _initThscTable();
+            _initThsjdTable();
         };
 
 
@@ -149,8 +150,7 @@
                                 {field: 'bjcs',title: '被叫次数',sortable:true},
                                 {field: 'bjthsc',title: '被叫总通话时长',sortable:true},
                                 {field: 'bjzcthsc',title: '被叫最长通话时长',sortable:true},
-                                {field: 'bjzdthsc',title: '被叫最短通话时长',sortable:true},
-                                {field: 'qtcs',title: '其他通讯次数',sortable:true}
+                                {field: 'bjzdthsc',title: '被叫最短通话时长',sortable:true}
                             ],
                             data : data
                         });
@@ -230,31 +230,82 @@
 
 
         };
+        /**
+         * 统计通话时间点
+         * @private
+         */
+        var _initThsjdTable = function(){
 
-        var formatter = function (val) {
-            return val === undefined || val=== null? val :val.toFixed(2);
-        }
-        // var _event = function () {
-        //     $("#data-table").on('click','.detail',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-detail.html?id="+$(this).attr("data-id"),'查看流水信息');
-        //     });
-        //     $("#addBtn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui.html?id="+hdId,'导入财付通流水信息');
-        //     });
-        //     $("#analyze-btn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-analyze.html?id="+hdId,'财付通流水信息分析');
-        //     });
-        //     $("#search-btn").on('click',function () {
-        //         _search = $("#search-input").val();
-        //         if(_search && $.trim(_search) !== ""){
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }else {
-        //             _search=null;
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }
-        //     });
-        // };
+            var data = [];
+            $.ajax.proxy({
+                url:"/api/admin/fx/huadan/thsjd",
+                type:"post",
+                dataType:"json",
+                data:{"hdId":hdId},
+                success : function (msg) {
+                    if(msg.status===200){
+                        data = msg.data["group_kssj_hh"];
+                        console.log(data)
+                        $("#loadding-icon-thsjd").hide();
+                        var labels = [];
+                        var chartData = [];
+                        for(var i=0;i< 24; i++){
+                            labels[i] = i<10?"0"+i:""+i;
+                            chartData[i] = 0;
+                        }
+                        for(var j=0;j<data.length;j++){
+                            var group = data[j];
+                            var lab = group["key"];
+                            for(i=0;i< 24; i++){
+                                if(labels[i] === lab){
+                                    chartData[i] = group["doc_count"];
+                                    break;
+                                }
+                            }
+                        }
+                        var lineData = {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: "通话时间点",
+                                    fillColor: "rgba(26,179,148,0.5)",
+                                    strokeColor: "rgba(26,179,148,0.7)",
+                                    pointColor: "rgba(26,179,148,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(26,179,148,1)",
+                                    data: chartData
+                                }
+                            ]
+                        };
 
+                        var lineOptions = {
+                            scaleShowGridLines: true,
+                            scaleGridLineColor: "rgba(0,0,0,.05)",
+                            scaleGridLineWidth: 1,
+                            bezierCurve: true,
+                            bezierCurveTension: 0.4,
+                            pointDot: true,
+                            pointDotRadius: 4,
+                            pointDotStrokeWidth: 1,
+                            pointHitDetectionRadius: 20,
+                            datasetStroke: true,
+                            datasetStrokeWidth: 2,
+                            datasetFill: true,
+                            responsive: true,
+                        };
+
+                        var ctx = document.getElementById("lineChart-thsjd").getContext("2d");
+                        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+                    }
+                },
+                error:function(){
+                    toastrMsg.error("系统错误");
+                }
+            });
+
+
+        };
         return {
             init:_init
         };

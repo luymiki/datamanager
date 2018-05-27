@@ -146,7 +146,17 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             this.aggJyls(dslJson,jyds,token);
             resultList.add(jyds);
         });
-
+        Collections.sort(resultList, new Comparator<TjfxCftJyds>() {
+            @Override
+            public int compare(TjfxCftJyds o1, TjfxCftJyds o2) {
+                if(o1.getLjjyje() > o2.getLjjyje()){
+                    return -1;
+                }else if(o1.getLjjyje() < o2.getLjjyje()){
+                    return 1;
+                }
+                return 0;
+            }
+        });
         return resultList;
     }
 
