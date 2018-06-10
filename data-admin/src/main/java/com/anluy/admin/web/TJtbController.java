@@ -29,8 +29,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/admin/tjtb")
 @Api(value = "/api/admin/tjtb", description = "统计图表功能")
-public class TJtbController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TJtbController.class);
+public class TjtbController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TjtbController.class);
     @Resource
     private ElasticsearchRestClient elasticsearchRestClient;
     @Resource
