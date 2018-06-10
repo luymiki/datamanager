@@ -59,7 +59,7 @@ public class ZfbRegParser {
         List<ZfbRegInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
 
-            List<String> infolist = split( txtContent.get(1));
+            List<String> infolist = split( txtContent.get(i));
             if(infolist.size() < 10){
                 throw new RuntimeException("文件格式不正确，不能解析");
             }

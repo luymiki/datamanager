@@ -33,7 +33,7 @@ var parser = (function () {
                 if(d.status===200) {
                     console.log(d.data);
                     toastrMsg.success("文件"+_data['name']+"保存成功");
-                    window.location.reload();
+                    top.contabs.closeTab();
                 }else {
                     console.log(d);
                     toastrMsg.error("文件"+_data['name']+"保存失败");

@@ -5,10 +5,14 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * 功能说明：
@@ -40,6 +44,10 @@ public class WebConfig {
                                 "/v2/api-docs",
                                 "/swagger-resources/**",
                                 "/webjars/**");
+            }
+            @Override
+            public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+                converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
             }
         };
     }

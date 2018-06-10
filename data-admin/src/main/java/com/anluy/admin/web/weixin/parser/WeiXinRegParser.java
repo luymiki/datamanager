@@ -155,6 +155,7 @@ public class WeiXinRegParser {
                         wxlxr.setBm(list.get(5));
                         wxlxr.setWbo(list.get(6));
                         wxlxr.setNc(list.get(7));
+                        wxlxr.setCreateTime(new Date());
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
                         wxlxrList.add(wxlxr);
@@ -173,6 +174,7 @@ public class WeiXinRegParser {
                         }
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
+                        wxlxr.setCreateTime(new Date());
                         wxqunList.add(wxlxr);
                     }
                 }else if (ipIndex >0 &&  i>=ipIndex) {//ip
@@ -186,6 +188,7 @@ public class WeiXinRegParser {
                         }
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
+                        wxlxr.setCreateTime(new Date());
                         wxloginipList.add(wxlxr);
                     }
                 }

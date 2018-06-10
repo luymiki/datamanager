@@ -1,5 +1,6 @@
 package com.anluy.admin.eqa.web;
 
+import com.alibaba.fastjson.JSON;
 import com.anluy.admin.eqa.core.ElasticsearchQueryAnalyzeEngine;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
@@ -54,7 +55,9 @@ public class QueryController {
                 LOGGER.error("查询失败，查询条件为空");
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(500,"查询失败，查询条件为空"));
             }
+
             Map result = elasticsearchQueryAnalyzeEngine.query(paramsStr,pageNum,pageSize);
+            //LOGGER.info(JSON.toJSONString(result));
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("查询成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("查询失败:" + exception.getMessage(), exception);

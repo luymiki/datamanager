@@ -67,14 +67,10 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
+            $('#data-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
                     {field: 'user_id',title: '支付宝账号',sortable:true},
                     {field: 'dlzh',title: '登陆账号',sortable:true},
                     {field: 'name',title: '账户名称',sortable:true},
@@ -128,6 +124,12 @@
                     con[con.length]={
                         "field": "user_id",
                         "values": [zfbInfo["user_id"]],
+                        "searchType": 1,
+                        "dataType":2,
+                    };
+                    con[con.length]={
+                        "field": "xcbh",
+                        "values": [zfbInfo["xcbh"]],
                         "searchType": 1,
                         "dataType":2,
                     };

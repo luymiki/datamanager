@@ -12,12 +12,12 @@
     <meta name="keywords" content="支付宝注册信息 | 数据管理系统">
     <meta name="description" content="支付宝注册信息 | 数据管理系统">
 
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-
-    <link href="/css/animate.css" rel="stylesheet">
-    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
 
 </head>
 
@@ -87,15 +87,46 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title" style="border-top: 0px;">
+                    <span style="font-size: 18px;font-family: 'Microsoft YaHei', '微软雅黑';">登录记录&emsp;</span>
+                    <input id="logininfo-search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                    <div class="btn btn-info" id="logininfo-search-btn"><i class="fa fa-search"></i> 查询</div>
+                </div>
+                <div class="ibox-content">
+                    <table id="logininfo-table" data-mobile-responsive="true">
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title" style="border-top: 0px;">
+                    <span style="font-size: 18px;font-family: 'Microsoft YaHei', '微软雅黑';">账户明细&emsp;</span>
+                    <input id="zhmx-search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                    <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
+                </div>
+                <div class="ibox-content">
+                    <table id="zhmx-table" data-mobile-responsive="true">
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </div>
+
 <!-- 全局js -->
-<script src="/js/jquery-3.3.1.js"></script>
-<script src="/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="/js/ajax.proxy.js"></script>
-<script src="/js/msg.js"></script>
-<script src="/js/utils.js"></script>
-<script src="/js/plugins/art-template/template.js"></script>
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
 <script src="/js/zfb/zfb-reg-detail.js"></script>
 
 </body>

@@ -103,8 +103,10 @@ public class ZfbZhParser {
             }
             if(StringUtils.isNotBlank(list.get(8))){
                 String[] yhxx = list.get(8).split("\\(|\\)");
-                regInfo.setDfUserId(yhxx[0]);
-                regInfo.setDfName(yhxx[1]);
+                if(yhxx.length>0)
+                    regInfo.setDfUserId(yhxx[0]);
+                if(yhxx.length>1)
+                    regInfo.setDfName(yhxx[1]);
             }
             regInfo.setXfmc(list.get(9));
             if(StringUtils.isNotBlank(list.get(10))){

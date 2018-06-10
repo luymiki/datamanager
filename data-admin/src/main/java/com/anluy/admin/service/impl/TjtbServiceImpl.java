@@ -29,7 +29,7 @@ import java.util.*;
 public class TjtbServiceImpl extends BaseServiceImpl implements TjtbService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjtbServiceImpl.class);
 
-    private static final String START_TIME = "2018-02-01 00:00:00";
+    private static final String START_TIME = "2018-04-01 00:00:00";
 
     @Resource
     private EqaConfig eqaConfig;

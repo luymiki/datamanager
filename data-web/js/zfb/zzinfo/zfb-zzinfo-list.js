@@ -64,14 +64,10 @@
         var _search;//查询的值
 
         var _initListTable = function(){
-            $('#data-table').bootstrapTable({
-                pagination:true,
-                pageSize:10,
-                height: utils.getWidowHeight()-75,
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                queryParamsType:'',
-                sidePagination:'server',
-                columns: [{field: 'xh',title: '序号',width:'50px'},
+            $('#data-table').myTable({
+                columns: [
+                    {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
+                    {field: 'xh',title: '序号',width:'50px'},
                     {field: 'jyh',title: '交易号',sortable:true},
                     {field: 'fkf_id',title: '付款方账号',sortable:true},
                     {field: 'skf_id',title: '收款方账号',sortable:true},
@@ -129,6 +125,12 @@
                     con[con.length]={
                         "field": "user_id",
                         "values": [zfbInfo["user_id"]],
+                        "searchType": 1,
+                        "dataType":2,
+                    };
+                    con[con.length]={
+                        "field": "xcbh",
+                        "values": [zfbInfo["xcbh"]],
                         "searchType": 1,
                         "dataType":2,
                     };

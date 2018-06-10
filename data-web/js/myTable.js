@@ -304,4 +304,20 @@
         }
     });
 
+    /**
+     * 批注
+     */
+    $("body").on('click',"#pizhu,.pizhu",function () {
+        var table = $(this).attr("data-table");
+        $("#"+table).myTable("comment");
+    });
+
+    // /**
+    //  * 批注
+    //  */
+    // $("body").on('click',"#pizhu",function () {
+    //     var table = $(this).attr("data-table");
+    //     $("#"+table).myTable("comment");
+    // });
+
 })(jQuery);

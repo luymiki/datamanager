@@ -1,5 +1,6 @@
 package com.anluy.admin.eqa.core;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.anluy.admin.eqa.entity.EqaIndex;
@@ -124,6 +125,7 @@ public class ElasticsearchQueryAnalyzeEngine {
             LOGGER.info(dsl.toJSONString());
         }
         Map result = elasticsearchRestClient.query(dsl.toJSONString(), indexName);
+//        LOGGER.info("ES返回数据"+ JSON.toJSONString(result));
         return this.setMeta(result, indexName);
     }
 
@@ -359,7 +361,9 @@ public class ElasticsearchQueryAnalyzeEngine {
     private List<Map> condition(String field, List<String> values, int dataType, boolean fuzzy) {
         List<Map> conditions = new ArrayList<>();
         for (String val : values) {
-            conditions.add(this.condition(field, val, dataType, fuzzy));
+            if(StringUtils.isNotBlank(val)){
+                conditions.add(this.condition(field, val, dataType, fuzzy));
+            }
         }
         return conditions;
     }

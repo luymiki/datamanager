@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * 功能说明：嫌疑人信息管理
+ * 功能说明：财付通统计分析
  * <p>
  * Created by hc.zeng on 2018/3/22.
  */
@@ -235,43 +235,42 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             jyls.setLjzrje(aggsObj.getDouble("sum_jyje"));
             jyls.setLjzrbs(aggsObj.getInteger("count_jyje"));
         }
-        //{"field":"shmc","searchType":"2","dataType":"2","values":["微信红包","QQ红包"],"groupType":"not"}
-        cond3.put("field", "shmc");
-        cond3.put("values", new String[]{"微信红包", "QQ红包"});
-        cond3.put("searchType", 2);
-        cond3.put("dataType", 2);
-        cond3.put("groupType", "not");
-        aggsObj = aggsJyje(dslJson, token);
-        if (aggsObj != null) {
-            jyls.setZzzdjyje(aggsObj.getDouble("max_jyje"));
-            jyls.setZzzxjyje(aggsObj.getDouble("min_jyje"));
-            jyls.setZzpjjyje(aggsObj.getDouble("avg_jyje"));
-            jyls.setZzljjyje(aggsObj.getDouble("sum_jyje"));
-            jyls.setZzljjybs(aggsObj.getInteger("count_jyje"));
-        }
-        JSONObject cond4 = new JSONObject();
-        cond4.put("field", "jdlx");
-        cond4.put("values", new String[]{"出"});
-        cond4.put("searchType", 1);
-        cond4.put("dataType", 2);
-        conditions.add(cond4);
-        aggsObj = aggsJyje(dslJson, token);
-        if (aggsObj != null) {
-            jyls.setZzzdzcje(aggsObj.getDouble("max_jyje"));
-            jyls.setZzzxzcje(aggsObj.getDouble("min_jyje"));
-            jyls.setZzljzcje(aggsObj.getDouble("sum_jyje"));
-            jyls.setZzljzcbs(aggsObj.getInteger("count_jyje"));
-        }
-        cond4.put("values", new String[]{"入"});
-        aggsObj = aggsJyje(dslJson, token);
-        if (aggsObj != null) {
-            jyls.setZzzdzrje(aggsObj.getDouble("max_jyje"));
-            jyls.setZzzxzrje(aggsObj.getDouble("min_jyje"));
-            jyls.setZzljzrje(aggsObj.getDouble("sum_jyje"));
-            jyls.setZzljzrbs(aggsObj.getInteger("count_jyje"));
-        }
-
-        conditions.remove(conditions.size()-1);
+//        //{"field":"shmc","searchType":"2","dataType":"2","values":["微信红包","QQ红包"],"groupType":"not"}
+//        cond3.put("field", "shmc");
+//        cond3.put("values", new String[]{"微信红包", "QQ红包"});
+//        cond3.put("searchType", 2);
+//        cond3.put("dataType", 2);
+//        cond3.put("groupType", "not");
+//        aggsObj = aggsJyje(dslJson, token);
+//        if (aggsObj != null) {
+//            jyls.setZzzdjyje(aggsObj.getDouble("max_jyje"));
+//            jyls.setZzzxjyje(aggsObj.getDouble("min_jyje"));
+//            jyls.setZzpjjyje(aggsObj.getDouble("avg_jyje"));
+//            jyls.setZzljjyje(aggsObj.getDouble("sum_jyje"));
+//            jyls.setZzljjybs(aggsObj.getInteger("count_jyje"));
+//        }
+//        JSONObject cond4 = new JSONObject();
+//        cond4.put("field", "jdlx");
+//        cond4.put("values", new String[]{"出"});
+//        cond4.put("searchType", 1);
+//        cond4.put("dataType", 2);
+//        conditions.add(cond4);
+//        aggsObj = aggsJyje(dslJson, token);
+//        if (aggsObj != null) {
+//            jyls.setZzzdzcje(aggsObj.getDouble("max_jyje"));
+//            jyls.setZzzxzcje(aggsObj.getDouble("min_jyje"));
+//            jyls.setZzljzcje(aggsObj.getDouble("sum_jyje"));
+//            jyls.setZzljzcbs(aggsObj.getInteger("count_jyje"));
+//        }
+//        cond4.put("values", new String[]{"入"});
+//        aggsObj = aggsJyje(dslJson, token);
+//        if (aggsObj != null) {
+//            jyls.setZzzdzrje(aggsObj.getDouble("max_jyje"));
+//            jyls.setZzzxzrje(aggsObj.getDouble("min_jyje"));
+//            jyls.setZzljzrje(aggsObj.getDouble("sum_jyje"));
+//            jyls.setZzljzrbs(aggsObj.getInteger("count_jyje"));
+//        }
+//        conditions.remove(conditions.size()-1);
         conditions.remove(conditions.size()-1);
         aggsObj = aggsDate(dslJson, token);
         if (aggsObj != null) {

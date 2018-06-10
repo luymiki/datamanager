@@ -101,6 +101,22 @@
 			<version>3.3.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+
+		<!--文佳编码探测-->
+		<!-- https://mvnrepository.com/artifact/net.sf.jmatchparser/jMatchParser-jchardet -->
+		<dependency>
+			<groupId>net.sf.jmatchparser</groupId>
+			<artifactId>jMatchParser-jchardet</artifactId>
+			<version>0.1</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.jgrapht/jgrapht
 		<dependency>
 			<groupId>org.jgrapht</groupId>
@@ -121,6 +137,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

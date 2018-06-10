@@ -90,7 +90,7 @@ var emailParser = (function () {
                     var email = d.data;
                     emailList[emailList.length] = email;
 
-                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+email['subject']+'</a></li>').appendTo($tabs);
+                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+ (email['subject']===''?(email['subject']='无标题'):email['subject'])+'</a></li>').appendTo($tabs);
                     //$('<div id="tab-'+i+'" class="tab-pane '+(i===0?('active'):(' '))+'"><div class="panel-body">'+ email['from']+'</div></div>').appendTo($contents);
 
                     var file = [];//附件
@@ -99,7 +99,8 @@ var emailParser = (function () {
                         for(var v = 0 ;v<email.fileList.length;v++){
                             var cont = email.fileList[v];
                             var contType=cont["type"];
-                            var fn = contType.split(";")[2].replace("name=","");
+                            var fs = cont["path"].split("/");
+                            var fn = fs[fs.length-1];//contType.split(";")[2].replace("name=","");
                             var ty = "file";
                             if(contType.indexOf("image")===0 || contType.indexOf("img")===0){
                                 ty = "image";
@@ -156,6 +157,7 @@ var emailSave = (function () {
                 count++;
             }
         }
+        top.contabs.closeTab();
     };
     var _saveEmlOne = function (o,indx) {
         var result = false;
@@ -207,7 +209,7 @@ var emailSave = (function () {
             _deleteEmlOne(null,i+1);
         }
         toastrMsg.success("邮件删除成功");
-        window.location.reload();
+        top.contabs.closeTab();
 
     };
     var _deleteEmlOne = function (o,indx) {

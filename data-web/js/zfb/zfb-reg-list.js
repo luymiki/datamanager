@@ -94,13 +94,14 @@
                                 for(var i= 0;i<data.length;i++){
                                     data[i]['xh'] = xh++;
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;" +
-                                        "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>"+
+                                        "<div class='btn btn-info btn-outline btn-xs analyze' data-id='"+data[i]["id"]+"' data-userId='"+data[i]["user_id"]+"'>分析</div>"+
                                         "<div class='btn btn-info btn-outline btn-xs logininfo' data-id='"+data[i]["id"]+"'>登陆日志</div>&nbsp;" +
                                         "<div class='btn btn-info btn-outline btn-xs zhinfo' data-id='"+data[i]["id"]+"'>账户明细</div>&nbsp;"+
                                         "<div class='btn btn-info btn-outline btn-xs txinfo' data-id='"+data[i]["id"]+"'>提现记录</div>&nbsp;"+
                                         "<div class='btn btn-info btn-outline btn-xs zzinfo' data-id='"+data[i]["id"]+"'>转账明细</div>&nbsp;"+
-                                        "<div class='btn btn-info btn-outline btn-xs jyjl' data-id='"+data[i]["id"]+"'>交易记录</div>&nbsp;"
-                                        ;
+                                        "<div class='btn btn-info btn-outline btn-xs jyjl' data-id='"+data[i]["id"]+"'>交易记录</div>&nbsp;"+
+                                    "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'  data-fileId='"+data[i]["file_id"]+"'>删除</div>"
+                                    ;
                                 }
                                 request.success({
                                     rows : data,
@@ -157,6 +158,9 @@
             });
             $("#data-table").on('click','.jyjl',function () {
                 top.contabs.addMenuItem("/view/zfb/jyjl/zfb-jyjl-list.html?id="+$(this).attr("data-id"),'交易记录列表');
+            });
+            $("#data-table").on('click','.analyze',function () {
+                top.contabs.addMenuItem("/view/zfb/analyze/zfb-analyze.html?id="+$(this).attr("data-id"),"["+$(this).attr("data-userId")+']分析');
             });
 
 

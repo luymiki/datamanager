@@ -14,31 +14,12 @@
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
 
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link href="/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
-    <link href="/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="/css/animate.min.css" rel="stylesheet">
-    <link href="/css/style.min.css?v=4.0.0" rel="stylesheet">
-    <link href="/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <style>
-        .search-input{
-            width: 160px;
-            height: 34px;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #555;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        }
-    </style>
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content  animated fadeInRight">
@@ -50,8 +31,9 @@
                     <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
                     <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
                     <div class="ibox-tools" >
-                        <h3 id="susp-name"></h3>
-                        <!--<div class="btn btn-primary btn-sm" id="addBtn" >新增</div>-->
+                        <div class="btn" id="susp-name"></div>
+                        <div class="btn btn-primary btn-sm" id="copy-row" data-clipboard-target="copyText">复制行</div>
+                        <div class="btn btn-primary btn-sm" id="pizhu" data-table="data-table">批注</div>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -63,26 +45,13 @@
         </div>
     </div>
 </div>
-
 <!-- 全局js -->
-<script src="/js/jquery-3.3.1.js"></script>
-<script src="/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="/js/ajax.proxy.js"></script>
-<script src="/js/plugins/twbsPagination/jquery.twbsPagination.js"></script>
-<script src="/js/plugins/bootstrap-table/bootstrap-table.js"></script>
-<script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="/js/msg.js"></script>
-<script src="/js/utils.js"></script>
-
-<!-- jQuery Validation plugin javascript-->
-<script src="/js/plugins/validate/jquery.validate.min.js"></script>
-<script src="/js/plugins/validate/messages_zh.min.js"></script>
-<script src="/js/plugins/art-template/template.js"></script>
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
 
 <script src="/js/zfb/txinfo/zfb-txinfo-list.js"></script>
-
-<!-- 自定义js -->
-<script src="/js/content.js?v=1.0.0"></script>
 
 
 </body>

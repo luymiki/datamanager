@@ -58,14 +58,38 @@
          * @private
          */
         var _initBysjl = function(){
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var first = getCurrentMonthFirst().getDate();
+            var last = getCurrentMonthLast().getDate();
+            var start = year+"-"+(month<10?"0"+month:month)+"-"+(first<10?"0"+first:first)+" 00:00:00";
+            var end = year+"-"+(month<10?"0"+month:month)+"-"+(last<10?"0"+last:last)+" 23:59:59";
             var params={"indexName":"","aggs": [{ "groupName":"count_id","field": "id","aggsType": 7}],
-                "conditions":[{"field":"create_time","searchType":"6","dataType":"4","values":["2018-05-01 16:08:58","2018-05-31 16:09:01"],"groupType":"must"}],
+                "conditions":[{"field":"create_time","searchType":"6","dataType":"4",
+                    "values":[start,end],
+                    "groupType":"must"}],
                 "sort":"create_time desc" };
             _aggs(params,function (data) {
                 var aggs = data.aggs["count_id"];
                 $("#by-count").html(aggs);
             });
         };
+
+        function getCurrentMonthFirst(){
+            var date=new Date();
+            date.setDate(1);
+            return date;
+        }
+
+        function getCurrentMonthLast(){
+            var date=new Date();
+            var currentMonth=date.getMonth();
+            var nextMonth=++currentMonth;
+            var nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1);
+            var oneDay=1000*60*60*24;
+            return new Date(nextMonthFirstDay-oneDay);
+        }
 
         var _aggs = function (params,success) {
             $.ajax.proxy({
@@ -199,41 +223,107 @@
 
                         }
 
-                        var lineData = {
-                            labels: labels,
-                            datasets: [
+                        // var lineData = {
+                        //     labels: labels,
+                        //     datasets: [
+                        //         {
+                        //             label: "通话时长",
+                        //             fillColor: "rgba(26,179,148,0.5)",
+                        //             strokeColor: "rgba(26,179,148,0.7)",
+                        //             pointColor: "rgba(26,179,148,1)",
+                        //             pointStrokeColor: "#fff",
+                        //             pointHighlightFill: "#fff",
+                        //             pointHighlightStroke: "rgba(26,179,148,1)",
+                        //             data: chartData
+                        //         }
+                        //     ]
+                        // };
+                        //
+                        // var lineOptions = {
+                        //     scaleShowGridLines: true,
+                        //     scaleGridLineColor: "rgba(0,0,0,.05)",
+                        //     scaleGridLineWidth: 1,
+                        //     bezierCurve: true,
+                        //     bezierCurveTension: 0.4,
+                        //     pointDot: true,
+                        //     pointDotRadius: 4,
+                        //     pointDotStrokeWidth: 1,
+                        //     pointHitDetectionRadius: 20,
+                        //     datasetStroke: true,
+                        //     datasetStrokeWidth: 2,
+                        //     datasetFill: true,
+                        //     responsive: true,
+                        // };
+                        //
+                        //
+                        // var ctx = document.getElementById("cjsj-dashboard-chart").getContext("2d");
+                        // var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+                        // 使用
+                        // 基于准备好的dom，初始化echarts图表
+                        var myChart = echarts.init(document.getElementById('cjsj-dashboard-chart'));
+                        var option = {
+                            // title: {
+                            //     text: '各月数据增量',
+                            //     subtext: '--'
+                            // },
+                            //边距
+                            grid: {
+                                left: '0',
+                                right: '25',
+                                bottom: '0',
+                                containLabel: true
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['数据量']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    //mark: {show: true},
+                                    dataView: {show: true, readOnly: false},
+                                    magicType: {show: true, type: ['line', 'bar']},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            calculable: true,
+                            xAxis: [
                                 {
-                                    label: "通话时长",
-                                    fillColor: "rgba(26,179,148,0.5)",
-                                    strokeColor: "rgba(26,179,148,0.7)",
-                                    pointColor: "rgba(26,179,148,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(26,179,148,1)",
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: labels
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '数据量',
+                                    type: 'line',
+                                    smooth: true,
+                                    itemStyle: {
+                                        normal: {
+                                            color:"rgba(26,179,148,1)",
+                                            borderColor:"rgba(26,179,148,1)",
+                                            lineStyle: {type: 'solid',color:"rgba(26,179,148,0.5)"},
+                                            areaStyle: {type: 'default',color:"rgba(26,179,148,0.5)"}
+                                    }},
                                     data: chartData
                                 }
                             ]
                         };
+                        // 为echarts对象加载数据
+                        myChart.setOption(option);
+                        // myChart.on('click', function (params) {
+                        //     console.log(params);
+                        // });
 
-                        var lineOptions = {
-                            scaleShowGridLines: true,
-                            scaleGridLineColor: "rgba(0,0,0,.05)",
-                            scaleGridLineWidth: 1,
-                            bezierCurve: true,
-                            bezierCurveTension: 0.4,
-                            pointDot: true,
-                            pointDotRadius: 4,
-                            pointDotStrokeWidth: 1,
-                            pointHitDetectionRadius: 20,
-                            datasetStroke: true,
-                            datasetStrokeWidth: 2,
-                            datasetFill: true,
-                            responsive: true,
-                        };
-
-
-                        var ctx = document.getElementById("cjsj-dashboard-chart").getContext("2d");
-                        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
                     }
                 },
                 error:function(){

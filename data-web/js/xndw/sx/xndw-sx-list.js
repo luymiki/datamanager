@@ -13,7 +13,7 @@
             _event();
         };
 
-        var params = {"indexName":"xndw_sx","conditions":[],"sort":"created_at desc"};
+        var params = {"indexName":"xndw_sx","conditions":[],"sort":"create_time desc"};
 
         var _search;//查询的值
 
@@ -32,7 +32,7 @@
                     {field: 'opt',title: '操作',width:'130px'}
                 ],
                 ajax : function (request) {
-                    var sort = "created_at desc";
+                    var sort = "create_time desc";
                     if(request.data.sortName){
                         sort = request.data.sortName +" "+request.data.sortOrder;
                     }

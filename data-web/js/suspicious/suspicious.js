@@ -21,125 +21,6 @@
         };
 
         var _initListTable = function(){
-             //
-             // $('#suspicious-table').wijmoGrid({
-             //     rowHeight:110,
-             //     columns:[
-             //         {binding: 'xh',header: '序号',width:50,allowSorting:false},
-             //         {binding: 'name',header: '姓名',width:100,allowSorting:false},
-             //         {binding: 'type',header: '类型',width:50},
-             //         {binding: 'gmsfzh',header: '身份证号',width:150},
-             //         {binding: 'qq',header: 'QQ',wordWrap:true},
-             //         {binding: 'weixin',header: '微信',wordWrap:true},
-             //         {binding: 'phone',header: '手机号',wordWrap:true},
-             //         {binding: 'imei',header: 'IMEI',wordWrap:true},
-             //         {binding: 'imsi',header: 'IMSI',wordWrap:true},
-             //         {binding: 'cft',header: '财付通',wordWrap:true},
-             //         {binding: 'zfb',header: '支付宝',wordWrap:true},
-             //         {binding: 'yhzh',header: '银行账号',wordWrap:true},
-             //         {binding: 'ip',header: 'IP',wordWrap:true},
-             //         {binding: 'email',header: '电子邮箱',wordWrap:true},
-             //         {binding: 'other',header: '其他码值',wordWrap:true},
-             //         {binding: 'gzjd',header: '工作进度'},
-             //         {binding: 'qkjj',header: '情况简介'},
-             //         {binding: 'opt',header: '操作',isReadOnly:true,width:60}
-             //     ],
-             //     "ajax":function (request) {
-             //         var sort = "modify_time desc";
-             //             // if(request.data.sortName){
-             //             //     sort = request.data.sortName +" "+request.data.sortOrder;
-             //             // }
-             //             params["sort"]=sort;
-             //             params["conditions"]=[kyr];
-             //             $.ajax.proxy({
-             //                 url:"/api/eqa/query",
-             //                 type:"post",
-             //                 dataType:"json",
-             //                 data:{"pageNum":1,"pageSize":10,"paramsStr":JSON.stringify(params)},
-             //                 success : function (msg) {
-             //                     if(msg.status===200){
-             //                         var data = msg.data.data;
-             //                         var xh =  ((0)*10)+1;
-             //                         for(var i= 0;i<data.length;i++){
-             //                             data[i]['xh'] = (xh++)+"";
-             //                             // data[i]['opt'] = "<div class='btn btn-info btn-outline btn-xs gxr' data-id='"+data[i]["id"]+"'>关系人</div>&nbsp;" +
-             //                             //     "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='"+data[i]["id"]+"'>提取</div>&nbsp;" +
-             //                             //     "<div class='btn btn-primary btn-outline btn-xs update' data-id='"+data[i]["id"]+"'>修改</div>&nbsp;"+
-             //                             //     "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'>删除</div>";
-             //                         }
-             //                         request.success({
-             //                             rows : data,
-             //                             total : msg.data.total
-             //                         });
-             //                     }else {
-             //                         request.success({
-             //                             rows : [],
-             //                             total : 0
-             //                         });
-             //                     }
-             //
-             //                 },
-             //                 error:function(){
-             //                     toastrMsg.error("错误！");
-             //                 }
-             //             });
-             //     },
-             //     formatItem: function (s, e) {
-             //         if (e.panel == s.cells) {
-             //             var item = s.rows[e.row].dataItem;
-             //             switch (s.columns[e.col].binding) {
-             //                 case 'opt':
-             //                     var id = item["id"];
-             //                     e.cell.innerHTML = "<div class='btn btn-info btn-outline btn-xs gxr' data-id='" + id + "'>关系人</div><br>" +
-             //                         "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='" + id + "'>提取</div><br>" +
-             //                         "<div class='btn btn-primary btn-outline btn-xs update' data-id='" + id + "'>修改</div><br>" +
-             //                         "<div class='btn btn-danger btn-outline btn-xs delete' data-id='" + id + "'>删除</div>";
-             //                     break;
-             //                 case "type":
-             //                     e.cell.innerHTML = formatterType(item["type"]);
-             //                     break;
-             //                 case "qq":
-             //                 case "weixin":
-             //                 case "phone":
-             //                 case "imei":
-             //                 case "imsi":
-             //                 case "cft":
-             //                 case "zfb":
-             //                 case "yhzh":
-             //                 case "ip":
-             //                 case "email":
-             //                     e.cell.innerHTML = formatterList(item[s.columns[e.col].binding]);
-             //                     break;
-             //             }
-             //         }
-             //     },
-             //     "dblclick":function (e,ht) {
-             //         //var ht = flexGrid.hitTest(e);
-             //         var data = ht.panel.rows[ht.row].dataItem;
-             //         //弹出一个提示层
-             //         var val = data[ht.panel.columns[ht.col].binding];
-             //         if(ht.panel.columns[ht.col].binding == "type"){
-             //             val = formatterType(val);
-             //         }
-             //         if(val instanceof Array){
-             //             val =  val.join("&emsp;");
-             //         }
-             //         if(val!==""){
-             //             layer.open({
-             //                 // time: 2000, //不自动关闭
-             //                 type: 1,
-             //                 skin: 'layui-layer-rim', //加上边框
-             //                 area: ['420px', '340px'], //宽高
-             //                 content: val
-             //             });
-             //         }
-             //
-             //
-             //     },
-             //     "frozenColumns":2 //冻结两列
-             // }).height(utils.getWidowHeight()-105);
-             //
-
             $('#suspicious-table').myTable({
                 columns:[
                     {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
@@ -183,8 +64,8 @@
                                 for(var i= 0;i<data.length;i++){
                                     data[i]['xh'] = xh++;
                                     data[i]['opt'] = "<div class='btn btn-info btn-outline btn-xs gxr' data-id='"+data[i]["id"]+"'>关系人</div><br>" +
-                                        "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='"+data[i]["id"]+"'>提取</div><br>" +
                                         "<div class='btn btn-primary btn-outline btn-xs update' data-id='"+data[i]["id"]+"'>修改</div><br>"+
+                                        "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='"+data[i]["id"]+"'>提取</div><br>" +
                                         "<div class='btn btn-danger btn-outline btn-xs delete' data-id='"+data[i]["id"]+"'>删除</div>";
                                 }
                                 request.success({
@@ -303,6 +184,14 @@
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'QQ注册信息导入',"/view/qq/reg/qq-reg.html");
             });
+            $('#addModal').on('click','.btn-qq-login',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'QQ登录IP导入',"/view/qq/loginip/qq-loginip.html");
+            });
+            $('#addModal').on('click','.btn-qq-qzone',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'QQ空间照片导入',"/view/qq/qzone/qq-qzone.html");
+            });
             $('#addModal').on('click','.btn-weixin',function () {
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'微信注册信息导入',"/view/weixin/weixin-reg.html");
@@ -311,10 +200,32 @@
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'财付通信息导入',"/view/cft/cft-reg.html");
             });
+
             $('#addModal').on('click','.btn-zfb',function () {
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'支付宝注册信息导入',"/view/zfb/zfb-reg.html");
             });
+            $('#addModal').on('click','.btn-zfb-login',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'支付宝登陆日志导入',"/view/zfb/logininfo/zfb-logininfo.html");
+            });
+            $('#addModal').on('click','.btn-zfb-zhmx',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'支付宝账户明细导入',"/view/zfb/zhinfo/zfb-zhinfo.html");
+            });
+            $('#addModal').on('click','.btn-zfb-txjl',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'支付宝提现记录导入',"/view/zfb/txinfo/zfb-txinfo.html");
+            });
+            $('#addModal').on('click','.btn-zfb-zzmx',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'支付宝转账明细导入',"/view/zfb/zzinfo/zfb-zzinfo.html");
+            });
+            $('#addModal').on('click','.btn-zfb-jyjl',function () {
+                var id = $('#addModal').find("#id").val();
+                _addImportItem(id,'支付宝交易记录导入',"/view/zfb/jyjl/zfb-jyjl.html");
+            });
+
             $('#addModal').on('click','.btn-huadan',function () {
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'话单信息导入',"/view/huadan/huadan.html");
@@ -323,12 +234,120 @@
                 var id = $('#addModal').find("#id").val();
                 _addImportItem(id,'电子邮件导入',"/view/file/email/file-email.html");
             });
+
+            //数据变动验证
+            $('#addModal').on('change','.data-value',function () {
+                changeVal($(this));
+            });
         };
         var _addItem =function (id,val,type,title) {
             top.contabs.addMenuItem("/view/suspicious/suspicious-page.html?id="+id+"&type="+type+"&code="+val,title);
-        }
+        };
         var _addImportItem =function (id,title,url) {
             top.contabs.addMenuItem(url+"?suspid="+id,title);
+        };
+
+        /**
+         * 扩展数组的方法，提供清除空元素的的方法
+         * @returns {boolean}
+         */
+        Array.prototype.notempty = function(){
+            return this.filter(t => t !== undefined && t!== null&& t!=="");
+        }
+
+        /**
+         * 校验新输入的值是否存在于其他可疑人员中
+         * @param type
+         * @param allval
+         * @param val
+         */
+        var changeVal = function (obj) {
+            var old = "";
+            var id = $("#id").val();
+            var type = obj.attr("data-type");
+            var dataValue = obj.attr("data-value").split(/,|，/);
+            var nv = obj.val().split(/,|，/);
+            if(dataValue.length > nv.length){
+                //删除了内容，不比较
+                return false;
+            }
+            var targert = difference(nv,dataValue);
+            targert = targert.notempty();
+            if(targert.length === 0){
+                return false;
+            }
+            var params = {"indexName":"suspicious","conditions":[
+                {
+                    "field": type,
+                    "searchType": "1",
+                    "dataType": "2",
+                    "values": targert,
+                    "groupType": "must"
+                }
+
+            ],"sort":"modify_time desc"};
+            if(id && id!==""){
+                params["conditions"][params["conditions"].length]={
+                    "field": "id",
+                    "searchType": "1",
+                    "dataType": "2",
+                    "values": [id],
+                    "groupType": "not"
+                };
+            }
+            $.ajax.proxy({
+                url:"/api/eqa/query",
+                type:"post",
+                dataType:"json",
+                data:{"pageNum":1,"pageSize":10,"paramsStr":JSON.stringify(params)},
+                success : function (msg) {
+                    if(msg.status===200){
+                        console.log(msg.data);
+                        var data = msg.data.data;
+                        var errormsg ="";
+                        if(data.length > 0){
+                            for(var i=0; i< data.length;i++){
+                                var d = data[i];
+                                var ds = d[type];
+                                if(ds instanceof Array){
+                                    targert.forEach(function(val1, i){
+                                        if (ds.indexOf(val1) >= 0) {
+                                            errormsg += '<label class="error '+type+'-error" for="name"><i class="fa fa-times-circle"></i> '+val1+"存在于可疑人“"+d["name"]+'”中</label>&emsp;';
+                                        }
+                                    });
+
+                                }else {
+                                    errormsg += '<label class="error '+type+'-error" for="name"><i class="fa fa-times-circle"></i> '+ds+"存在于可疑人“"+d["name"]+'”中</label>&emsp;';
+                                }
+
+                            }
+                            obj.parent().append(errormsg);
+                        }else {
+                            obj.attr("data-value",nv);
+                        }
+
+
+                    }
+                },
+                error:function(){
+                    toastrMsg.error("错误！");
+                }
+            });
+        };
+        /**
+         * 求集合arr1与arr2的差集
+         * @param arr1
+         * @param arr2
+         */
+        var difference = function(arr1, arr2) {
+            var diff = [];
+            arr1.forEach(function(val1, i){
+                if (arr2.indexOf(val1) < 0) {
+                    diff.push(val1);
+                }
+            });
+            console.log(diff);
+            return diff;
         }
 
         var formatter = function (field,id,val) {
@@ -509,7 +528,7 @@
                             var susp = data[0];
                             for(var key in susp){
                                 var value=susp[key];
-                                $("#"+key).val(value);
+                                $("#"+key).val(value).attr("data-value",value);
                             }
                             // $("#addBtn").click();
                             $('#addModal').modal("show");

@@ -122,5 +122,4 @@ public class JhfxServiceImpl extends BaseServiceImpl implements JhFxService {
         return resultList;
     }
 
-
 }

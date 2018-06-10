@@ -88,7 +88,7 @@ public class CftTradesParser {
                 regInfo.setFsf(list.get(10));
             }
 
-            if(list.size()>11 && StringUtils.isNotBlank(list.get(11))){
+            if(list.size()>11 && StringUtils.isNotBlank(list.get(11)) && !"null".equals(list.get(11))){
                 regInfo.setFsje(Double.valueOf(list.get(11))/100);
             }
             if(list.size()>12) {

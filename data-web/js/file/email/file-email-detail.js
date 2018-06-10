@@ -50,7 +50,8 @@
                                     var cont = email.file_list[v];
                                     cont = JSON.parse(cont);
                                     var contType=cont["type"];
-                                    var fn = contType.split(";")[2].replace("name=","");
+                                    var fs = cont["path"].split("/");
+                                    var fn = fs[fs.length-1];//contType.split(";")[2].replace("name=","");
                                     var ty = "file";
                                     if(contType.indexOf("image")===0 || contType.indexOf("img")===0){
                                         ty = "image";

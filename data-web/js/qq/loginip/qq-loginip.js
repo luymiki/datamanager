@@ -150,7 +150,7 @@ var Opt = (function () {
             _deleteEmlOne(null,i+1);
         }
         toastrMsg.success("文件删除成功");
-        window.location.reload();
+        top.contabs.closeTab();
 
     };
     var _deleteEmlOne = function (o,indx) {

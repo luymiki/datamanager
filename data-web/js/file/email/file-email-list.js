@@ -161,12 +161,13 @@
             $("#addBtn").on('click', function () {
                 top.contabs.addMenuItem("/view/file/email/file-email.html", '导入邮件');
             });
-            /**
-             * 批注
-             */
-            $("#pizhu").on('click',function () {
-                $("#email-table").myTable("comment");
-            });
+
+            // /**
+            //  * 批注
+            //  */
+            // $("#pizhu").on('click',function () {
+            //     $("#email-table").myTable("comment");
+            // });
 
             $("#email-table").on('click', '.detail', function () {
                 top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id=" + $(this).attr("data-id"), '查看邮件');

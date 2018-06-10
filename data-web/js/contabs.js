@@ -213,18 +213,22 @@ var contabs = (function(window,$){
 
 
     // 关闭选项卡菜单
-    function closeTab() {
-        var closeTabId = $(this).parents('.J_menuTab').data('id');
-        var currentWidth = $(this).parents('.J_menuTab').width();
+    function closeTab(element,type_) {
+        if( type_ !=="colse"){
+            element = $(this);
+        }
+
+        var closeTabId = element.parents('.J_menuTab').data('id');
+        var currentWidth = element.parents('.J_menuTab').width();
 
         // 当前元素处于活动状态
-        if ($(this).parents('.J_menuTab').hasClass('active')) {
+        if (element.parents('.J_menuTab').hasClass('active')) {
 
             // 当前元素后面有同辈元素，使后面的一个元素处于活动状态
-            if ($(this).parents('.J_menuTab').next('.J_menuTab').length) {
+            if (element.parents('.J_menuTab').next('.J_menuTab').length) {
 
-                var activeId = $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').data('id');
-                $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').addClass('active');
+                var activeId = element.parents('.J_menuTab').next('.J_menuTab:eq(0)').data('id');
+                element.parents('.J_menuTab').next('.J_menuTab:eq(0)').addClass('active');
 
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') == activeId) {
@@ -241,7 +245,7 @@ var contabs = (function(window,$){
                 }
 
                 //  移除当前选项卡
-                $(this).parents('.J_menuTab').remove();
+                element.parents('.J_menuTab').remove();
 
                 // 移除tab对应的内容区
                 $('.J_mainContent .J_iframe').each(function () {
@@ -253,9 +257,9 @@ var contabs = (function(window,$){
             }
 
             // 当前元素后面没有同辈元素，使当前元素的上一个元素处于活动状态
-            if ($(this).parents('.J_menuTab').prev('.J_menuTab').length) {
-                var activeId = $(this).parents('.J_menuTab').prev('.J_menuTab:last').data('id');
-                $(this).parents('.J_menuTab').prev('.J_menuTab:last').addClass('active');
+            if (element.parents('.J_menuTab').prev('.J_menuTab').length) {
+                var activeId = element.parents('.J_menuTab').prev('.J_menuTab:last').data('id');
+                element.parents('.J_menuTab').prev('.J_menuTab:last').addClass('active');
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') == activeId) {
                         $(this).show().siblings('.J_iframe').hide();
@@ -264,7 +268,7 @@ var contabs = (function(window,$){
                 });
 
                 //  移除当前选项卡
-                $(this).parents('.J_menuTab').remove();
+                element.parents('.J_menuTab').remove();
 
                 // 移除tab对应的内容区
                 $('.J_mainContent .J_iframe').each(function () {
@@ -278,7 +282,7 @@ var contabs = (function(window,$){
         // 当前元素不处于活动状态
         else {
             //  移除当前选项卡
-            $(this).parents('.J_menuTab').remove();
+            element.parents('.J_menuTab').remove();
 
             // 移除相应tab对应的内容区
             $('.J_mainContent .J_iframe').each(function () {
@@ -289,6 +293,13 @@ var contabs = (function(window,$){
             });
             scrollToTab($('.J_menuTab.active'));
         }
+        return false;
+    }
+
+    // 关闭选项卡菜单
+    function _closeTab() {
+        var active = $('.page-tabs-content').find(".active i");
+        closeTab(active,"colse");
         return false;
     }
 
@@ -347,7 +358,8 @@ var contabs = (function(window,$){
     }
     return {
         init:_init,
-        addMenuItem:addMenuItem
+        addMenuItem:addMenuItem,
+        closeTab:_closeTab
     };
 })(window,jQuery);
 
@@ -362,3 +374,8 @@ $(function () {
 
 
 });
+
+/**
+
+
+ **/
