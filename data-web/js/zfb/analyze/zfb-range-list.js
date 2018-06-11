@@ -5,6 +5,7 @@
     "use strict";
     var zfbInfo;
     var user_id;
+    var ds_id;
     var xcbh;
     var range;
     var zfb = (function () {
@@ -12,6 +13,7 @@
             var params = utils.getURLParams();
             var id = params["id"];
             range = params["range"];
+            ds_id = params["ds_id"];
             _get(id);
         }
         var params = {"indexName":"zfbreginfo","conditions":[],"sort":"create_time desc"};
@@ -37,7 +39,7 @@
                             zfbInfo =file[0];
                             user_id = zfbInfo["user_id"];
                             xcbh = zfbInfo["xcbh"];
-                            $("#zfb-title").html("支付宝账号 [ "+zfbInfo["user_id"]+" ] 的交易汇总");
+                            $("#zfb-title").html("支付宝账号 [ "+zfbInfo["user_id"]+" ] "+(ds_id?"与对手["+ds_id+"]":"")+"的交易汇总");
                         }
                     }else {
                         toastrMsg.error("查询失败");
@@ -78,6 +80,14 @@
                 "searchType": 6,
                 "dataType":2,
             };
+            if(ds_id){
+                con[con.length]={
+                    "field": "ds_id",
+                    "values": [ds_id],
+                    "searchType": 1,
+                    "dataType":2,
+                };
+            }
             _initJylsTable();
             _initZhxxList();
             _initTxxxList();
@@ -92,7 +102,7 @@
                 url:"/api/admin/fx/zfb/jyls",
                 type:"post",
                 dataType:"json",
-                data:{"userId":user_id,"xcbh":xcbh},
+                data:{"userId":user_id,"xcbh":xcbh,"jyjeRange":range,"dsId":ds_id},
                 async:false,
                 success : function (msg) {
                     if(msg.status===200){
@@ -172,7 +182,7 @@
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;";
                                 }
                                 if(msg.data.total===0){
-                                    $('#zhxx-table').bootstrapTable("destroy");
+                                    $('#zhxx-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                                     return false;
                                 }
                                 request.success({
@@ -233,7 +243,7 @@
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;";
                                 }
                                 if(msg.data.total===0){
-                                    $('#txxx-table').bootstrapTable("destroy");
+                                    $('#txxx-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                                     return false;
                                 }
                                 request.success({
@@ -293,7 +303,7 @@
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;";
                                 }
                                 if(msg.data.total===0){
-                                    $('#zzxx-table').bootstrapTable("destroy");
+                                    $('#zzxx-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                                     return false;
                                 }
                                 request.success({
@@ -352,7 +362,7 @@
                                     data[i]['opt'] = "<div class='btn btn-primary btn-outline btn-xs detail' data-id='"+data[i]["id"]+"'>查看</div>&nbsp;";
                                 }
                                 if(msg.data.total===0){
-                                    $('#jyls-table').bootstrapTable("destroy");
+                                    $('#jyls-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                                     return false;
                                 }
                                 request.success({

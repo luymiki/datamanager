@@ -315,14 +315,14 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyls(String userId, String xcbh, String token) throws IOException {
+    public Object analyzeJyls(String userId, String xcbh,String jyjeRange,String dsId, String token) throws IOException {
         String dsl = String.format(queryDsl, userId, xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxZfbJyls tjfxZfbJyls = new TjfxZfbJyls();
         tjfxZfbJyls.setUserId(userId);
         tjfxZfbJyls.setXcbh(xcbh);
-        this.aggJyls(dslJson, tjfxZfbJyls, token);
+        this.aggJyls(dslJson, tjfxZfbJyls,jyjeRange,dsId, token);
         return tjfxZfbJyls;
     }
 
@@ -378,7 +378,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
             TjfxZfbJyds jyds = new TjfxZfbJyds();
             jyds.setUserId(userId);
             jyds.setDfId(dszh);
-            this.aggJyls(dslJson,jyds,token);
+            this.aggJyls(dslJson,jyds,null,null,token);
             resultList.add(jyds);
         });
         Collections.sort(resultList, new Comparator<TjfxZfbJyds>() {
@@ -404,9 +404,19 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyje(String userId, String xcbh, String token) throws IOException {
+    public Object analyzeJyje(String userId, String xcbh,String dsId, String token) throws IOException {
         String dsl = String.format(queryDsl, userId, xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
+
+        JSONArray conditions = dslJson.getJSONArray("conditions");
+        if(StringUtils.isNotBlank(dsId)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "ds_id");
+            cond.put("values", new String[]{dsId});
+            cond.put("searchType", 1);
+            cond.put("dataType", 2);
+            conditions.add(cond);
+        }
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
 
@@ -439,8 +449,24 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         return aggsObj;
     }
 
-    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls, String token) {
+    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls,String jyjeRange,String dsId, String token) {
         JSONArray conditions = dslJson.getJSONArray("conditions");
+        if(StringUtils.isNotBlank(jyjeRange)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "jyje");
+            cond.put("values", jyjeRange.replace("\\*","").split("-"));
+            cond.put("searchType", 6);
+            cond.put("dataType", 3);
+            conditions.add(cond);
+        }
+        if(StringUtils.isNotBlank(dsId)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "ds_id");
+            cond.put("values", new String[]{dsId});
+            cond.put("searchType", 1);
+            cond.put("dataType", 2);
+            conditions.add(cond);
+        }
 
         JSONObject aggsObj = aggsJyje(dslJson, token);
         if (aggsObj != null) {

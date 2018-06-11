@@ -342,7 +342,7 @@ public class ElasticsearchQueryAnalyzeEngine {
                     String start = values.get(0);
                     String end = values.get(1);
                     if (StringUtils.isNotBlank(start)) {
-                        datamap.put("gt", start);
+                        datamap.put("gte", start);
                     }
                     if (StringUtils.isNotBlank(end)) {
                         datamap.put("lt", end);

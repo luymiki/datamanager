@@ -60,9 +60,36 @@
             _initJylsTable();
             _initJydsTable();
             _initJyjeTable();
+            _event();
         };
 
 
+        var _integrated = function () {
+            $.ajax.proxy({
+                url:"/api/admin/fx/zfb/integrated",
+                type:"post",
+                dataType:"json",
+                data:{"userId":user_id,"xcbh":xcbh},
+                async:false,
+                success : function (msg) {
+                    if(msg.status===200){
+                        toastrMsg.success("整合完成");
+                    }else {
+                        toastrMsg.success("整合失败");
+                        console.log(msg);
+                    }
+                },
+                error:function(){
+                    toastrMsg.error("系统错误");
+                }
+            });
+
+        }
+
+        /**
+         * 统计总体交易情况
+         * @private
+         */
         var _initJylsTable = function(){
             var data = [];
             $.ajax.proxy({
@@ -147,7 +174,7 @@
                         $('#jyds-table').myTable({
                             sidePagination:'client',
                             columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
-                                {field: 'dfId',title: '对手账号',sortable:true},
+                                {field: 'dfId',title: '对手账号',sortable:true,formatter:formatterJyds},
                                 {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
                                 {field: 'ljjybs',title: '累计交易笔数',sortable:true},
                                 {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
@@ -332,26 +359,16 @@
         var formatter = function (val) {
             return val === undefined || val=== null? val :val.toFixed(2);
         }
-        // var _event = function () {
-        //     $("#data-table").on('click','.detail',function () {
-        //         top.contabs.addMenuItem("/view/zfb/liushui/zfb-liushui-detail.html?id="+$(this).attr("data-id"),'查看流水信息');
-        //     });
-        //     $("#addBtn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/zfb/liushui/zfb-liushui.html?id="+zfbid,'导入支付宝流水信息');
-        //     });
-        //     $("#analyze-btn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/zfb/liushui/zfb-liushui-analyze.html?id="+zfbid,'支付宝流水信息分析');
-        //     });
-        //     $("#search-btn").on('click',function () {
-        //         _search = $("#search-input").val();
-        //         if(_search && $.trim(_search) !== ""){
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }else {
-        //             _search=null;
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }
-        //     });
-        // };
+        var formatterJyds = function (val) {
+            return val === undefined || val=== null ? val :"<a class='jyds' data-dsid='"+val+"'>"+val+"</a>";
+        }
+        var _event = function () {
+            $("#integrated").on('click',_integrated);
+            $("#jyds-table").on('click',".jyds",function () {
+                var dsid = $(this).attr("data-dsid");
+                top.contabs.addMenuItem("/view/zfb/analyze/zfb-jyds.html?id="+zfbInfo["id"]+"&ds_id="+dsid,'查看对手['+dsid+']流水信息');
+            });
+        };
 
         return {
             init:_init

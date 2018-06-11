@@ -23,7 +23,7 @@ var utils = (function () {
             url = url[1].split("&");
             for (var i = 0; i < url.length; i++) {
                 var p = url[i].split("=");
-                params[p[0]] = p[1];
+                params[p[0]] = decodeURI(p[1]);
             }
         }
         return params;

@@ -151,6 +151,8 @@
                     ],
                     data : file["wxlxrList"]
                 });
+            }else {
+                $('#wxlxrList-table').html("<tr><td>无</td></tr>");
             }
             if(file["wxqunList"]&& file["wxqunList"].length>0){
                 for(var i=0;i<file["wxqunList"].length;i++){
@@ -170,6 +172,8 @@
                     ],
                     data : file["wxqunList"]
                 });
+            }else{
+                $('#wxqunList-table').html("<tr><td>无</td></tr>");
             }
             if(file["wxloginipList"]&& file["wxloginipList"].length>0){
                 for(var i=0;i<file["wxloginipList"].length;i++){
@@ -188,6 +192,8 @@
                     ],
                     data : file["wxloginipList"]
                 });
+            }else{
+                $('#wxloginipList-table').html("<tr><td>无</td></tr>");
             }
 
 

@@ -25,7 +25,7 @@ public interface TjfxZfbService extends TjfxService{
      * @return
      * @throws IOException
      */
-    Object analyzeJyls(String userId, String xcbh, String token) throws IOException;
+    Object analyzeJyls(String userId, String xcbh, String jyjeRange,String dsId,String token) throws IOException;
 
     /**
      * 分析交易对手数据
@@ -42,7 +42,7 @@ public interface TjfxZfbService extends TjfxService{
      * @return
      * @throws IOException
      */
-    Object analyzeJyje(String userId, String xcbh, String token) throws IOException;
+    Object analyzeJyje(String userId, String xcbh,String dsId, String token) throws IOException;
 
 
 }
