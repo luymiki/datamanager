@@ -59,8 +59,29 @@
             _initJylsTable();
             _initJydsTable();
             _initJyjeTable();
+            _event();
         };
+        var _integrated = function () {
+            $.ajax.proxy({
+                url:"/api/admin/fx/cft/integrated",
+                type:"post",
+                dataType:"json",
+                data:{"cftId":cftid},
+                async:false,
+                success : function (msg) {
+                    if(msg.status===200){
+                        toastrMsg.success("整合完成");
+                    }else {
+                        toastrMsg.success("整合失败");
+                        console.log(msg);
+                    }
+                },
+                error:function(){
+                    toastrMsg.error("系统错误");
+                }
+            });
 
+        }
 
         var _initJylsTable = function(){
             var data = [];
@@ -132,7 +153,7 @@
                         $('#jyds-table').myTable({
                             sidePagination:'client',
                             columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
-                                {field: 'dfId',title: '对手账号',sortable:true},
+                                {field: 'dfId',title: '对手账号',sortable:true,formatter:formatterJyds},
                                 {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
                                 {field: 'ljjybs',title: '累计交易笔数',sortable:true},
                                 {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
@@ -183,41 +204,70 @@
                             labels[labels.length] = group["key"];
                             chartData[chartData.length] = group["doc_count"];
                         }
-                        var lineData = {
-                            labels: labels,
-                            datasets: [
+
+                        var myChart = echarts.init(document.getElementById('lineChart'));
+                        var option = {
+                            //边距
+                            grid: {
+                                left: '0',
+                                right: '30',
+                                bottom: '0',
+                                containLabel: true
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['交易次数']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    //mark: {show: true},
+                                    dataView: {show: true, readOnly: false},
+                                    magicType: {show: true, type: ['line', 'bar']},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            calculable: true,
+                            xAxis: [
                                 {
-                                    label: "交易次数",
-                                    fillColor: "rgba(26,179,148,0.5)",
-                                    strokeColor: "rgba(26,179,148,0.7)",
-                                    pointColor: "rgba(26,179,148,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(26,179,148,1)",
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: labels
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '交易次数',
+                                    type: 'line',
+                                    smooth: true,
+                                    itemStyle: {
+                                        normal: {
+                                            color:"rgba(26,179,148,1)",
+                                            borderColor:"rgba(26,179,148,1)",
+                                            lineStyle: {type: 'solid',color:"rgba(26,179,148,0.5)"},
+                                            areaStyle: {type: 'default',color:"rgba(26,179,148,0.5)"}
+                                        }},
                                     data: chartData
                                 }
                             ]
                         };
-
-                        var lineOptions = {
-                            scaleShowGridLines: true,
-                            scaleGridLineColor: "rgba(0,0,0,.05)",
-                            scaleGridLineWidth: 1,
-                            bezierCurve: true,
-                            bezierCurveTension: 0.4,
-                            pointDot: true,
-                            pointDotRadius: 4,
-                            pointDotStrokeWidth: 1,
-                            pointHitDetectionRadius: 20,
-                            datasetStroke: true,
-                            datasetStrokeWidth: 2,
-                            datasetFill: true,
-                            responsive: true,
-                        };
-
-
-                        var ctx = document.getElementById("lineChart").getContext("2d");
-                        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+                        // 为echarts对象加载数据
+                        myChart.setOption(option);
+                        myChart.on('click', function (params) {
+                            var data = params["data"];
+                            var name = params["name"];
+                            console.log(name);
+                            console.log(data);
+                            top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&range="+name,'查看交易金额['+name+']流水信息');
+                        });
                     }
                 },
                 error:function(){
@@ -231,26 +281,16 @@
         var formatter = function (val) {
             return val === undefined || val=== null? val :val.toFixed(2);
         }
-        // var _event = function () {
-        //     $("#data-table").on('click','.detail',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-detail.html?id="+$(this).attr("data-id"),'查看流水信息');
-        //     });
-        //     $("#addBtn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui.html?id="+cftid,'导入财付通流水信息');
-        //     });
-        //     $("#analyze-btn").on('click',function () {
-        //         top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-analyze.html?id="+cftid,'财付通流水信息分析');
-        //     });
-        //     $("#search-btn").on('click',function () {
-        //         _search = $("#search-input").val();
-        //         if(_search && $.trim(_search) !== ""){
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }else {
-        //             _search=null;
-        //             $('#data-table').bootstrapTable("refresh");
-        //         }
-        //     });
-        // };
+        var formatterJyds = function (val) {
+            return val === undefined || val=== null ? val :"<a class='jyds' data-dsid='"+val+"'>"+val+"</a>";
+        }
+        var _event = function () {
+            $("#integrated").on('click',_integrated);
+            $("#jyds-table").on('click',".jyds",function () {
+                var dsid = $(this).attr("data-dsid");
+                top.contabs.addMenuItem("/view/cft/analyze/cft-jyds.html?id="+cftInfo["id"]+"&ds_id="+dsid,'查看对手['+dsid+']流水信息');
+            });
+        };
 
         return {
             init:_init

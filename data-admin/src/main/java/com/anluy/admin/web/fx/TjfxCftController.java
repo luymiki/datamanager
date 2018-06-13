@@ -31,20 +31,44 @@ public class TjfxCftController {
     private TjfxCftService tjfxCftService;
 
     /**
+     * 财付通流水整合接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "财付通流水整合", response = Result.class)
+    @RequestMapping(value = "/integrated",method = {RequestMethod.GET,RequestMethod.POST})
+    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通ID")})
+    public Object integrated(HttpServletRequest request,String cftId) {
+        try {
+            if(StringUtils.isBlank(cftId) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"财付通ID为空"));
+            }
+            String token = request.getHeader(AuthorizationController.AUTHORIZATION);
+            Object result = tjfxCftService.integrated(cftId,token);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("整合成功").setData(result).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("整合失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+        }
+    }
+    
+    /**
      * 分析可疑人信息接口
      *
      * @return
      */
     @ApiOperation(value = "财付通流水统计", response = Result.class)
     @RequestMapping(value = "/jyls",method = {RequestMethod.GET,RequestMethod.POST})
-    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通记录编号")})
-    public Object analyzeJyls(HttpServletRequest request,String cftId) {
+    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通记录编号"),
+            @ApiImplicitParam(name="jyjeRange",value = "交易金额范围"),
+            @ApiImplicitParam(name="dsId",value = "对手账号")})
+    public Object analyzeJyls(HttpServletRequest request,String cftId,String jyjeRange,String dsId) {
         try {
             if(StringUtils.isBlank(cftId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"财付通记录编号为空"));
             }
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxCftService.analyzeJyls(cftId,token);
+            Object result = tjfxCftService.analyzeJyls(cftId,jyjeRange,dsId,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
@@ -65,11 +89,9 @@ public class TjfxCftController {
             if(StringUtils.isBlank(cftId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"财付通记录编号为空"));
             }
-            if(StringUtils.isBlank(cftzh) ){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"财付通账号为空"));
-            }
+
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxCftService.analyzeJyds(cftId,cftzh,token);
+            Object result = tjfxCftService.analyzeJyds(cftId,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
@@ -84,14 +106,16 @@ public class TjfxCftController {
      */
     @ApiOperation(value = "财付通流水金额分组", response = Result.class)
     @RequestMapping(value = "/jyje",method = {RequestMethod.GET,RequestMethod.POST})
-    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通记录编号")})
-    public Object analyzeJyje(HttpServletRequest request,String cftId) {
+    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通记录编号"),
+            @ApiImplicitParam(name="dsId",value = "对手账号")})
+    public Object analyzeJyje(HttpServletRequest request,String cftId,String dsId) {
         try {
             if(StringUtils.isBlank(cftId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"财付通记录编号为空"));
             }
+
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxCftService.analyzeJyje(cftId,token);
+            Object result = tjfxCftService.analyzeJyje(cftId,dsId,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);

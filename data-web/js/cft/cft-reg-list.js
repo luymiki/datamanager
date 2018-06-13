@@ -161,7 +161,7 @@
                 _delete($(this).attr("data-id"),$(this).attr("data-fileId"));
             });
             $("#data-table").on('click','.analyze',function () {
-                top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-list-analyze.html?id="+$(this).attr("data-id"),'财付通流水信息分析');
+                top.contabs.addMenuItem("/view/cft/analyze/cft-analyze.html?id="+$(this).attr("data-id"),'财付通流水信息分析');
             });
             $("#search-btn").on('click',function () {
                 _search = $("#search-input").val();

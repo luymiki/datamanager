@@ -7,6 +7,11 @@
     var search = (function ($) {
         var _init = function () {
             $("#search-btn").click(_search);
+            $("#search").keyup(function (e) {
+                if(e.keyCode===13){
+                    _search();
+                }
+            })
             $("#search-list ").on("click",".search-result",function(){
                 var index = $(this).attr("data-index");
                 switch (index){

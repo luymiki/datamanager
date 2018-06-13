@@ -10,6 +10,16 @@ import java.io.IOException;
  * Created by hc.zeng on 2018/3/22.
  */
 public interface TjfxCftService extends TjfxService{
+
+    /**
+     * 整合数据
+     * @param cftId
+     * @param token
+     * @return
+     * @throws IOException
+     */
+    Object integrated(String cftId,String token) throws Exception;
+
     /**
      * 分析交易流水数据
      * @param cftId
@@ -17,7 +27,7 @@ public interface TjfxCftService extends TjfxService{
      * @return
      * @throws IOException
      */
-    Object analyzeJyls(String cftId,String token) throws IOException;
+    Object analyzeJyls(String cftId,String jyjeRange,String dsId,String token) throws IOException;
 
     /**
      * 分析交易对手数据
@@ -26,7 +36,7 @@ public interface TjfxCftService extends TjfxService{
      * @return
      * @throws IOException
      */
-    Object analyzeJyds(String cftId,String cftzh, String token) throws IOException;
+    Object analyzeJyds(String cftId,String token) throws IOException;
 
     /**
      * 分析交易金额数据
@@ -35,7 +45,7 @@ public interface TjfxCftService extends TjfxService{
      * @return
      * @throws IOException
      */
-    Object analyzeJyje(String cftId,String token) throws IOException;
+    Object analyzeJyje(String cftId,String dsId,String token) throws IOException;
 
 
 }

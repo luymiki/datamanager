@@ -48,9 +48,9 @@ public class TjtbController {
         try {
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
             Object result = tjtbService.analyzeCjsj(token);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("提取成功").setData(result).setPath(request.getRequestURI()));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("分析完成").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
-            LOGGER.error("提取失败:" + exception.getMessage(), exception);
+            LOGGER.error("分析失败:" + exception.getMessage(), exception);
             return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
         }
     }

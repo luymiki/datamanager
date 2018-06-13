@@ -1,0 +1,35 @@
+{
+  "from": 0,
+  "size": 500,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "cft_id": "%s"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "sort": [
+    {
+      "create_time": {
+        "order": "desc"
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+
+zfbzhinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "ds_id": {
+      "type": "keyword"
+    },
+    "jdlx": {
+      "type": "keyword"
+    },
+	"jyje": {
+      "type": "double"
+    },
+	"jysj": {
+       "type": "date",
+       "format": "yyyy-MM-dd HH:mm:ss"
+    }
+  }
+}
+
+==========================
+zfbtxinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+	"ds_id": {
+      "type": "keyword"
+    },
+    "jdlx": {
+      "type": "keyword"
+    },
+	"jyje": {
+      "type": "double"
+    },
+	"jysj": {
+       "type": "date",
+       "format": "yyyy-MM-dd HH:mm:ss"
+    }
+  }
+}
+=============================
+zfbzzinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "ds_id": {
+      "type": "keyword"
+    },
+    "jdlx": {
+      "type": "keyword"
+    },
+	"jyje": {
+      "type": "double"
+    },
+	"jysj": {
+       "type": "date",
+       "format": "yyyy-MM-dd HH:mm:ss"
+    }
+  }
+}
+==============================
+zfbjyjlinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "ds_id": {
+      "type": "keyword"
+    },
+    "jdlx": {
+      "type": "keyword"
+    },
+	"jyje": {
+      "type": "double"
+    },
+	"jysj": {
+       "type": "date",
+       "format": "yyyy-MM-dd HH:mm:ss"
+    }
+  }
+}
+==============================
+cfttrades/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "ds_id": {
+      "type": "keyword"
+    }
+  }
+}
