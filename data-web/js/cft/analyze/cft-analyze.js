@@ -145,7 +145,6 @@
          */
         var _initJydsTable = function(){
             var data = [];
-            var cftzh = cftInfo["zh"];
             $.ajax.proxy({
                 url:"/api/admin/fx/cft/jyds",
                 type:"post",
@@ -280,7 +279,7 @@
                             var name = params["name"];
                             //console.log(name);
                             //console.log(data);
-                            top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&range="+name+"&zcType="+zcType,'查看交易金额['+name+']流水信息');
+                            top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&range="+name+"&zcType="+(zcType||""),'查看交易金额['+name+']流水信息');
                         });
                     }
                 },
@@ -391,7 +390,7 @@
             $("#integrated").on('click',_integrated);
             $("#jyds-table").on('click',".jyds",function () {
                 var dsid = $(this).attr("data-dsid");
-                top.contabs.addMenuItem("/view/cft/analyze/cft-jyds.html?id="+cftInfo["id"]+"&ds_id="+dsid,'查看对手['+dsid+']流水信息');
+                top.contabs.addMenuItem("/view/cft/analyze/cft-jyds.html?id="+cftInfo["id"]+"&ds_id="+dsid+"&zcType="+(zcType||""),'查看对手['+dsid+']流水信息');
             });
         };
 

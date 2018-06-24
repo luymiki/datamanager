@@ -60,12 +60,7 @@
         var _init = function init(_data) {
             _initJylsTable();
             _initJyjeLineChart();
-            if(zcType){
-                $("#chart-line").removeClass("col-sm-8");
-                $("#chart-pie").hide();
-            }else {
-                _initJyjePieChart();
-            }
+            _initJyjePieChart();
             _event();
         };
 
@@ -232,7 +227,7 @@
                 url:"/api/admin/fx/cft/jyjeZc100",
                 type:"post",
                 dataType:"json",
-                data:{"cftId":cft_id,"dsId":ds_id,"zcType":zcType||""},
+                data:{"cftId":cft_id,"dsId":ds_id},
                 success : function (msg) {
                     if(msg.status===200){
                         var nzc100 = msg.data["nzc100"]["group_zc0"];

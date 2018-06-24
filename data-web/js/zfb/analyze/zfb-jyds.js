@@ -7,11 +7,13 @@
     var user_id;
     var ds_id;
     var xcbh;
+    var zcType;
     var zfb = (function () {
         var _init = function () {
             var params = utils.getURLParams();
             var id = params["id"];
             ds_id = params["ds_id"];
+            zcType = params["zcType"];
             _get(id);
         }
         var params = {"indexName":"zfbreginfo","conditions":[],"sort":"create_time desc"};
@@ -61,6 +63,7 @@
         var _init = function init(_data) {
             _initJylsTable();
             _initJyjeTable();
+            _initJyjePieChart();
             _event();
         };
 
@@ -75,7 +78,7 @@
                 url:"/api/admin/fx/zfb/jyls",
                 type:"post",
                 dataType:"json",
-                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id},
+                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id,"zcType":zcType},
                 async:false,
                 success : function (msg) {
                     if(msg.status===200){
@@ -128,7 +131,7 @@
                 url:"/api/admin/fx/zfb/jyje",
                 type:"post",
                 dataType:"json",
-                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id},
+                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id,"zcType":zcType},
                 success : function (msg) {
                     if(msg.status===200){
                         data = msg.data["group_jyje"];
@@ -204,9 +207,98 @@
                             var name = params["name"];
                             console.log(name);
                             console.log(data);
-                            top.contabs.addMenuItem("/view/zfb/analyze/zfb-range-list.html?id="+zfbInfo["id"]+"&range="+name+"&ds_id="+ds_id,'查看交易金额['+name+']流水信息');
+                            top.contabs.addMenuItem("/view/zfb/analyze/zfb-range-list.html?id="+zfbInfo["id"]+"&range="+name+"&ds_id="+ds_id+"&zcType="+(zcType||""),'查看交易金额['+name+']流水信息');
                         });
 
+                    }
+                },
+                error:function(){
+                    toastrMsg.error("系统错误");
+                }
+            });
+
+
+        };
+
+        /**
+         * 统计被100整除交易金额饼状图
+         * @private
+         */
+        var _initJyjePieChart = function(){
+            var data = [];
+            $.ajax.proxy({
+                url:"/api/admin/fx/zfb/jyjeZc100",
+                type:"post",
+                dataType:"json",
+                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id},
+                success : function (msg) {
+                    if(msg.status===200){
+                        var nzc100 = msg.data["nzc100"]["group_zc0"];
+                        var zc100 = msg.data["zc100"]["group_zc0"];
+                        //console.log(msg)
+                        $("#loadding-icon-jyjeZc100").hide();
+                        var labels = ["被100整除","不能被100整除"];
+                        var chartData = [
+                            {"name":"被100整除","value":(zc100||0)},
+                            {"name":"不能被100整除","value":(nzc100||0)}
+                        ];
+
+                        var myChart = echarts.init(document.getElementById('pieChart'));
+                        var option = {
+                            title: {
+                                text: '交易金额区间分布'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                data: labels,
+                                type: 'scroll',
+                                orient: 'vertical',
+                                right: 10,
+                                top: 50,
+                                bottom: 20,
+                            },
+
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataView: {show: true, readOnly: false},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            calculable: true,
+
+                            series: [
+                                {
+                                    name: '交易次数',
+                                    type: 'pie',
+                                    radius : '55%',
+                                    center: ['40%', '50%'],
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                    },
+                                    data: chartData
+                                }
+                            ]
+                        };
+                        // 为echarts对象加载数据
+                        myChart.setOption(option);
+                        // myChart.on('click', function (params) {
+                        //     var data = params["data"];
+                        //     var name = params["name"];
+                        //     //console.log(name);
+                        //     //console.log(data);
+                        //     var type = 100;
+                        //     if("被100整除"!== name){
+                        //         type = -100;
+                        //     }
+                        //     top.contabs.addMenuItem("/view/cft/analyze/cft-analyze.html?id="+cftInfo["id"]+"&zcType="+type,'查看['+name+']的流水信息');
+                        // });
                     }
                 },
                 error:function(){

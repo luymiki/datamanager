@@ -8,12 +8,14 @@
     var ds_id;
     var xcbh;
     var range;
+    var zcType;
     var zfb = (function () {
         var _init = function () {
             var params = utils.getURLParams();
             var id = params["id"];
             range = params["range"];
             ds_id = params["ds_id"];
+            zcType = params["zcType"];
             _get(id);
         }
         var params = {"indexName":"zfbreginfo","conditions":[],"sort":"create_time desc"};
@@ -88,6 +90,24 @@
                     "dataType":2,
                 };
             }
+            if(zcType){
+                if(zcType==="100"){
+                    con[con.length]={
+                        "field": "zc100",
+                        "values": ["0"],
+                        "searchType": 1,
+                        "dataType":2,
+                    };
+                }else if(zcType==="-100"){
+                    con[con.length]={
+                        "field": "zc100",
+                        "values": ["0"],
+                        "searchType": 3,
+                        "dataType":2,
+                    };
+                }
+
+            }
             _initJylsTable();
             _initZhxxList();
             _initTxxxList();
@@ -102,7 +122,7 @@
                 url:"/api/admin/fx/zfb/jyls",
                 type:"post",
                 dataType:"json",
-                data:{"userId":user_id,"xcbh":xcbh,"jyjeRange":range,"dsId":ds_id},
+                data:{"userId":user_id,"xcbh":xcbh,"jyjeRange":range,"dsId":ds_id,"zcType":zcType||""},
                 async:false,
                 success : function (msg) {
                     if(msg.status===200){

@@ -38,7 +38,7 @@ import java.util.*;
 @Service
 public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjfxCftServiceImpl.class);
-    private static final String CACHE_NAME ="Eqa-Aggs-Cache";
+    private static final String CACHE_NAME = "Eqa-Aggs-Cache";
     @Resource
     private EqaConfig eqaConfig;
 
@@ -50,13 +50,13 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
     private String queryDsl;
     private String queryDslForIntegrated;
 
-    public TjfxCftServiceImpl(){
+    public TjfxCftServiceImpl() {
         //dsl查询语句
         if (StringUtils.isBlank(queryDsl)) {
             try {
                 queryDsl = IOUtils.toString(TjfxCftServiceImpl.class.getResourceAsStream("/dsl/eqa-queryCftJyls.json"));
             } catch (IOException e) {
-                LOGGER.error("DSL文件加载错误",e);
+                LOGGER.error("DSL文件加载错误", e);
             }
         }
         //dsl查询语句
@@ -64,13 +64,14 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             try {
                 queryDslForIntegrated = IOUtils.toString(TjfxCftServiceImpl.class.getResourceAsStream("/dsl/eqa-queryCftData.json"));
             } catch (IOException e) {
-                LOGGER.error("DSL文件加载错误",e);
+                LOGGER.error("DSL文件加载错误", e);
             }
         }
     }
 
     /**
      * 整合数据
+     *
      * @param cftId
      * @param token
      * @return
@@ -92,51 +93,51 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
                         String jsf = (String) map.get("jsf");
                         String fsf = (String) map.get("fsf");
                         String ds_id = (String) map.get("ds_id");
-                        Object jyjeO =  map.get("jyje");
+                        Object jyjeO = map.get("jyje");
                         Double jyje = null;
-                        if(jyjeO instanceof BigDecimal){
-                            jyje = ((BigDecimal)jyjeO).doubleValue();
-                        } else if(jyjeO instanceof Double){
-                            jyje = ((Double)jyjeO);
-                        }else{
+                        if (jyjeO instanceof BigDecimal) {
+                            jyje = ((BigDecimal) jyjeO).doubleValue();
+                        } else if (jyjeO instanceof Double) {
+                            jyje = ((Double) jyjeO);
+                        } else {
                             jyje = Double.valueOf(jyjeO.toString());
                         }
                         Double zc100 = (Double) map.get("zc100");
-                        if(StringUtils.isBlank(ds_id)){
-                            if(StringUtils.isBlank(fsf) && StringUtils.isBlank(jsf)){
-                                map.put("ds_id","-");
-                            }else if("出".equals(jdlx)) {
-                                if(StringUtils.isBlank(jsf))
-                                    map.put("ds_id","-");
+                        if (StringUtils.isBlank(ds_id)) {
+                            if (StringUtils.isBlank(fsf) && StringUtils.isBlank(jsf)) {
+                                map.put("ds_id", "-");
+                            } else if ("出".equals(jdlx)) {
+                                if (StringUtils.isBlank(jsf))
+                                    map.put("ds_id", "-");
                                 else
                                     map.put("ds_id", jsf);
-                            }else {
-                                if(StringUtils.isBlank(fsf))
-                                    map.put("ds_id","-");
+                            } else {
+                                if (StringUtils.isBlank(fsf))
+                                    map.put("ds_id", "-");
                                 else
                                     map.put("ds_id", fsf);
                             }
                             update = true;
                         }
-                        if(zc100 == null){
+                        if (zc100 == null) {
                             update = true;
-                            if(jyje!=null){
+                            if (jyje != null) {
                                 Double mod = jyje % 100;
                                 map.put("zc100", mod);
-                            }else {
+                            } else {
                                 map.put("zc100", -1);
                             }
                         }
-                        if(update){
+                        if (update) {
                             dataList.add(map);
                         }
-                        if(dataList.size() == 500){
-                            elasticsearchRestClient.batchUpdate(dataList,"cfttrades");
+                        if (dataList.size() == 500) {
+                            elasticsearchRestClient.batchUpdate(dataList, "cfttrades");
                             dataList.clear();
                         }
                     }
-                    if( !dataList.isEmpty()){
-                        elasticsearchRestClient.batchUpdate(dataList,"cfttrades");
+                    if (!dataList.isEmpty()) {
+                        elasticsearchRestClient.batchUpdate(dataList, "cfttrades");
                     }
                 }
             }
@@ -155,44 +156,35 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyls(String cftId,String jyjeRange,String dsId,String zcType, String token) throws IOException {
+    public Object analyzeJyls(String cftId, String jyjeRange, String dsId, String zcType, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxCftJyls tjfxCftJyls = new TjfxCftJyls();
         tjfxCftJyls.setCftId(cftId);
-        this.aggJyls(dslJson,tjfxCftJyls,jyjeRange,dsId,zcType,token);
+        this.aggJyls(dslJson, tjfxCftJyls, jyjeRange, dsId, zcType, token);
         return tjfxCftJyls;
     }
 
     /**
      * 分析财付通交易对手数据
      * 并清洗流水的交易时间的 时、日、周、月等标签
+     *
      * @param cftId
      * @param token
      * @return
      * @throws IOException
      */
     @Override
-    public Object analyzeJyds(String cftId,String zcType,String token) throws IOException {
+    public Object analyzeJyds(String cftId, String zcType, String token) throws IOException {
         List<TjfxCftJyds> resultList = new ArrayList<>();
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         Set<String> jydsZh = new HashSet<>();
 
         JSONArray conditions = dslJson.getJSONArray("conditions");
-        if(StringUtils.isNotBlank(zcType)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "zc100");
-            cond.put("values", new String[]{"0"});
-            cond.put("dataType", 2);
-            conditions.add(cond);
-            if("100".equals(zcType)){
-                cond.put("searchType", 1);
-            }else if("-100".equals(zcType)){
-                cond.put("searchType", 3);
-            }
-        }
+        this.setConditionZcType100(conditions, zcType);
+
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
         //聚合对手账号
@@ -201,8 +193,8 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         count.put("field", "ds_id");
         count.put("aggsType", 1);
         aggsJSONArray.add(count);
-        JSONObject aggsObject = aggs(eqaConfig.getAggsUrl(),dslJson.toJSONString(),token);
-        if(aggsObject!=null){
+        JSONObject aggsObject = aggs(eqaConfig.getAggsUrl(), dslJson.toJSONString(), token);
+        if (aggsObject != null) {
             JSONArray dsArray = aggsObject.getJSONArray("terms_ds");
             for (int i = 0; i < dsArray.size(); i++) {
                 JSONObject cv = dsArray.getJSONObject(i);
@@ -221,19 +213,19 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         conditions.add(cond1);
 
         //统计对手
-        jydsZh.forEach(dszh->{
+        jydsZh.forEach(dszh -> {
             cond1.put("values", new String[]{dszh});
             TjfxCftJyds jyds = new TjfxCftJyds();
             jyds.setDfId(dszh);
-            this.aggJyls(dslJson,jyds,null,null,zcType,token);
+            this.aggJyls(dslJson, jyds, null, null, zcType, token);
             resultList.add(jyds);
         });
         Collections.sort(resultList, new Comparator<TjfxCftJyds>() {
             @Override
             public int compare(TjfxCftJyds o1, TjfxCftJyds o2) {
-                if(o1.getLjjyje() > o2.getLjjyje()){
+                if (o1.getLjjyje() > o2.getLjjyje()) {
                     return -1;
-                }else if(o1.getLjjyje() < o2.getLjjyje()){
+                } else if (o1.getLjjyje() < o2.getLjjyje()) {
                     return 1;
                 }
                 return 0;
@@ -242,56 +234,40 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         return resultList;
     }
 
+
     /**
      * 统计交易金额区间
+     *
      * @param cftId
      * @param token
      * @return
      * @throws IOException
      */
     @Override
-    public Object analyzeJyje(String cftId,String dsId,String zcType, String token) throws IOException {
+    public Object analyzeJyje(String cftId, String dsId, String zcType, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
 
         JSONArray conditions = dslJson.getJSONArray("conditions");
-        if(StringUtils.isNotBlank(dsId)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "ds_id");
-            cond.put("values", new String[]{dsId});
-            cond.put("searchType", 1);
-            cond.put("dataType", 2);
-            conditions.add(cond);
-        }
-        if(StringUtils.isNotBlank(zcType)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "zc100");
-            cond.put("values", new String[]{"0"});
-            cond.put("dataType", 2);
-            conditions.add(cond);
-            if("100".equals(zcType)){
-                cond.put("searchType", 1);
-            }else if("-100".equals(zcType)){
-                cond.put("searchType", 3);
-            }
-        }
+        this.setConditionDsId(conditions, dsId);
+        this.setConditionZcType100(conditions, zcType);
         List<Double[]> rangeList = new ArrayList<>();
-        rangeList.add(new Double[]{0.00,10.00});
-        rangeList.add(new Double[]{10.00,50.00});
-        rangeList.add(new Double[]{50.00,100.00});
-        rangeList.add(new Double[]{100.00,500.00});
-        rangeList.add(new Double[]{500.00,1000.00});
-        rangeList.add(new Double[]{1000.00,5000.00});
-        rangeList.add(new Double[]{5000.00,10000.00});
-        rangeList.add(new Double[]{10000.00,50000.00});
-        rangeList.add(new Double[]{50000.00,null});
+        rangeList.add(new Double[]{0.00, 10.00});
+        rangeList.add(new Double[]{10.00, 50.00});
+        rangeList.add(new Double[]{50.00, 100.00});
+        rangeList.add(new Double[]{100.00, 500.00});
+        rangeList.add(new Double[]{500.00, 1000.00});
+        rangeList.add(new Double[]{1000.00, 5000.00});
+        rangeList.add(new Double[]{5000.00, 10000.00});
+        rangeList.add(new Double[]{10000.00, 50000.00});
+        rangeList.add(new Double[]{50000.00, null});
         List<Map> values = new ArrayList<>();
-        for (Double[] range :rangeList             ) {
-            Map<String,Double> map = new HashMap<>();
-            map.put("from",range[0]);
-            map.put("to",range[1]);
+        for (Double[] range : rangeList) {
+            Map<String, Double> map = new HashMap<>();
+            map.put("from", range[0]);
+            map.put("to", range[1]);
             values.add(map);
         }
         //
@@ -301,32 +277,28 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         max.put("values", values);
         max.put("aggsType", 8);
         aggsJSONArray.add(max);
-        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
+        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(), JSON.toJSONString(dslJson), token);
         return aggsObj;
     }
+
+
     /**
      * 统计交易金额区间
+     *
      * @param cftId
      * @param token
      * @return
      * @throws IOException
      */
     @Override
-    public Object analyzeZc100(String cftId,String dsId, String token) throws IOException {
+    public Object analyzeZc100(String cftId, String dsId, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
 
         JSONArray conditions = dslJson.getJSONArray("conditions");
-        if(StringUtils.isNotBlank(dsId)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "ds_id");
-            cond.put("values", new String[]{dsId});
-            cond.put("searchType", 1);
-            cond.put("dataType", 2);
-            conditions.add(cond);
-        }
+        this.setConditionDsId(conditions, dsId);
 
         JSONObject cond = new JSONObject();
         cond.put("field", "zc100");
@@ -340,17 +312,19 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         max.put("field", "zc100");
         max.put("aggsType", 7);
         aggsJSONArray.add(max);
-        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
+        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(), JSON.toJSONString(dslJson), token);
 
         cond.put("searchType", 3);
-        JSONObject aggsObj2 = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
+        JSONObject aggsObj2 = aggs(eqaConfig.getAggsUrl(), JSON.toJSONString(dslJson), token);
         Map result = new HashMap();
-        result.put("zc100",aggsObj);
-        result.put("nzc100",aggsObj2);
+        result.put("zc100", aggsObj);
+        result.put("nzc100", aggsObj2);
         return result;
     }
+
     /**
      * 统计交易流水
+     *
      * @param dslJson
      * @param jyls
      * @param jyjeRange
@@ -358,36 +332,18 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
      * @param token
      * @return
      */
-    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls,String jyjeRange,String dsId,String zcType, String token){
+    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls, String jyjeRange, String dsId, String zcType, String token) {
         JSONArray conditions = dslJson.getJSONArray("conditions");
-        if(StringUtils.isNotBlank(jyjeRange)){
+        if (StringUtils.isNotBlank(jyjeRange)) {
             JSONObject cond = new JSONObject();
             cond.put("field", "jyje");
-            cond.put("values", jyjeRange.replace("*","").split("-"));
+            cond.put("values", jyjeRange.replace("*", "").split("-"));
             cond.put("searchType", 6);
             cond.put("dataType", 3);
             conditions.add(cond);
         }
-        if(StringUtils.isNotBlank(dsId)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "ds_id");
-            cond.put("values", new String[]{dsId});
-            cond.put("searchType", 1);
-            cond.put("dataType", 2);
-            conditions.add(cond);
-        }
-        if(StringUtils.isNotBlank(zcType)){
-            JSONObject cond = new JSONObject();
-            cond.put("field", "zc100");
-            cond.put("values", new String[]{"0"});
-            cond.put("dataType", 2);
-            conditions.add(cond);
-            if("100".equals(zcType)){
-                cond.put("searchType", 1);
-            }else if("-100".equals(zcType)){
-                cond.put("searchType", 3);
-            }
-        }
+        this.setConditionDsId(conditions, dsId);
+        this.setConditionZcType100(conditions, zcType);
 
         JSONObject aggsObj = aggsJyje(dslJson, token);
         if (aggsObj != null) {
@@ -418,7 +374,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             jyls.setLjzrje(aggsObj.getDouble("sum_jyje"));
             jyls.setLjzrbs(aggsObj.getInteger("count_jyje"));
         }
-        conditions.remove(conditions.size()-1);
+        conditions.remove(conditions.size() - 1);
         aggsObj = aggsDate(dslJson, token);
         if (aggsObj != null) {
             jyls.setZzjysj(aggsObj.getDate("min_jysj"));
@@ -473,12 +429,12 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         String key = MD5.encode(dsl);
         Object cacheObj = cache.get(key);
         JSONObject result = null;
-        if(cacheObj != null){
-            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
-        }else {
-            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
-            if(result !=null && !result.isEmpty()  && StringUtils.isNotBlank(result.getString("max_jyje"))){
-                cache.put(key,result);
+        if (cacheObj != null) {
+            result = (JSONObject) ((SimpleValueWrapper) cacheObj).get();
+        } else {
+            result = aggs(eqaConfig.getAggsUrl(), dsl, token);
+            if (result != null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jyje"))) {
+                cache.put(key, result);
             }
         }
         return result;
@@ -486,6 +442,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
 
     /**
      * 统计时间
+     *
      * @param dslJson
      * @param token
      * @return
@@ -512,17 +469,54 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         String key = MD5.encode(dsl);
         Object cacheObj = cache.get(key);
         JSONObject result = null;
-        if(cacheObj != null){
-            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
-        }else {
-            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
-            if(result !=null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jysj"))){
-                cache.put(key,result);
+        if (cacheObj != null) {
+            result = (JSONObject) ((SimpleValueWrapper) cacheObj).get();
+        } else {
+            result = aggs(eqaConfig.getAggsUrl(), dsl, token);
+            if (result != null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jysj"))) {
+                cache.put(key, result);
             }
         }
         return result;
     }
 
+    /**
+     * 设置对手id条件
+     *
+     * @param conditions
+     * @param dsId
+     */
+    private void setConditionDsId(JSONArray conditions, String dsId) {
+        if (StringUtils.isNotBlank(dsId)) {
+            JSONObject cond = new JSONObject();
+            cond.put("field", "ds_id");
+            cond.put("values", new String[]{dsId});
+            cond.put("searchType", 1);
+            cond.put("dataType", 2);
+            conditions.add(cond);
+        }
+    }
+
+    /**
+     * 设置被100整除条件
+     *
+     * @param conditions
+     * @param zcType
+     */
+    private void setConditionZcType100(JSONArray conditions, String zcType) {
+        if (StringUtils.isNotBlank(zcType)) {
+            JSONObject cond = new JSONObject();
+            cond.put("field", "zc100");
+            cond.put("values", new String[]{"0"});
+            cond.put("dataType", 2);
+            conditions.add(cond);
+            if ("100".equals(zcType)) {
+                cond.put("searchType", 1);
+            } else if ("-100".equals(zcType)) {
+                cond.put("searchType", 3);
+            }
+        }
+    }
 
     @Override
     public BaseDAO getBaseDAO() {

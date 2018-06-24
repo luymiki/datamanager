@@ -68,8 +68,9 @@ public class TjfxZfbController {
     @ApiImplicitParams({@ApiImplicitParam(name="userId",value = "支付宝账号"),
             @ApiImplicitParam(name="xcbh",value = "协查编号"),
             @ApiImplicitParam(name="jyjeRange",value = "金额范围"),
-            @ApiImplicitParam(name="dsId",value = "对手id")})
-    public Object analyzeJyls(HttpServletRequest request,String userId,String xcbh,String jyjeRange,String dsId) {
+            @ApiImplicitParam(name="dsId",value = "对手id"),
+            @ApiImplicitParam(name="zcType",value = "整除类型")})
+    public Object analyzeJyls(HttpServletRequest request,String userId,String xcbh,String jyjeRange,String dsId,String zcType) {
         try {
             if(StringUtils.isBlank(userId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"支付宝账号为空"));
@@ -78,7 +79,7 @@ public class TjfxZfbController {
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"协查编号为空"));
             }
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxZfbService.analyzeJyls(userId,xcbh,jyjeRange,dsId,token);
+            Object result = tjfxZfbService.analyzeJyls(userId,xcbh,jyjeRange,dsId,zcType,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
@@ -94,8 +95,9 @@ public class TjfxZfbController {
     @ApiOperation(value = "支付宝对手统计", response = Result.class)
     @RequestMapping(value = "/jyds",method = {RequestMethod.GET,RequestMethod.POST})
     @ApiImplicitParams({@ApiImplicitParam(name="userId",value = "支付宝账号"),
-            @ApiImplicitParam(name="xcbh",value = "协查编号")})
-    public Object analyzeJyds(HttpServletRequest request,String userId,String xcbh) {
+            @ApiImplicitParam(name="xcbh",value = "协查编号"),
+            @ApiImplicitParam(name="zcType",value = "整除类型")})
+    public Object analyzeJyds(HttpServletRequest request,String userId,String xcbh,String zcType) {
         try {
             if(StringUtils.isBlank(userId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"支付宝账号为空"));
@@ -104,7 +106,7 @@ public class TjfxZfbController {
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"协查编号为空"));
             }
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxZfbService.analyzeJyds(userId,xcbh,token);
+            Object result = tjfxZfbService.analyzeJyds(userId,xcbh,zcType,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
@@ -121,8 +123,9 @@ public class TjfxZfbController {
     @RequestMapping(value = "/jyje",method = {RequestMethod.GET,RequestMethod.POST})
     @ApiImplicitParams({@ApiImplicitParam(name="userId",value = "支付宝账号"),
             @ApiImplicitParam(name="xcbh",value = "协查编号"),
-            @ApiImplicitParam(name="dsId",value = "对手id")})
-    public Object analyzeJyje(HttpServletRequest request,String userId,String xcbh,String dsId) {
+            @ApiImplicitParam(name="dsId",value = "对手id"),
+            @ApiImplicitParam(name="zcType",value = "整除类型")})
+    public Object analyzeJyje(HttpServletRequest request,String userId,String xcbh,String dsId,String zcType) {
         try {
             if(StringUtils.isBlank(userId) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"支付宝账号为空"));
@@ -131,7 +134,35 @@ public class TjfxZfbController {
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"协查编号为空"));
             }
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
-            Object result = tjfxZfbService.analyzeJyje(userId,xcbh,dsId,token);
+            Object result = tjfxZfbService.analyzeJyje(userId,xcbh,dsId,zcType,token);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("统计失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+        }
+    }
+
+    /**
+     * 支付宝流水被100整除的数据量
+     *
+     * @return
+     */
+    @ApiOperation(value = "支付宝流水被100整除的数据量", response = Result.class)
+    @RequestMapping(value = "/jyjeZc100",method = {RequestMethod.GET,RequestMethod.POST})
+    @ApiImplicitParams({@ApiImplicitParam(name="userId",value = "支付宝账号"),
+            @ApiImplicitParam(name="xcbh",value = "协查编号"),
+            @ApiImplicitParam(name="dsId",value = "对手id")})
+    public Object analyzeJyjeZc100(HttpServletRequest request,String userId,String xcbh,String dsId) {
+        try {
+            if(StringUtils.isBlank(userId) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"支付宝账号为空"));
+            }
+            if(StringUtils.isBlank(xcbh) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"协查编号为空"));
+            }
+
+            String token = request.getHeader(AuthorizationController.AUTHORIZATION);
+            Object result = tjfxZfbService.analyzeJyjeZc100(userId,xcbh,dsId,token);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
