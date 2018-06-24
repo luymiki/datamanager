@@ -9,6 +9,7 @@ import com.anluy.admin.entity.TjfxCftJyls;
 import com.anluy.admin.entity.TjfxJyls;
 import com.anluy.admin.service.TjfxCftService;
 import com.anluy.admin.utils.HTTPUtils;
+import com.anluy.admin.utils.MD5;
 import com.anluy.commons.dao.BaseDAO;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.service.BaseServiceImpl;
@@ -18,11 +19,15 @@ import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCache;
+import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -33,12 +38,14 @@ import java.util.*;
 @Service
 public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjfxCftServiceImpl.class);
-
+    private static final String CACHE_NAME ="Eqa-Aggs-Cache";
     @Resource
     private EqaConfig eqaConfig;
 
     @Resource
     private ElasticsearchRestClient elasticsearchRestClient;
+    @Resource
+    private CacheManager cacheManager;
 
     private String queryDsl;
     private String queryDslForIntegrated;
@@ -85,6 +92,16 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
                         String jsf = (String) map.get("jsf");
                         String fsf = (String) map.get("fsf");
                         String ds_id = (String) map.get("ds_id");
+                        Object jyjeO =  map.get("jyje");
+                        Double jyje = null;
+                        if(jyjeO instanceof BigDecimal){
+                            jyje = ((BigDecimal)jyjeO).doubleValue();
+                        } else if(jyjeO instanceof Double){
+                            jyje = ((Double)jyjeO);
+                        }else{
+                            jyje = Double.valueOf(jyjeO.toString());
+                        }
+                        Double zc100 = (Double) map.get("zc100");
                         if(StringUtils.isBlank(ds_id)){
                             if(StringUtils.isBlank(fsf) && StringUtils.isBlank(jsf)){
                                 map.put("ds_id","-");
@@ -99,6 +116,18 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
                                 else
                                     map.put("ds_id", fsf);
                             }
+                            update = true;
+                        }
+                        if(zc100 == null){
+                            update = true;
+                            if(jyje!=null){
+                                Double mod = jyje % 100;
+                                map.put("zc100", mod);
+                            }else {
+                                map.put("zc100", -1);
+                            }
+                        }
+                        if(update){
                             dataList.add(map);
                         }
                         if(dataList.size() == 500){
@@ -111,7 +140,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
                     }
                 }
             }
-        }, "cfttrades", "id,zh,jdlx,jsf,fsf,ds_id", null);
+        }, "cfttrades", "id,zh,jdlx,jsf,fsf,ds_id,jyje,zc100", null);
 
         return null;
     }
@@ -126,13 +155,13 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyls(String cftId,String jyjeRange,String dsId, String token) throws IOException {
+    public Object analyzeJyls(String cftId,String jyjeRange,String dsId,String zcType, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxCftJyls tjfxCftJyls = new TjfxCftJyls();
         tjfxCftJyls.setCftId(cftId);
-        this.aggJyls(dslJson,tjfxCftJyls,jyjeRange,dsId,token);
+        this.aggJyls(dslJson,tjfxCftJyls,jyjeRange,dsId,zcType,token);
         return tjfxCftJyls;
     }
 
@@ -145,12 +174,25 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyds(String cftId,String token) throws IOException {
+    public Object analyzeJyds(String cftId,String zcType,String token) throws IOException {
         List<TjfxCftJyds> resultList = new ArrayList<>();
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         Set<String> jydsZh = new HashSet<>();
 
+        JSONArray conditions = dslJson.getJSONArray("conditions");
+        if(StringUtils.isNotBlank(zcType)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "zc100");
+            cond.put("values", new String[]{"0"});
+            cond.put("dataType", 2);
+            conditions.add(cond);
+            if("100".equals(zcType)){
+                cond.put("searchType", 1);
+            }else if("-100".equals(zcType)){
+                cond.put("searchType", 3);
+            }
+        }
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
         //聚合对手账号
@@ -168,7 +210,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
                 jydsZh.add(dszh);
             }
         }
-        JSONArray conditions = dslJson.getJSONArray("conditions");
+
         JSONObject cond1 = new JSONObject();
         cond1.put("groupId", "group-field-1527089623689");
         cond1.put("groupType", "should");
@@ -183,7 +225,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             cond1.put("values", new String[]{dszh});
             TjfxCftJyds jyds = new TjfxCftJyds();
             jyds.setDfId(dszh);
-            this.aggJyls(dslJson,jyds,null,null,token);
+            this.aggJyls(dslJson,jyds,null,null,zcType,token);
             resultList.add(jyds);
         });
         Collections.sort(resultList, new Comparator<TjfxCftJyds>() {
@@ -208,7 +250,7 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
      * @throws IOException
      */
     @Override
-    public Object analyzeJyje(String cftId,String dsId, String token) throws IOException {
+    public Object analyzeJyje(String cftId,String dsId,String zcType, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
@@ -222,6 +264,18 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             cond.put("searchType", 1);
             cond.put("dataType", 2);
             conditions.add(cond);
+        }
+        if(StringUtils.isNotBlank(zcType)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "zc100");
+            cond.put("values", new String[]{"0"});
+            cond.put("dataType", 2);
+            conditions.add(cond);
+            if("100".equals(zcType)){
+                cond.put("searchType", 1);
+            }else if("-100".equals(zcType)){
+                cond.put("searchType", 3);
+            }
         }
         List<Double[]> rangeList = new ArrayList<>();
         rangeList.add(new Double[]{0.00,10.00});
@@ -250,13 +304,66 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
         return aggsObj;
     }
+    /**
+     * 统计交易金额区间
+     * @param cftId
+     * @param token
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public Object analyzeZc100(String cftId,String dsId, String token) throws IOException {
+        String dsl = String.format(queryDsl, cftId);
+        JSONObject dslJson = (JSONObject) JSON.parse(dsl);
+        JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
+        aggsJSONArray.clear();
 
-    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls,String jyjeRange,String dsId, String token){
+        JSONArray conditions = dslJson.getJSONArray("conditions");
+        if(StringUtils.isNotBlank(dsId)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "ds_id");
+            cond.put("values", new String[]{dsId});
+            cond.put("searchType", 1);
+            cond.put("dataType", 2);
+            conditions.add(cond);
+        }
+
+        JSONObject cond = new JSONObject();
+        cond.put("field", "zc100");
+        cond.put("values", new String[]{"0"});
+        cond.put("searchType", 1);
+        cond.put("dataType", 3);
+        conditions.add(cond);
+
+        JSONObject max = new JSONObject();
+        max.put("groupName", "group_zc0");
+        max.put("field", "zc100");
+        max.put("aggsType", 7);
+        aggsJSONArray.add(max);
+        JSONObject aggsObj = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
+
+        cond.put("searchType", 3);
+        JSONObject aggsObj2 = aggs(eqaConfig.getAggsUrl(),JSON.toJSONString(dslJson), token);
+        Map result = new HashMap();
+        result.put("zc100",aggsObj);
+        result.put("nzc100",aggsObj2);
+        return result;
+    }
+    /**
+     * 统计交易流水
+     * @param dslJson
+     * @param jyls
+     * @param jyjeRange
+     * @param dsId
+     * @param token
+     * @return
+     */
+    private TjfxJyls aggJyls(JSONObject dslJson, TjfxJyls jyls,String jyjeRange,String dsId,String zcType, String token){
         JSONArray conditions = dslJson.getJSONArray("conditions");
         if(StringUtils.isNotBlank(jyjeRange)){
             JSONObject cond = new JSONObject();
             cond.put("field", "jyje");
-            cond.put("values", jyjeRange.replace("\\*","").split("-"));
+            cond.put("values", jyjeRange.replace("*","").split("-"));
             cond.put("searchType", 6);
             cond.put("dataType", 3);
             conditions.add(cond);
@@ -268,6 +375,18 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             cond.put("searchType", 1);
             cond.put("dataType", 2);
             conditions.add(cond);
+        }
+        if(StringUtils.isNotBlank(zcType)){
+            JSONObject cond = new JSONObject();
+            cond.put("field", "zc100");
+            cond.put("values", new String[]{"0"});
+            cond.put("dataType", 2);
+            conditions.add(cond);
+            if("100".equals(zcType)){
+                cond.put("searchType", 1);
+            }else if("-100".equals(zcType)){
+                cond.put("searchType", 3);
+            }
         }
 
         JSONObject aggsObj = aggsJyje(dslJson, token);
@@ -299,42 +418,6 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
             jyls.setLjzrje(aggsObj.getDouble("sum_jyje"));
             jyls.setLjzrbs(aggsObj.getInteger("count_jyje"));
         }
-//        //{"field":"shmc","searchType":"2","dataType":"2","values":["微信红包","QQ红包"],"groupType":"not"}
-//        cond3.put("field", "shmc");
-//        cond3.put("values", new String[]{"微信红包", "QQ红包"});
-//        cond3.put("searchType", 2);
-//        cond3.put("dataType", 2);
-//        cond3.put("groupType", "not");
-//        aggsObj = aggsJyje(dslJson, token);
-//        if (aggsObj != null) {
-//            jyls.setZzzdjyje(aggsObj.getDouble("max_jyje"));
-//            jyls.setZzzxjyje(aggsObj.getDouble("min_jyje"));
-//            jyls.setZzpjjyje(aggsObj.getDouble("avg_jyje"));
-//            jyls.setZzljjyje(aggsObj.getDouble("sum_jyje"));
-//            jyls.setZzljjybs(aggsObj.getInteger("count_jyje"));
-//        }
-//        JSONObject cond4 = new JSONObject();
-//        cond4.put("field", "jdlx");
-//        cond4.put("values", new String[]{"出"});
-//        cond4.put("searchType", 1);
-//        cond4.put("dataType", 2);
-//        conditions.add(cond4);
-//        aggsObj = aggsJyje(dslJson, token);
-//        if (aggsObj != null) {
-//            jyls.setZzzdzcje(aggsObj.getDouble("max_jyje"));
-//            jyls.setZzzxzcje(aggsObj.getDouble("min_jyje"));
-//            jyls.setZzljzcje(aggsObj.getDouble("sum_jyje"));
-//            jyls.setZzljzcbs(aggsObj.getInteger("count_jyje"));
-//        }
-//        cond4.put("values", new String[]{"入"});
-//        aggsObj = aggsJyje(dslJson, token);
-//        if (aggsObj != null) {
-//            jyls.setZzzdzrje(aggsObj.getDouble("max_jyje"));
-//            jyls.setZzzxzrje(aggsObj.getDouble("min_jyje"));
-//            jyls.setZzljzrje(aggsObj.getDouble("sum_jyje"));
-//            jyls.setZzljzrbs(aggsObj.getInteger("count_jyje"));
-//        }
-//        conditions.remove(conditions.size()-1);
         conditions.remove(conditions.size()-1);
         aggsObj = aggsDate(dslJson, token);
         if (aggsObj != null) {
@@ -384,7 +467,21 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         count.put("field", "jyje");
         count.put("aggsType", 7);
         aggsJSONArray.add(count);
-        return aggs(eqaConfig.getAggsUrl(),dslJson.toJSONString(),token);
+
+        String dsl = dslJson.toJSONString();
+        EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
+        String key = MD5.encode(dsl);
+        Object cacheObj = cache.get(key);
+        JSONObject result = null;
+        if(cacheObj != null){
+            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
+        }else {
+            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
+            if(result !=null && !result.isEmpty()  && StringUtils.isNotBlank(result.getString("max_jyje"))){
+                cache.put(key,result);
+            }
+        }
+        return result;
     }
 
     /**
@@ -409,7 +506,21 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         min.put("field", "jysj");
         min.put("aggsType", 3);
         aggsJSONArray.add(min);
-        return aggs(eqaConfig.getAggsUrl(),dslJson.toJSONString(),token);
+
+        String dsl = dslJson.toJSONString();
+        EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
+        String key = MD5.encode(dsl);
+        Object cacheObj = cache.get(key);
+        JSONObject result = null;
+        if(cacheObj != null){
+            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
+        }else {
+            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
+            if(result !=null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jysj"))){
+                cache.put(key,result);
+            }
+        }
+        return result;
     }
 
 

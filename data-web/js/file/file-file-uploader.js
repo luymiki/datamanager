@@ -397,14 +397,66 @@ jQuery(function() {
         uploader.onFileQueued = function( file ) {
             fileCount++;
             fileSize += file.size;
-            if ( fileCount === 1 ) {
-                $placeHolder.addClass( 'element-invisible' );
-                $statusBar.show();
-            }
+            var hasFile = false;
+            //校验文件的MD5
+            browserMD5File(file.source.source, function (err, md5) {
+                file["md5"] = md5;
+                $.ajax.proxy({
+                    url:"/api/admin/file/md5",
+                    type:"post",
+                    dataType:"json",
+                    data:{md5:md5},
+                    async:false,
+                    success : function (d) {
+                        //存在
+                        if(d.status===200 && d.data){
+                            hasFile = true;
+                        }
+                    },
+                    error:function(){
+                        console.error("校验MD5失败");
+                    }
+                });
 
-            addFile( file );
-            setState( 'ready' );
-            updateTotalProgress();
+                //存在不能导入
+                if(hasFile){
+                    var rsl = false;
+                    swal({
+                        title: "该文件已导过，是否再次导入？",
+                        text: "重新导入可能会导致数据重复，请谨慎操作！",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "导入",
+                        cancelButtonColor: "#DD6B55",
+                        cancelButtonText: "取消",
+                        closeOnConfirm: true
+                    }, function (f) {
+                        if(f){
+                            if ( fileCount === 1 ) {
+                                $placeHolder.addClass( 'element-invisible' );
+                                $statusBar.show();
+                            }
+                            addFile( file );
+                            setState( 'ready' );
+                            updateTotalProgress();
+                            return false;
+                        }else {
+                            uploader.removeFile(file, true);
+                        }
+                    });
+                }else{
+                    if ( fileCount === 1 ) {
+                        $placeHolder.addClass( 'element-invisible' );
+                        $statusBar.show();
+                    }
+
+                    addFile( file );
+                    setState( 'ready' );
+                    updateTotalProgress();
+                }
+            });
+
         };
 
         uploader.onFileDequeued = function( file ) {

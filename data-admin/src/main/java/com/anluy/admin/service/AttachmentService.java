@@ -9,5 +9,5 @@ import com.anluy.commons.service.BaseService;
  * Created by hc.zeng on 2018/3/19.
  */
 public interface AttachmentService extends BaseService<String,Attachment> {
-
+    Attachment getMd5(String md5);
 }

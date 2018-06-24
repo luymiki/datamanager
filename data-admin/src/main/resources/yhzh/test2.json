@@ -1,0 +1,158 @@
+//yhzh_khxx
+{
+  "yhzh_khxx": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "file_id": {
+            "type": "keyword"
+          },
+          "xh": {
+            "type": "keyword"
+          },
+          "cxfkjg": {
+            "type": "keyword"
+          },
+          "cxfkjgyy": {
+            "type": "keyword"
+          },
+          "kh": {
+            "type": "keyword"
+          },
+          "zh": {
+            "type": "keyword"
+          },
+          "jylx": {
+            "type": "keyword"
+          },
+          "jdlx": {
+            "type": "keyword"
+          },
+          "jybz": {
+            "type": "keyword"
+          },
+          "jyje": {
+            "type": "double"
+          },
+          "jyye": {
+            "type": "double"
+          },
+          "jysj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "jylsh": {
+            "type": "keyword"
+          },
+          "dfmc": {
+            "type": "keyword"
+          },
+          "dfzh": {
+            "type": "keyword"
+          },
+          "dfkh": {
+            "type": "keyword"
+          },
+          "dfzjhm": {
+            "type": "keyword"
+          },
+          "dfye": {
+            "type": "keyword"
+          },
+          "dfzhkhh": {
+            "type": "keyword"
+          },
+          "jyzh": {
+            "type": "keyword"
+          },
+          "jywdmc": {
+            "type": "keyword"
+          },
+          "jywddm": {
+            "type": "keyword"
+          },
+          "rzh": {
+            "type": "keyword"
+          },
+          "cph": {
+            "type": "keyword"
+          },
+          "pzzl": {
+            "type": "keyword"
+          },
+          "pzh": {
+            "type": "keyword"
+          },
+          "xjbz": {
+            "type": "keyword"
+          },
+          "zdh": {
+            "type": "keyword"
+          },
+          "jysfcg": {
+            "type": "keyword"
+          },
+          "jyfsd": {
+            "type": "keyword"
+          },
+          "shmc": {
+            "type": "keyword"
+          },
+          "shh": {
+            "type": "keyword"
+          },
+          "ip": {
+            "type": "keyword"
+          },
+          "mac": {
+            "type": "keyword"
+          },
+          "jygyh": {
+            "type": "keyword"
+          },
+          "bz": {
+            "type": "keyword"
+          },
+          "jyssfbz": {
+            "type": "keyword"
+          },
+          "jyssfje": {
+            "type": "double"
+          },
+          "jyssfzy": {
+            "type": "keyword"
+          },
+          "dlyhm": {
+            "type": "keyword"
+          },
+          "dbrxm": {
+            "type": "keyword"
+          },
+          "dbrzjlx": {
+            "type": "keyword"
+          },
+          "dbrzjhm": {
+            "type": "keyword"
+          },
+          "dbrlxdhg": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

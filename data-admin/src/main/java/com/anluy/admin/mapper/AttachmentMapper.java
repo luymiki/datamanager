@@ -26,10 +26,16 @@ public interface AttachmentMapper extends BaseDAO<String, Attachment> {
     })
     Attachment get(String id);
 
-    @Insert("INSERT INTO Attachment(id,folder,tags,path,name,size,suffix,type,create_time,susp_name,susp_id) VALUES(#{id},#{folder},#{tags},#{path},#{name},#{size},#{suffix},#{type},#{createTime},#{suspName},#{suspId})")
+    @Select("SELECT * FROM Attachment WHERE md5 = #{md5}")
+    @Results({
+            @Result(property = "createTime", column = "create_time")
+    })
+    Attachment getMd5(String md5);
+
+    @Insert("INSERT INTO Attachment(id,folder,tags,path,name,size,suffix,type,create_time,susp_name,susp_id,md5) VALUES(#{id},#{folder},#{tags},#{path},#{name},#{size},#{suffix},#{type},#{createTime},#{suspName},#{suspId},#{md5})")
     void save(Attachment attachment);
 
-    @Update("UPDATE Attachment SET folder=#{folder},tags=#{tags},path=#{path},name=#{name},size=#{size},suffix=#{suffix},type=#{type},susp_name=#{suspName},susp_id=#{suspId} WHERE id =#{id}")
+    @Update("UPDATE Attachment SET folder=#{folder},tags=#{tags},path=#{path},name=#{name},size=#{size},suffix=#{suffix},type=#{type},susp_name=#{suspName},susp_id=#{suspId},md5=#{md5} WHERE id =#{id}")
     int update(Attachment attachment);
 
     @Delete("DELETE FROM Attachment WHERE id =#{id}")

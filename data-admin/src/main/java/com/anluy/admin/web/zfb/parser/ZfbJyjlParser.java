@@ -115,7 +115,7 @@ public class ZfbJyjlParser {
     }
 
     private List<String> split(String line) {
-        String[] infos = line.split(",");
+        String[] infos = line.split(",\t");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {
             hylist.add(hy.replace("\"","").trim());

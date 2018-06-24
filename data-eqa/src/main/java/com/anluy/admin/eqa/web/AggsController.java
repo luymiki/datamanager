@@ -1,6 +1,7 @@
 package com.anluy.admin.eqa.web;
 
 import com.anluy.admin.eqa.core.ElasticsearchQueryAnalyzeEngine;
+import com.anluy.admin.eqa.utils.MD5;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
 import io.swagger.annotations.Api;
@@ -8,8 +9,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCache;
+import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +35,14 @@ import java.util.Map;
 @Api(value = "/api/eqa", description = "统计接口")
 public class AggsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AggsController.class);
+
+    private static final String CACHE_NAME ="Eqa-Aggs-Cache";
+
     @Resource
     private ElasticsearchQueryAnalyzeEngine elasticsearchQueryAnalyzeEngine;
+
+    @Resource
+    private CacheManager cacheManager;
 
     /**
      * 统计接口
@@ -48,6 +59,22 @@ public class AggsController {
                 LOGGER.error("统计失败，查询条件为空");
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(500,"统计失败，统计条件为空"));
             }
+//            Map result = null;
+//            EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
+//            String key = MD5.encode(paramsStr);
+//            Object cacheObj = cache.get(key);
+//            if(cacheObj != null){
+//                result = (Map)((SimpleValueWrapper)cacheObj).get();
+//            }else {
+//                result = elasticsearchQueryAnalyzeEngine.aggs(paramsStr,pageNum,pageSize);
+//            }
+//            boolean chf = true;
+//            if(((Map)result.get("aggs")).isEmpty()){
+//                chf = false;
+//            }
+//            if(chf){
+//                cache.put(key, result);
+//            }
             Map result = elasticsearchQueryAnalyzeEngine.aggs(paramsStr,pageNum,pageSize);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {

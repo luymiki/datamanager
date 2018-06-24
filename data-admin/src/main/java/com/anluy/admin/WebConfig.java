@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
  * Created by hc.zeng on 2018/4/24.
  */
 @Configuration
-@EnableCaching
 public class WebConfig {
     @Resource
     private AuthorizedInterceptor authorizedInterceptor;
@@ -49,11 +48,4 @@ public class WebConfig {
             }
         };
     }
-
-    @Bean
-    public CacheManager cacheManager(){
-        CacheManager cacheManager = new EhCacheCacheManager();
-        return cacheManager;
-    }
-
 }

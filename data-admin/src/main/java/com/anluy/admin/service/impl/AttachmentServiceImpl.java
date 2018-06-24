@@ -62,4 +62,9 @@ public class AttachmentServiceImpl extends BaseServiceImpl<String,Attachment> im
     public String getIndexName() {
         return "attachment";
     }
+
+    @Override
+    public Attachment getMd5(String md5) {
+        return attachmentMapper.getMd5(md5);
+    }
 }

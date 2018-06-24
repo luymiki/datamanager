@@ -7,6 +7,7 @@ import com.anluy.admin.EqaConfig;
 import com.anluy.admin.entity.*;
 import com.anluy.admin.service.TjfxCftService;
 import com.anluy.admin.service.TjfxZfbService;
+import com.anluy.admin.utils.MD5;
 import com.anluy.commons.dao.BaseDAO;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.service.BaseServiceImpl;
@@ -14,6 +15,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCache;
+import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,9 +33,12 @@ import java.util.*;
 @Service
 public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjfxZfbServiceImpl.class);
-
+    private static final String CACHE_NAME ="Eqa-Aggs-Cache";
     @Resource
     private EqaConfig eqaConfig;
+
+    @Resource
+    private CacheManager cacheManager;
 
     private String queryDsl;
     private String queryDslForIntegrated;
@@ -454,7 +461,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         if(StringUtils.isNotBlank(jyjeRange)){
             JSONObject cond = new JSONObject();
             cond.put("field", "jyje");
-            cond.put("values", jyjeRange.replace("\\*","").split("-"));
+            cond.put("values", jyjeRange.replace("*","").split("-"));
             cond.put("searchType", 6);
             cond.put("dataType", 3);
             conditions.add(cond);
@@ -546,7 +553,21 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         count.put("field", "jyje");
         count.put("aggsType", 7);
         aggsJSONArray.add(count);
-        return aggs(eqaConfig.getAggsUrl(), dslJson.toJSONString(), token);
+
+        String dsl = dslJson.toJSONString();
+        EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
+        String key = MD5.encode(dsl);
+        Object cacheObj = cache.get(key);
+        JSONObject result = null;
+        if(cacheObj != null){
+            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
+        }else {
+            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
+            if(result !=null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jyje"))){
+                cache.put(key,result);
+            }
+        }
+        return result;
     }
 
     /**
@@ -572,7 +593,21 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         min.put("field", "jysj");
         min.put("aggsType", 3);
         aggsJSONArray.add(min);
-        return aggs(eqaConfig.getAggsUrl(), dslJson.toJSONString(), token);
+
+        String dsl = dslJson.toJSONString();
+        EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
+        String key = MD5.encode(dsl);
+        Object cacheObj = cache.get(key);
+        JSONObject result = null;
+        if(cacheObj != null){
+            result = (JSONObject)((SimpleValueWrapper)cacheObj).get();
+        }else {
+            result = aggs(eqaConfig.getAggsUrl(),dsl,token);
+            if(result !=null && !result.isEmpty() && StringUtils.isNotBlank(result.getString("max_jysj"))){
+                cache.put(key,result);
+            }
+        }
+        return result;
     }
 
 

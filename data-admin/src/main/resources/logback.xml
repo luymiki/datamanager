@@ -88,10 +88,10 @@
     </appender>
 
 
-    <!-- 修改其他包的日志输出级别
+    <!-- 修改其他包的日志输出级别-->
     <logger name="ch.qos">
         <level value="ERROR"/>
-    </logger>-->
+    </logger>
 
     <!-- root 默认日志配置 ， 注意这里的级别哈！小心生产环境用DEBUG，压爆你的磁盘！-->
     <root level="INFO">

@@ -33,7 +33,9 @@
                             <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="视频">视频</a>-->
                             <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="图片">图片</a>-->
                             <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="SQL文件">SQL文件</a>-->
-                            <!--<div class="hr-line-dashed"></div>-->
+                            <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                            <div class="btn btn-info" id="search-btn" style="padding-right: 6px;padding-left: 6px;"><i class="fa fa-search"></i>查询</div>
+                            <div class="hr-line-dashed"></div>
                             <button class="btn btn-primary btn-block" id="btn-upload-img">上传图片</button>
                             <button class="btn btn-primary btn-block" id="btn-upload-file">上传文件</button>
                             <div class="hr-line-dashed"></div>
@@ -85,6 +87,7 @@
             $('#btn-upload-file').on("click",function () {
                 top.contabs.addMenuItem("/view/file/file-file-uploader.html",'文件上传');
             });
+
         });
     </script>
 

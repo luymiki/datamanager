@@ -244,6 +244,9 @@ public class ElasticsearchQueryAnalyzeEngine {
             Integer dataType = condition.getInt("dataType", DATA_TYPE_TEXT);
             String field = condition.getString("field");
             List<String> values = condition.getList("values", String.class);
+            if(values == null){
+                continue;
+            }
             JSONObject itemBool = new JSONObject();
             JSONObject items = new JSONObject();
             itemBool.put("bool", items);
@@ -277,13 +280,18 @@ public class ElasticsearchQueryAnalyzeEngine {
         Map map = new HashMap();
 
         switch (dataType) {
-            case DATA_TYPE_TEXT:
-            case DATA_TYPE_DIC: {
+            case DATA_TYPE_TEXT:{
+                map.put("default_field",field);
                 if (fuzzy) {
-                    map.put(field, "*" + value + "*");
+                    map.put("query", "*" + value + "*");
                 } else {
-                    map.put(field, value);
+                    map.put("query", value);
                 }
+                conditionMap.put("query_string", map);
+                break;
+            }
+            case DATA_TYPE_DIC: {
+                map.put(field, value);
                 conditionMap.put("wildcard", map);
                 break;
             }
@@ -534,20 +542,47 @@ public class ElasticsearchQueryAnalyzeEngine {
      * @return
      * @throws IOException
      */
-    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName) throws IOException {
+    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort) throws IOException {
         JSONObject dsl = createDsl(pageNum, pageSize);
         JSONObject query = new JSONObject();
-        JSONObject queryString = new JSONObject();
-        StringBuffer sb = new StringBuffer();
+        JSONObject bool = new JSONObject();
+        query.put("bool",bool);
+        JSONArray must = new JSONArray();
+        bool.put("must",must);
         String[] ss = keyword.split(" |,|，");
         for (String k : ss) {
-            sb.append("*").append(k).append("* ");
+            if(StringUtils.isBlank(k)){
+                continue;
+            }
+            JSONObject queryString = new JSONObject();
+            queryString.put("query","*"+k+"*");
+            queryString.put("default_operator","AND");
+            JSONObject queryItem = new JSONObject();
+            queryItem.put("query_string", queryString);
+            must.add(queryItem);
         }
-        queryString.put("query", sb.toString());
-        query.put("query_string", queryString);
         dsl.put("query", query);
+
+        JSONObject aggs = new JSONObject();
+        JSONObject distinct = new JSONObject();
+        JSONObject terms = new JSONObject();
+        terms.put("field","_index");
+        terms.put("size","1000");
+        distinct.put("terms",terms);
+        aggs.put("terms_index",distinct);
+        dsl.put("aggregations",aggs);
+
+        List sortList = this.sort(sort);
+        if (sortList != null && !sortList.isEmpty()) {
+            dsl.put("sort", sortList);
+        }
         LOGGER.info(dsl.toJSONString());
         Map result = elasticsearchRestClient.query(dsl.toJSONString(), indexName);
+        if(result.get("aggs")!=null){
+            Configuration aggsConfig = Configuration.from(result.get("aggs"));
+            result.put("indexs",aggsConfig.get("terms_index.buckets"));
+        }
+
         return this.setMetaList(result);
     }
 

@@ -76,7 +76,7 @@
             };
             con[con.length]={
                 "field": "jyje",
-                "values": range.replace("*").split("-"),
+                "values": range.replace("*","").split("-"),
                 "searchType": 6,
                 "dataType":2,
             };

@@ -1,0 +1,144 @@
+//yhzh_khxx
+{
+  "yhzh_khxx": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "file_id": {
+            "type": "keyword"
+          },
+          "xh": {
+            "type": "keyword"
+          },
+          "cxfkjg": {
+            "type": "keyword"
+          },
+          "zzlx": {
+            "type": "keyword"
+          },
+          "zzhm": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "lxdh": {
+            "type": "keyword"
+          },
+          "kh": {
+            "type": "keyword"
+          },
+          "zh": {
+            "type": "keyword"
+          },
+          "khrq": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "xhrq": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "khwd": {
+            "type": "keyword"
+          },
+          "lxsj": {
+            "type": "keyword"
+          },
+          "dbrxm": {
+            "type": "keyword"
+          },
+          "dbrzjlx": {
+            "type": "keyword"
+          },
+          "dbrzjhm": {
+            "type": "keyword"
+          },
+          "zzdz": {
+            "type": "keyword"
+          },
+          "zzdh": {
+            "type": "keyword"
+          },
+          "gzdw": {
+            "type": "keyword"
+          },
+          "dwdz": {
+            "type": "keyword"
+          },
+          "dwdh": {
+            "type": "keyword"
+          },
+          "email": {
+            "type": "keyword"
+          },
+          "frdb": {
+            "type": "keyword"
+          },
+          "frdbzjlx": {
+            "type": "keyword"
+          },
+          "frdbzjhm": {
+            "type": "keyword"
+          },
+          "khgszzhm": {
+            "type": "keyword"
+          },
+          "gsnsh": {
+            "type": "keyword"
+          },
+          "dsnsh": {
+            "type": "keyword"
+          },
+          "dbrlxdh": {
+            "type": "keyword"
+          },
+          "wyzhm": {
+            "type": "keyword"
+          },
+          "wyblrq": {
+            "type": "keyword"
+          },
+          "wykhwd": {
+            "type": "keyword"
+          },
+          "wykhwddm": {
+            "type": "keyword"
+          },
+          "wykhwdszd": {
+            "type": "keyword"
+          },
+          "sjyhzhm": {
+            "type": "keyword"
+          },
+          "sjyhblrq": {
+            "type": "keyword"
+          },
+          "sjyhkhwd": {
+            "type": "keyword"
+          },
+          "sjyhkhwddm": {
+            "type": "keyword"
+          },
+          "sjyhkhwdszd": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

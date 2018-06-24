@@ -174,7 +174,7 @@
                 top.contabs.addMenuItem("/view/cft/liushui/cft-liushui.html?id="+cftid,'导入财付通流水信息');
             });
             $("#analyze-btn").on('click',function () {
-                top.contabs.addMenuItem("/view/cft/liushui/cft-liushui-list-analyze.html?id="+cftid,'财付通流水信息分析');
+                top.contabs.addMenuItem("/view/cft/analyze/cft-analyze.html?id="+cftid,'财付通流水信息分析');
             });
             $("#search-btn").on('click',function () {
                 _search = $("#search-input").val();

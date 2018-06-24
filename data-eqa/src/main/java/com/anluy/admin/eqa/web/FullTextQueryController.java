@@ -44,7 +44,7 @@ public class FullTextQueryController {
     @ApiResponses(value = {@ApiResponse(code = 500, message = "查询失败"),
             @ApiResponse(code = 501, message = "查询参数异常")})//错误码说明
     @RequestMapping(value = "/fulltext",method = {RequestMethod.GET,RequestMethod.POST})
-    public Object fulltext(HttpServletRequest request,Integer pageNum,Integer pageSize,String keyword) {
+    public Object fulltext(HttpServletRequest request,Integer pageNum,Integer pageSize,String keyword,String indexName,String sort) {
         try {
             if(pageSize==null){
                 pageSize = 10;
@@ -56,7 +56,10 @@ public class FullTextQueryController {
                 LOGGER.error("查询失败，查询条件为空");
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(500,"查询失败，查询条件为空"));
             }
-            Map result = elasticsearchQueryAnalyzeEngine.fulltext(keyword,pageNum,pageSize,indexNames);
+            if(StringUtils.isBlank(indexName)){
+                indexName = indexNames;
+            }
+            Map result = elasticsearchQueryAnalyzeEngine.fulltext(keyword,pageNum,pageSize,indexName,sort);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("查询成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("查询失败:" + exception.getMessage(), exception);

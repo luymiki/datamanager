@@ -58,7 +58,7 @@ public class FileManagerController {
     @ApiOperation(value = "上传文件", response = Result.class)
     @ApiResponses(value = {@ApiResponse(code = 500, message = "上传文件失败")})//错误码说明
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody Object upload(HttpServletRequest request, @RequestParam(required = false) MultipartFile file, String name, Long size, String folder, String tags,String suspName,String suspId) {
+    public @ResponseBody Object upload(HttpServletRequest request, @RequestParam(required = false) MultipartFile file, String name, Long size, String folder, String tags,String suspName,String suspId,String md5) {
         try {
             if(file == null  ){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"上传的文件为空"));
@@ -95,6 +95,7 @@ public class FileManagerController {
             attachment.setCreateTime(new Date());
             attachment.setSuspName(suspName);
             attachment.setSuspId(suspId);
+            attachment.setMd5(md5);
 //            params.put("id", UUID.randomUUID().toString());
 //            params.put("name", name);
 //            params.put("size", String.valueOf(size));
@@ -150,6 +151,28 @@ public class FileManagerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
+
+    /**
+     * 根据文件id查询文件
+     *
+     * @return
+     */
+    @ApiOperation(value = "根据文件md5查询文件", response = Result.class)
+    @ApiResponses(value = {@ApiResponse(code = 500, message = "查询文件失败")})//错误码说明
+    @RequestMapping(value = "/md5", method = {RequestMethod.GET,RequestMethod.POST})
+    public @ResponseBody Object getMd5(HttpServletRequest request, String md5) {
+        try {
+            if(StringUtils.isBlank(md5)){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件md5为空"));
+            }
+            Attachment attachment = attachmentService.getMd5(md5);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("查询成功").setData(attachment).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
+
     /**
      * 根据文件id删除文件
      *

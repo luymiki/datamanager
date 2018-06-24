@@ -8,12 +8,14 @@
     var ds_id;
     var cft_id;
     var range;
+    var zcType;
     var cft = (function () {
         var _init = function () {
             var params = utils.getURLParams();
             cft_id = params["id"];
             range = params["range"];
             ds_id = params["ds_id"];
+            zcType = params["zcType"];
             _get(cft_id);
         }
         var params = {"indexName":"cftreginfo","conditions":[],"sort":"create_time desc"};
@@ -68,7 +70,7 @@
             };
             con[con.length]={
                 "field": "jyje",
-                "values": range.replace("*").split("-"),
+                "values": range.replace("*","").split("-"),
                 "searchType": 6,
                 "dataType":2,
             };
@@ -79,6 +81,24 @@
                     "searchType": 1,
                     "dataType":2,
                 };
+            }
+            if(zcType){
+                if(zcType==="100"){
+                    con[con.length]={
+                        "field": "zc100",
+                        "values": ["0"],
+                        "searchType": 1,
+                        "dataType":2,
+                    };
+                }else if(zcType==="-100"){
+                    con[con.length]={
+                        "field": "zc100",
+                        "values": ["0"],
+                        "searchType": 3,
+                        "dataType":2,
+                    };
+                }
+
             }
             _initJylsTable();
             _initJylsList();
@@ -91,7 +111,7 @@
                 url:"/api/admin/fx/cft/jyls",
                 type:"post",
                 dataType:"json",
-                data:{"cftId":cft_id,"jyjeRange":range,"dsId":ds_id},
+                data:{"cftId":cft_id,"jyjeRange":range,"dsId":ds_id,"zcType":zcType||""},
                 async:false,
                 success : function (msg) {
                     if(msg.status===200){

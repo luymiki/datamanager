@@ -9,7 +9,17 @@ $(function() {
             _folderBtn();
             _btnTagsBtn();
             _btnEvent();
+            $("#search-btn").on('click',function () {
+                _search = $("#search-input").val();
+                if(_search && $.trim(_search) !== ""){
+                    _list();
+                }else {
+                    _search=null;
+                    _list();
+                }
+            });
         };
+        var _search;
         var _folder;
         var _type;
         var _tags;
@@ -22,6 +32,16 @@ $(function() {
         var _list = function (page) {
             page = page|| _pageNum;
             var con = [];
+            if(_search){
+                var v = {
+                    "field": "name",
+                    "values": [_search],
+                    "searchType": 1,
+                    "dataType":1,
+                };
+                con[con.length]=v;
+                _pagination_reload = true;
+            }
             if(_folder){
                 var v = {
                     "field": "folder",

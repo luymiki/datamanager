@@ -58,6 +58,12 @@ public class Attachment extends BaseEntity<String> {
     @JSONField(name = "susp_id")
     private String suspId;
 
+    /**
+     * 文件MD5
+     */
+    @JSONField(name = "md5")
+    private String md5;
+
     public String getFolder() {
         return folder;
     }
@@ -136,5 +142,13 @@ public class Attachment extends BaseEntity<String> {
 
     public void setSuspId(String suspId) {
         this.suspId = suspId;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }
