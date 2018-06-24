@@ -1,0 +1,379 @@
+
+
+ALTER TABLE `attachment`
+ADD COLUMN `md5`  varchar(255) NULL COMMENT '文件MD5' AFTER `susp_id`;
+
+INSERT INTO `eqa_meta` VALUES (351, 'cfttrades', '被100整除余数', 'zc100', 3, 1, 23);
+INSERT INTO `eqa_meta` VALUES (352, 'zfbzhinfo', '被100整除余数', 'zc100', 3, 1, 23);
+INSERT INTO `eqa_meta` VALUES (353, 'zfbtxinfo', '被100整除余数', 'zc100', 3, 1, 23);
+INSERT INTO `eqa_meta` VALUES (354, 'zfbzzinfo', '被100整除余数', 'zc100', 3, 1, 23);
+INSERT INTO `eqa_meta` VALUES (355, 'zfbjyjlinfo', '被100整除余数', 'zc100', 3, 1, 23);
+INSERT INTO `eqa_meta` VALUES (356, 'attachment', '文件MD5', 'md5', 3, 1, 23);
+
+==================================
+attachment/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "md5": {
+      "type": "keyword"
+    }
+  }
+}
+
+
+==================================
+zfbzhinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+	"zc100": {
+      "type": "double"
+    }
+  }
+}
+
+==========================
+zfbtxinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+	"zc100": {
+      "type": "double"
+    }
+  }
+}
+=============================
+zfbzzinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "zc100": {
+      "type": "double"
+    }
+  }
+}
+==============================
+zfbjyjlinfo/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "zc100": {
+      "type": "double"
+    }
+  }
+}
+==============================
+cfttrades/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "zc100": {
+      "type": "double"
+    }
+  }
+}
+
+################yhzh_khxx
+{
+  "yhzh_khxx": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "file_id": {
+            "type": "keyword"
+          },
+          "xh": {
+            "type": "keyword"
+          },
+          "cxfkjg": {
+            "type": "keyword"
+          },
+          "zzlx": {
+            "type": "keyword"
+          },
+          "zzhm": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "lxdh": {
+            "type": "keyword"
+          },
+          "kh": {
+            "type": "keyword"
+          },
+          "zh": {
+            "type": "keyword"
+          },
+          "khrq": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "xhrq": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "khwd": {
+            "type": "keyword"
+          },
+          "lxsj": {
+            "type": "keyword"
+          },
+          "dbrxm": {
+            "type": "keyword"
+          },
+          "dbrzjlx": {
+            "type": "keyword"
+          },
+          "dbrzjhm": {
+            "type": "keyword"
+          },
+          "zzdz": {
+            "type": "keyword"
+          },
+          "zzdh": {
+            "type": "keyword"
+          },
+          "gzdw": {
+            "type": "keyword"
+          },
+          "dwdz": {
+            "type": "keyword"
+          },
+          "dwdh": {
+            "type": "keyword"
+          },
+          "email": {
+            "type": "keyword"
+          },
+          "frdb": {
+            "type": "keyword"
+          },
+          "frdbzjlx": {
+            "type": "keyword"
+          },
+          "frdbzjhm": {
+            "type": "keyword"
+          },
+          "khgszzhm": {
+            "type": "keyword"
+          },
+          "gsnsh": {
+            "type": "keyword"
+          },
+          "dsnsh": {
+            "type": "keyword"
+          },
+          "dbrlxdh": {
+            "type": "keyword"
+          },
+          "wyzhm": {
+            "type": "keyword"
+          },
+          "wyblrq": {
+            "type": "keyword"
+          },
+          "wykhwd": {
+            "type": "keyword"
+          },
+          "wykhwddm": {
+            "type": "keyword"
+          },
+          "wykhwdszd": {
+            "type": "keyword"
+          },
+          "sjyhzhm": {
+            "type": "keyword"
+          },
+          "sjyhblrq": {
+            "type": "keyword"
+          },
+          "sjyhkhwd": {
+            "type": "keyword"
+          },
+          "sjyhkhwddm": {
+            "type": "keyword"
+          },
+          "sjyhkhwdszd": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+################yhzh_jyls
+{
+  "yhzh_jyls": {
+    "mappings": {
+      "doc": {
+        "dynamic": "strict",
+        "properties": {
+          "susp_id": {
+            "type": "keyword"
+          },
+          "susp_name": {
+            "type": "keyword"
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "create_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "file_id": {
+            "type": "keyword"
+          },
+          "xh": {
+            "type": "keyword"
+          },
+          "cxfkjg": {
+            "type": "keyword"
+          },
+          "cxfkjgyy": {
+            "type": "keyword"
+          },
+          "kh": {
+            "type": "keyword"
+          },
+          "zh": {
+            "type": "keyword"
+          },
+          "jylx": {
+            "type": "keyword"
+          },
+          "jdlx": {
+            "type": "keyword"
+          },
+          "jybz": {
+            "type": "keyword"
+          },
+          "jyje": {
+            "type": "double"
+          },
+          "jyye": {
+            "type": "double"
+          },
+          "jysj": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          },
+          "jylsh": {
+            "type": "keyword"
+          },
+          "dfmc": {
+            "type": "keyword"
+          },
+          "dfzh": {
+            "type": "keyword"
+          },
+          "dfkh": {
+            "type": "keyword"
+          },
+          "dfzjhm": {
+            "type": "keyword"
+          },
+          "dfye": {
+            "type": "keyword"
+          },
+          "dfzhkhh": {
+            "type": "keyword"
+          },
+          "jyzh": {
+            "type": "keyword"
+          },
+          "jywdmc": {
+            "type": "keyword"
+          },
+          "jywddm": {
+            "type": "keyword"
+          },
+          "rzh": {
+            "type": "keyword"
+          },
+          "cph": {
+            "type": "keyword"
+          },
+          "pzzl": {
+            "type": "keyword"
+          },
+          "pzh": {
+            "type": "keyword"
+          },
+          "xjbz": {
+            "type": "keyword"
+          },
+          "zdh": {
+            "type": "keyword"
+          },
+          "jysfcg": {
+            "type": "keyword"
+          },
+          "jyfsd": {
+            "type": "keyword"
+          },
+          "shmc": {
+            "type": "keyword"
+          },
+          "shh": {
+            "type": "keyword"
+          },
+          "ip": {
+            "type": "keyword"
+          },
+          "mac": {
+            "type": "keyword"
+          },
+          "jygyh": {
+            "type": "keyword"
+          },
+          "bz": {
+            "type": "keyword"
+          },
+          "jyssfbz": {
+            "type": "keyword"
+          },
+          "jyssfje": {
+            "type": "double"
+          },
+          "jyssfzy": {
+            "type": "keyword"
+          },
+          "dlyhm": {
+            "type": "keyword"
+          },
+          "dbrxm": {
+            "type": "keyword"
+          },
+          "dbrzjlx": {
+            "type": "keyword"
+          },
+          "dbrzjhm": {
+            "type": "keyword"
+          },
+          "dbrlxdhg": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
