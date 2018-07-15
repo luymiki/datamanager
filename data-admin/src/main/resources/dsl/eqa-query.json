@@ -1,6 +1,15 @@
 {
-  "indexName": "",
-  "conditions": [],
+  "indexName": "%s",
+  "conditions": [
+    {
+      "field": "susp_id",
+      "values": [
+        "%s"
+      ],
+      "searchType": 1,
+      "dataType": 2
+    }
+  ],
   "aggs": [],
-  "sort":"create_time desc"
+  "sort": "create_time desc"
 }

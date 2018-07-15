@@ -80,6 +80,7 @@ public class ZfbJyjlInfoParserController {
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
+                        case "jysj":
                         case "sksj":
                         case "zhxgsj":
                         case "cjsj":

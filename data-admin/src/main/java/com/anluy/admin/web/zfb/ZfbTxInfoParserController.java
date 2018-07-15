@@ -79,6 +79,7 @@ public class ZfbTxInfoParserController {
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
+                        case "jysj":
                         case "sqsj":
                         case "clsj":
                         case "create_time":{

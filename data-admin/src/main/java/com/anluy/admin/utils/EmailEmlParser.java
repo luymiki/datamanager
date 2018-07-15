@@ -5,11 +5,13 @@ import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.anluy.admin.entity.Email;
 import com.sun.mail.util.BASE64DecoderStream;
 import org.apache.commons.lang3.StringUtils;
@@ -32,15 +34,6 @@ public class EmailEmlParser {
         this.fileDir = fileDir;
         this.emailId = emailId;
     }
-//    public static void main(String[] args) {
-//        EmailEmlParser parser = new EmailEmlParser();
-//        try {
-//            Email email = parser.parser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\现在开始试用Wijmo Enterprise产品-.eml");
-//            System.out.println(JSON.toJSONString(email));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     /**
      * 解析邮件eml
@@ -59,79 +52,80 @@ public class EmailEmlParser {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(emlFile), charset));
             //BufferedReader bufferedReader = new BufferedReader(new FileReader(emlFile));
             String line = null;
+            StringBuffer sbl = new StringBuffer();
             while ((line = bufferedReader.readLine()) != null) {
-                break;
+                sbl.append(line).append("\n");
+                //System.out.println(line);
             }
             bufferedReader.close();
-
+            inMsg =  new FileInputStream(emlFile);
             String content = null;
             //xml包装过的，先解析﻿<?xml version="1.0" encoding="UTF-8"?>
-            if (line.indexOf("<?xml") >= 0) {
-                FileInputStream fis = new FileInputStream(emlFile);
-                List<Byte> bl = new ArrayList<>();
-                int i = -1;
-                while ( (i=fis.read())!=-1){
-                    if(i!=ii){
-                        bl.add((byte)i);
-                    }
-                }
-                byte[] bb = new byte[bl.size()];
-                for (int j = 0; j < bl.size(); j++) {
-                    bb[j] = bl.get(j);
-                }
-                fis.close();
-                ByteArrayInputStream bis  = new ByteArrayInputStream(bb);
+            if (sbl.indexOf("<?xml") >= 0) {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 //创建DocumentBuilder对象
                 DocumentBuilder db = dbf.newDocumentBuilder();
-                //通过DocumentBuilder对象的parser方法加载books.xml文件到当前项目下
-                Document document = db.parse(bis);
-                bis.close();
-                //获取所有book节点的集合
-                NodeList responseList = document.getElementsByTagName("Response");
-                Element respone = (Element) responseList.item(0);
-                NodeList resultList = respone.getElementsByTagName("result");
-                NodeList contentList = ((Element) resultList.item(0)).getElementsByTagName("content");
-                Node contentNode = contentList.item(0).getFirstChild();
-                if (contentNode.getNodeType() == Node.CDATA_SECTION_NODE) {
-                    CDATASection cdataNode = (CDATASection) contentNode;
-                    content = cdataNode.getTextContent();
-                    inMsg = new ByteArrayInputStream(content.getBytes());
+                //先按照xml解析出content的内容
+                //如果不能按照xml解析说明文件里有编码问题，
+                try{
+                    Document document = db.parse(inMsg);
+                    inMsg.close();
+                    inMsg =  new FileInputStream(emlFile);
+                    //获取所有book节点的集合
+                    NodeList responseList = document.getElementsByTagName("Response");
+                    Element respone = (Element) responseList.item(0);
+                    NodeList resultList = respone.getElementsByTagName("result");
+                    NodeList contentList = ((Element) resultList.item(0)).getElementsByTagName("content");
+                    Node contentNode = contentList.item(0).getFirstChild();
+                    if (contentNode.getNodeType() == Node.CDATA_SECTION_NODE) {
+                        CDATASection cdataNode = (CDATASection) contentNode;
+                        content = cdataNode.getTextContent();
+                        inMsg = new ByteArrayInputStream(content.getBytes("gbk"));
 
-                    String[] sbu = content.split("\n");
-                    StringBuffer sb = new StringBuffer();
-                    boolean st = false;
-                    for (String ll : sbu) {
-                        if ("".equals(ll)) {
-                            st = true;
+                        String[] sbu = content.split("\n");
+                        StringBuffer sb = new StringBuffer();
+                        boolean st = false;
+                        for (String ll : sbu) {
+                            if ("".equals(ll)) {
+                                st = true;
+                            }
+                            if (st) {
+                                sb.append(ll).append("\n");
+                            }
                         }
-                        if (st) {
-                            sb.append(ll).append("\n");
-                        }
+                        content = sb.toString();
+
                     }
-                    content = sb.toString();
-
+                }catch (Exception e){
+                    // 不能解析，直接截取字符串，截取出content的内容
+                    inMsg.close();
+                    inMsg =  new FileInputStream(emlFile);
+                    content = sbl.toString();
+                    content = content.substring(content.indexOf("<content><![CDATA[")+18);
+                    content = content.substring(0,content.indexOf("]]></content>"));
+                    //System.out.println(content);
                 }
             } else {
-                inMsg = new FileInputStream(emlFile);
-                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(emlFile), charset));
-                StringBuffer sb = new StringBuffer();
-                line = null;
-                boolean st = false;
-                while ((line = bufferedReader.readLine()) != null) {
-                    if ("".equals(line)) {
-                        st = true;
-                    }
-                    if (st) {
-                        sb.append(line).append("\n");
-                    }
-                }
-                content = sb.toString();
+                //如果是纯文本格式的，直接读取
+//                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(emlFile), charset));
+//                StringBuffer sb = new StringBuffer();
+//                line = null;
+//                boolean st = false;
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    if ("".equals(line)) {
+//                        st = true;
+//                    }
+//                    if (st) {
+//                        sb.append(line).append("\n");
+//                    }
+//                }
+                content = sbl.toString();
             }
 
             Message msg = new MimeMessage(session, inMsg);
             return parseEml(msg, content);
         }catch (Exception e){
+            e.printStackTrace();
             Email email = new Email();
             email.setSubject("邮件格式异常不能解析");
             email.addContent("<h1>邮件格式异常不能解析</h1>");
@@ -237,10 +231,17 @@ public class EmailEmlParser {
             }
 
         }catch (Exception e){
-            if(StringUtils.isBlank(email.getSubject())){
-                email.setSubject("邮件格式异常不能解析");
+            if(StringUtils.isNotBlank(content)){
+                try {
+                    parseMy(email, content);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    if(StringUtils.isBlank(email.getSubject())){
+                        email.setSubject("邮件格式异常不能解析");
+                    }
+                    email.addContent("<h1>邮件格式异常不能解析</h1>");
+                }
             }
-            email.addContent("<h1>邮件格式异常不能解析</h1>");
         }
         return email;
     }
@@ -353,10 +354,10 @@ public class EmailEmlParser {
                             bb[i]+=256;
                         }
                     }
-                    String str = "<h1>加密邮件，不能解析</h1> "+ new String(bb,charset==null?"GBK":charset);
+                    String str = new String(bb,charset==null?"GBK":charset);
                     email.addContent(str);
                 }else {
-                    email.addContent("<h1>加密邮件，不能解析</h1> "+sb.toString());
+                    email.addContent(sb.toString());
                 }
             }
 
@@ -444,7 +445,7 @@ public class EmailEmlParser {
      * @throws Exception
      */
     private void reBodyPart(Email email, BodyPart bodyPart) throws Exception {
-        if (bodyPart.getDisposition() != null) {
+        if (bodyPart.getDisposition() != null || bodyPart instanceof MimeBodyPart) {
             String strFileNmae = bodyPart.getFileName();
             if (!StringUtils.isEmpty(strFileNmae)) {
                 // MimeUtility.decodeText解决附件名乱码问题
@@ -479,9 +480,10 @@ public class EmailEmlParser {
     }
 
     public static void main(String[] args) {
-        EmailEmlParser parser = new EmailEmlParser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\", "");
+        EmailEmlParser parser = new EmailEmlParser("H:\\数据管理系统\\数据导入20180711\\", "");
         try {
-            parser.parser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据20180601\\IM4356055160\\1302587787\\mail\\recvmail\\2017_12_15_10_45_56.eml");
+            Email email =  parser.parser("H:\\数据管理系统\\导入数据20180601\\IM4356055160\\1302587787\\mail\\recvmail\\2017_12_15_10_45_56.eml");
+            System.out.println(JSON.toJSONString(email));
         } catch (Exception e) {
             e.printStackTrace();
         }

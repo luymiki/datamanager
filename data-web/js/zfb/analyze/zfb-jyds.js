@@ -78,7 +78,7 @@
                 url:"/api/admin/fx/zfb/jyls",
                 type:"post",
                 dataType:"json",
-                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id,"zcType":zcType},
+                data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id,"zcType":zcType||""},
                 async:false,
                 success : function (msg) {
                     if(msg.status===200){
@@ -205,8 +205,8 @@
                         myChart.on('click', function (params) {
                             var data = params["data"];
                             var name = params["name"];
-                            console.log(name);
-                            console.log(data);
+                            //console.log(name);
+                           // console.log(data);
                             top.contabs.addMenuItem("/view/zfb/analyze/zfb-range-list.html?id="+zfbInfo["id"]+"&range="+name+"&ds_id="+ds_id+"&zcType="+(zcType||""),'查看交易金额['+name+']流水信息');
                         });
 
@@ -288,17 +288,15 @@
                         };
                         // 为echarts对象加载数据
                         myChart.setOption(option);
-                        // myChart.on('click', function (params) {
-                        //     var data = params["data"];
-                        //     var name = params["name"];
-                        //     //console.log(name);
-                        //     //console.log(data);
-                        //     var type = 100;
-                        //     if("被100整除"!== name){
-                        //         type = -100;
-                        //     }
-                        //     top.contabs.addMenuItem("/view/cft/analyze/cft-analyze.html?id="+cftInfo["id"]+"&zcType="+type,'查看['+name+']的流水信息');
-                        // });
+                        myChart.on('click', function (params) {
+                            var data = params["data"];
+                            var name = params["name"];
+                            var type = 100;
+                            if("被100整除"!== name){
+                                type = -100;
+                            }
+                            top.contabs.addMenuItem("/view/zfb/analyze/zfb-range-list.html?id="+zfbInfo["id"]+"&ds_id="+ds_id+"&zcType="+type,'查看交易金额['+name+']流水信息');
+                        });
                     }
                 },
                 error:function(){

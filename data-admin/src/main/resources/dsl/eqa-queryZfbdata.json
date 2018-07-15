@@ -11,17 +11,6 @@
                   "should": [
                     {
                       "term": {
-                        "user_id": "%s"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "bool": {
-                  "should": [
-                    {
-                      "term": {
                         "xcbh": "%s"
                       }
                     }

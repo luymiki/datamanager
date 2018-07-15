@@ -76,11 +76,15 @@ public class ZfbTxParser {
             regInfo.setUserId(list.get(2));
             regInfo.setKhyh(list.get(3));
             regInfo.setYhzh(list.get(4));
+            regInfo.setDsId(regInfo.getYhzh());
             if(StringUtils.isNotBlank(list.get(5))){
                 if(list.get(5).indexOf("/")>0){
                     regInfo.setSqsj(sdf2.parse(list.get(5)));
                 }else {
                     regInfo.setSqsj(sdf1.parse(list.get(5)));
+                }
+                if(regInfo.getSqsj()!=null){
+                    regInfo.setJysj(regInfo.getSqsj());
                 }
             }
             if(StringUtils.isNotBlank(list.get(6))){
@@ -92,6 +96,14 @@ public class ZfbTxParser {
             }
             if(StringUtils.isNotBlank(list.get(7))){
                 regInfo.setJe(Double.valueOf(list.get(7)));
+                regInfo.setJyje(regInfo.getJe());
+                if (regInfo.getJyje() != null) {
+                    Double mod = regInfo.getJyje() % 100;
+                    regInfo.setZc100(mod);
+                } else {
+                    regInfo.setZc100(-1.0);
+                }
+                regInfo.setJdlx("出");
             }
             regInfo.setZt(list.get(8));
             regInfo.setSbyy(list.get(9));

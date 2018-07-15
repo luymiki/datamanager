@@ -29,7 +29,7 @@
         var _init = function () {
 
             $(".logout").click(_logout);
-
+            notice();
         };
 
         var _logout = function () {
@@ -58,6 +58,23 @@
             return false;
         };
 
+        /**
+         * websocket通知
+         */
+        var notice = function () {
+            var socket = new SockJS("/api/admin/websocketServer");
+            var stomp = Stomp.over(socket);
+                stomp.connect({},function connectCallback() {
+                    console.log("websocket连接成功");
+                    //订阅 用户名为 admin 的消息
+                    stomp.subscribe("/user/admin/msg",function (response) {
+                        toastrMsg.info("新的消息："+response.body);
+                    });
+                },function errorCallback() {
+                    toastrMsg.error("websocket连接失败");
+                });
+
+        }
 
         return{
             init:_init

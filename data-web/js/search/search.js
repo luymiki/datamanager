@@ -18,6 +18,14 @@
             $("#search-list ").on("click", ".search-result", function () {
                 var index = $(this).attr("data-index");
                 switch (index) {
+                    case "yhzh_khxx": {
+                        top.contabs.addMenuItem("/view/yhzh/yhzh-reg-detail.html?id=" + $(this).attr("data-id"), '查看银行开户信息');
+                        break;
+                    }
+                    case "yhzh_jyls": {
+                        top.contabs.addMenuItem("/view/yhzh/jyjl/yhzh-jyjl-detail.html?id=" + $(this).attr("data-id"), '查看银行交易流水');
+                        break;
+                    }
                     case "zfbzzinfo": {
                         top.contabs.addMenuItem("/view/zfb/zzinfo/zfb-zzinfo-detail.html?id=" + $(this).attr("data-id"), '查看支付宝转账明细');
                         break;

@@ -1,0 +1,23 @@
+{
+  "indexName": "yhzh_jyls",
+  "conditions": [
+    {
+      "field": "ssyh",
+      "values": [
+        "农业银行"
+      ],
+      "searchType": 1,
+      "dataType":2
+    },
+    {
+      "field": "kh",
+      "values": [
+        "%s"
+      ],
+      "searchType": 1,
+      "dataType":2
+    }
+  ],
+  "aggs": [],
+  "sort":"create_time desc"
+}

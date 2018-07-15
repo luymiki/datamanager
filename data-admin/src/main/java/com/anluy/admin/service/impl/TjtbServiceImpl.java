@@ -40,7 +40,7 @@ public class TjtbServiceImpl extends BaseServiceImpl implements TjtbService {
         //dsl查询语句
         if (StringUtils.isBlank(queryDsl)) {
             try {
-                queryDsl = IOUtils.toString(TjfxCftServiceImpl.class.getResourceAsStream("/dsl/eqa-query.json"));
+                queryDsl = IOUtils.toString(TjfxCftServiceImpl.class.getResourceAsStream("/dsl/eqa-queryTjtb.json"));
             } catch (IOException e) {
                 LOGGER.error("DSL文件加载错误", e);
             }

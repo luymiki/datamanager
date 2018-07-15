@@ -73,8 +73,8 @@
                     {field: 'txlx',title: '提现类型',sortable:true},
                     {field: 'khyh',title: '开户银行',sortable:true},
                     {field: 'yhzh',title: '银行账号',sortable:true},
-                    {field: 'sqsj',title: '申请时间'},
-                    {field: 'clsj',title: '处理时间'},
+                    {field: 'sqsj',title: '申请时间',sortable:true},
+                    {field: 'clsj',title: '处理时间',sortable:true},
                     {field: 'je',title: '转账金额（元）',sortable:true},
                     {field: 'zt',title: '状态',sortable:true},
                     {field: 'jyzt',title: '交易状态',sortable:true},
@@ -123,12 +123,12 @@
                             }
                         ];
                     }
-                    con[con.length]={
-                        "field": "user_id",
-                        "values": [zfbInfo["user_id"]],
-                        "searchType": 1,
-                        "dataType":2,
-                    };
+                    // con[con.length]={
+                    //     "field": "user_id",
+                    //     "values": [zfbInfo["user_id"]],
+                    //     "searchType": 1,
+                    //     "dataType":2,
+                    // };
                     con[con.length]={
                         "field": "xcbh",
                         "values": [zfbInfo["xcbh"]],

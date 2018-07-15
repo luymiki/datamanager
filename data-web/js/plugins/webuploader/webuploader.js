@@ -4070,7 +4070,8 @@
                     type: file.type,
                     lastModifiedDate: file.lastModifiedDate,
                     size: file.size,
-                    md5: file["md5"]
+                    md5: file["md5"],
+                    cfdr: file["cfdr"]
                 });
     
                 block.chunks > 1 && $.extend( data, {

@@ -121,12 +121,12 @@
                             }
                         ];
                     }
-                    con[con.length]={
-                        "field": "user_id",
-                        "values": [zfbInfo["user_id"]],
-                        "searchType": 1,
-                        "dataType":2,
-                    };
+                    // con[con.length]={
+                    //     "field": "user_id",
+                    //     "values": [zfbInfo["user_id"]],
+                    //     "searchType": 1,
+                    //     "dataType":2,
+                    // };
                     con[con.length]={
                         "field": "xcbh",
                         "values": [zfbInfo["xcbh"]],

@@ -99,7 +99,9 @@ public class WeiXinRegParser {
                                 break;
                             }
                             case "QQ": {
-                                regInfo.setQq(infos[1]);
+                                if(infos[1]!=null && infos[1].length()>4){
+                                    regInfo.setQq(infos[1]);
+                                }
                                 break;
                             }
                             case "手机号": {

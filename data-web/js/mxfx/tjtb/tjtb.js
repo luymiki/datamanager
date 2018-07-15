@@ -99,7 +99,7 @@
                 data:{"pageNum":1,"pageSize":1000,"paramsStr":JSON.stringify(params)},
                 async:true,
                 success:function (d) {
-                    console.log(d);
+                    //console.log(d);
                     if(d.status===200){
                         if(d.data.aggs){
                             success(d.data);
@@ -201,7 +201,7 @@
                     if(msg.status===200){
                         data = msg.data["group_createTime"];
                         var rangeList = msg.data["rangeList"];
-                        console.log(data)
+                        //console.log(data)
                         $("#loadding-icon-jyje").hide();
                         var labels = [];
                         var chartData = [];
@@ -348,7 +348,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = msg.data["group_kssj_hh"];
-                        console.log(data)
+                        //console.log(data)
                         $("#loadding-icon-thsjd").hide();
                         var labels = [];
                         var chartData = [];

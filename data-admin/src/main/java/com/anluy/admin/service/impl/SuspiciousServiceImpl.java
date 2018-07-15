@@ -127,18 +127,10 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
     /**
      * 查询es
      *
-     * @param suspId
-     * @param indexNames
      * @return
      */
-    private JSONObject get(String suspId,String token, String indexNames) {
-//        Map params = new HashMap<>();
-//        params.put("pageNum", "1");
-//        params.put("pageSize", "10000");
-//        params.put("paramsStr", String.format(queryDsl, indexNames, suspId));
-//        Header[] headers = new Header[]{new BasicHeader("Authorization",token)};
-//        return HTTPUtils.getJSONObjectByPost(eqaConfig.getQueryUrl(), params, headers,"utf-8");
-        return getByDsl(eqaConfig.getQueryUrl(),String.format(queryDsl, indexNames, suspId),token);
+    private JSONObject get(String dsl,String token) {
+        return getByDsl(eqaConfig.getQueryUrl(),dsl,token);
     }
 
     /**
@@ -176,7 +168,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquQQ(String suspId,String token, Map suspObject) {
-        JSONObject resultJson = get(suspId, token,"qqreginfo,email,qqzone,qqloginip,wxreginfo");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "qqreginfo,email,qqzone,qqloginip,wxreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json), token);
         //提取QQ号 qqreginfo：qq;email:qq.com;qqzone:qq；qqloginip：qq ；wxreginfo：qq
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -223,7 +216,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquWixin(String suspId,String token, Map suspObject) {
-        JSONObject resultJson = get(suspId, token,"wxreginfo");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "wxreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json), token);
         //提取微信号 wxreginfo：weixin
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -256,7 +250,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquCft(String suspId,String token, Map suspObject) {
-        JSONObject resultJson = get(suspId, token,"cftreginfo");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "cftreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json), token);
         //提取财付通 cftreginfo：zh
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -289,7 +284,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquYhzh(String suspId, String token,Map suspObject) {
-        JSONObject resultJson = get(suspId,token, "cftreginfo");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "cftreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json),token);
         //提取银行账号 cftreginfo：yhzh_list
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -325,7 +321,9 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquSjhm(String suspId, String token,Map suspObject) {
-        JSONObject resultJson = get(suspId, token,"qqreginfo,wxreginfo,cftreginfo,huaduan");
+        //还有huaduan没有实现
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "qqreginfo,wxreginfo,cftreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json), token);
         //提取手机号 qqreginfo：dh;wxreginfo:dh;cftreginfo:dh ;huaduan:zjhm;
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -367,7 +365,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquEmail(String suspId, String token,Map suspObject) {
-        JSONObject resultJson = get(suspId, token,"email,qqreginfo,wxreginfo");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "email,qqreginfo,wxreginfo", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json), token);
         //提取电子邮箱 email：to_address; qqreginfo:email;wxreginfo:email
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");
@@ -407,7 +406,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquIp(String suspId,String token, Map suspObject) {
-        JSONObject resultJson = get(suspId,token, "wxreginfo,qqloginip");
+        JSON json = (JSON) JSON.parse(String.format(queryDsl, "wxreginfo,qqloginip", suspId));
+        JSONObject resultJson = get(JSON.toJSONString(json),token);
         //提取IP wxreginfo：ip_list[]; qqloginip:ip_list[]
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");

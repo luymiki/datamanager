@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>银行账号交易记录信息导入 | 数据管理系统</title>
+
+    <meta name="keywords" content="银行账号交易记录信息导入 | 数据管理系统">
+    <meta name="description" content="银行账号交易记录信息导入 | 数据管理系统">
+
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        UPDLOAD_CSS();
+    </script>
+    <style type="text/css">
+        .thumb-file {
+            font-size: 70px;
+            color: #dadada;
+            padding: 20px 10px;
+        }
+
+        #uploader .placeholder {
+            background: none;
+            padding-top: 120px;
+        }
+
+        #uploader .placeholder .fa-file {
+            font-size: 70px;
+            margin-bottom: 30px;
+        }
+
+        .tabs-container .tabs-left > .nav-tabs {
+            width: 20%;
+        }
+
+        .tabs-container .tabs-left .panel-body {
+            width: 80%;
+            margin-left: 20%;
+        }
+        .mail-tools{
+            margin-top: -10px;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" id="eml-upload" >
+                <div class="ibox-content">
+                    <form method="get" class="form-horizontal">
+                        <input type="hidden" id="file-folder" class="form-control" value="文件">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">开户银行</label>
+                            <div class="col-sm-5">
+                                <select id="yys" name="yys" class="form-control">
+                                    <option value="">请选开户银行</option>
+                                    <!--<option value="中国银行">中国银行</option>-->
+                                    <!--<option value="农业银行">农业银行</option>-->
+                                    <!--<option value="工商银行">工商银行</option>-->
+                                    <!--<option value="建设银行">建设银行</option>-->
+                                    <!--<option value="平安银行">平安银行</option>-->
+                                    <!--<option value="招商银行">招商银行</option>-->
+                                    <!--<option value="交通银行">交通银行</option>-->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">标签</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="file-tags" class="form-control" data-role="tagsinput">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </form>
+
+                    <div class="page-container">
+                        <p>您可以尝试文件拖拽，或者点击添加文件按钮，来上传文件.</p>
+                        <div id="uploader" class="wu-example">
+                            <div class="queueList">
+                                <div id="dndArea" class="placeholder">
+                                    <i class="fa fa-file"></i>
+                                    <div id="filePicker"></div>
+                                    <p>银行账号数据导入只能选择1个文件</p>
+                                </div>
+                            </div>
+                            <div class="statusBar" style="display:none;">
+                                <div class="progress">
+                                    <span class="text">0%</span>
+                                    <span class="percentage"></span>
+                                </div>
+                                <div class="info"></div>
+                                <div class="btns">
+                                    <div id="filePicker2"></div>
+                                    <div id="uploadBtn" class="uploadBtn">开始上传</div>
+                                    <div id="parserEml" class="uploadBtn" style="display: none;">保存</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script type="text/javascript">
+    BASE_JS();
+    UPDLOAD_FILE_JS();
+</script>
+<script src="/js/yhzh/jyjl/yhzh-jyjl.js"></script>
+
+</body>
+
+</html>

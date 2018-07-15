@@ -53,6 +53,8 @@ public class AuthorizedInterceptor implements HandlerInterceptor {
         }
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(Result.error(HttpStatus.UNAUTHORIZED.value(),"登录验证失败").setPath(httpServletRequest.getRequestURI())));
+        httpServletResponse.getWriter().flush();
+        httpServletResponse.getWriter().close();
         return false;
     }
 

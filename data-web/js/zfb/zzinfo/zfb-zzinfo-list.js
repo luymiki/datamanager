@@ -72,8 +72,9 @@
                     {field: 'fkf_id',title: '付款方账号',sortable:true},
                     {field: 'skf_id',title: '收款方账号',sortable:true},
                     {field: 'skjgmc',title: '收款机构信息',sortable:true},
-                    {field: 'dzsj',title: '到账时间'},
+                    {field: 'dzsj',title: '到账时间',sortable:true},
                     {field: 'je',title: '转账金额（元）',sortable:true},
+                    {field: 'jdlx',title: '借贷类型',sortable:true},
                     {field: 'zzcpmc',title: '转账产品名称',sortable:true},
                     {field: 'jyfsd',title: '交易发生地',sortable:true},
                     {field: 'txlsh',title: '提现流水号',sortable:true},
@@ -122,12 +123,12 @@
                             }
                         ];
                     }
-                    con[con.length]={
-                        "field": "user_id",
-                        "values": [zfbInfo["user_id"]],
-                        "searchType": 1,
-                        "dataType":2,
-                    };
+                    // con[con.length]={
+                    //     "field": "user_id",
+                    //     "values": [zfbInfo["user_id"]],
+                    //     "searchType": 1,
+                    //     "dataType":2,
+                    // };
                     con[con.length]={
                         "field": "xcbh",
                         "values": [zfbInfo["xcbh"]],

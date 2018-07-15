@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 功能说明：支付宝转账明细文件操作
@@ -70,16 +71,62 @@ public class ZfbZzInfoParserController {
             String uploadDir = fileManagerConfig.getUploadDir();
             String path = uploadDir + attachment.getPath();
             ZfbZzParser parser = new ZfbZzParser(attachment);
-            List<ZfbZzInfo> zfbJyjlInfoList = parser.parser(path);
+            Set<String> xcbhSet = new HashSet<>();
+            List<ZfbZzInfo> zfbJyjlInfoList = parser.parser(path,xcbhSet);
+            Map<String,String> mapping = new HashMap<>();//xcbh与userid的映射关系
+            //xcbhSet
+            if(!xcbhSet.isEmpty()){
+                StringBuffer stringBuffer = new StringBuffer();
+                AtomicInteger ai = new AtomicInteger(0);
+                xcbhSet.forEach(xcbh->{
+                    if(ai.get()>0){
+                        stringBuffer.append(",");
+                    }
+                    stringBuffer.append("\"").append(xcbh).append("\"");
+                    ai.getAndAdd(1);
+                });
+                String dsl = "{\"from\": 0,\"query\": {\"bool\": {\"must\": {\"terms\": {\"xcbh\": ["+stringBuffer.toString()+"]}}}},\"size\": 1000}";
+                Map rm = elasticsearchRestClient.query(dsl,"zfbreginfo");
+                if(rm!=null && !rm.isEmpty()){
+                    List<Map> lm = (List<Map> ) rm.get("data");
+                    if(lm!=null){
+                        lm.forEach(map->{
+                            if(!mapping.containsKey(map.get("xcbh"))){
+                                mapping.put((String) map.get("xcbh"),(String)map.get("user_id"));
+                            }
+                        });
+                    }
+                }
+            }
+
             List<Map> saveList = new ArrayList<>();
             zfbJyjlInfoList.forEach(regInfo->{
                 regInfo.setId(UUID.randomUUID().toString() );
                 regInfo.setCreateTime(new Date());
-                regInfo.setUserId(regInfo.getFkfId());
+                if(!mapping.containsKey( regInfo.getXcbh())){
+                    return;
+                }
+                String userId = mapping.get( regInfo.getXcbh());
+                regInfo.setUserId(userId);
+                if("提现".equals(regInfo.getZzcpmc())){
+                    regInfo.setJdlx("出");
+                    regInfo.setDsId(regInfo.getSkfId());
+                }else {
+                    //如果是付款方账户id等于支付宝id说明是转出
+                    if (regInfo.getSkfId() != null && regInfo.getSkfId().equals(userId)) {
+                        regInfo.setJdlx("入");
+                        regInfo.setDsId(regInfo.getFkfId());
+                    } else {
+                        regInfo.setJdlx("出");
+                        regInfo.setDsId(regInfo.getSkfId());
+                    }
+                }
+
                 Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(regInfo);
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
+                        case "jysj":
                         case "dzsj":
                         case "create_time":{
                             if(v!=null){
@@ -97,8 +144,10 @@ public class ZfbZzInfoParserController {
                 });
                 saveList.add(jsonMap);
             });
+            if(!saveList.isEmpty()){
+                elasticsearchRestClient.batchSave(saveList,"zfbzzinfo");
+            }
 
-            elasticsearchRestClient.batchSave(saveList,"zfbzzinfo");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(saveList).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

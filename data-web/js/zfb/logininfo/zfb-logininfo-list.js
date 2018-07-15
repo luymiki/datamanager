@@ -74,8 +74,8 @@
                     {field: 'user_id',title: '支付宝账号',sortable:true},
                     {field: 'dlzh',title: '登陆账号',sortable:true},
                     {field: 'name',title: '账户名称',sortable:true},
-                    {field: 'ip',title: 'IP'},
-                    {field: 'czsj',title: '登录时间'},
+                    {field: 'ip',title: 'IP',sortable:true},
+                    {field: 'czsj',title: '登录时间',sortable:true},
                     {field: 'xcbh',title: '协查编号'}
                 ],
                 ajax : function (request) {
@@ -121,12 +121,12 @@
                             }
                         ];
                     }
-                    con[con.length]={
-                        "field": "user_id",
-                        "values": [zfbInfo["user_id"]],
-                        "searchType": 1,
-                        "dataType":2,
-                    };
+                    // con[con.length]={
+                    //     "field": "user_id",
+                    //     "values": [zfbInfo["user_id"]],
+                    //     "searchType": 1,
+                    //     "dataType":2,
+                    // };
                     con[con.length]={
                         "field": "xcbh",
                         "values": [zfbInfo["xcbh"]],

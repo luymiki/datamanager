@@ -16,6 +16,7 @@
     <script src="/js/meta.js"></script>
     <script type="text/javascript">
         BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
     </script>
 
 </head>
@@ -23,48 +24,41 @@
 <body class="gray-bg">
     <div class="wrapper wrapper-content">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3" style="padding: 0px;">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="file-manager">
-                            <!--<h5>显示：</h5>-->
-                            <!--<a href="javascript:void(0);" class="file-control active btn-file-type btn-file-type-all" data-type="">所有</a>-->
-                            <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="文件">文件</a>-->
-                            <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="视频">视频</a>-->
-                            <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="图片">图片</a>-->
-                            <!--<a href="javascript:void(0);" class="file-control btn-file-type" data-type="SQL文件">SQL文件</a>-->
-                            <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
-                            <div class="btn btn-info" id="search-btn" style="padding-right: 6px;padding-left: 6px;"><i class="fa fa-search"></i>查询</div>
-                            <div class="hr-line-dashed"></div>
                             <button class="btn btn-primary btn-block" id="btn-upload-img">上传图片</button>
                             <button class="btn btn-primary btn-block" id="btn-upload-file">上传文件</button>
                             <div class="hr-line-dashed"></div>
-                            <h5>文件夹</h5>
-                            <ul class="folder-list" style="padding: 0">
-                                <li><a href="javascript:void(0);" class="file-control active btn-file-folder btn-file-folder-all" data-folder=""><i class="fa fa-folder"></i> 所有</a></li>
-                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="文件"><i class="fa fa-folder"></i> 文件</a></li>
-                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="图片"><i class="fa fa-folder"></i> 图片</a></li>
-                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="视频"><i class="fa fa-folder"></i> 视频</a></li>
-                                <li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="SQL文件"><i class="fa fa-folder"></i> SQL文件</a></li>
-                            </ul>
+                            <!--<h5>文件夹</h5>-->
+                            <!--<ul class="folder-list" style="padding: 0">-->
+                                <!--<li><a href="javascript:void(0);" class="file-control active btn-file-folder btn-file-folder-all" data-folder=""><i class="fa fa-folder"></i> 所有</a></li>-->
+                                <!--<li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="文件"><i class="fa fa-folder"></i> 文件</a></li>-->
+                                <!--<li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="图片"><i class="fa fa-folder"></i> 图片</a></li>-->
+                                <!--<li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="视频"><i class="fa fa-folder"></i> 视频</a></li>-->
+                                <!--<li><a href="javascript:void(0);" class="file-control btn-file-folder" data-folder="SQL文件"><i class="fa fa-folder"></i> SQL文件</a></li>-->
+                            <!--</ul>-->
                             <h5 class="tag-title">标签</h5>
-                            <ul class="tag-list" id="tag-list" style="padding: 0">
+                            <ul class="tag-list" id="tag-list" style="padding: 0;">
                             </ul>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9 animated fadeInRight">
-                <div class="row">
-                    <div class="col-sm-12" id="file-list">
-
-
+            <div class="col-sm-9 animated fadeInRight" style="padding: 0px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title" style="padding-top: 7px;border: 0px;">
+                        <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                        <div class="btn btn-info" id="search-btn" style="padding-right: 6px;padding-left: 6px;"><i class="fa fa-search"></i>查询</div>
                     </div>
+                    <div class="ibox-content">
+                        <table id="data-table" data-mobile-responsive="true">
+                        </table>
+                    </div>
+
                 </div>
-                <nav id="pagination_box">
-                    <ul class="pagination" id="pagination"></ul>
-                </nav>
             </div>
         </div>
     </div>
@@ -72,9 +66,9 @@
     <!-- 全局js -->
     <script type="text/javascript">
         BASE_JS();
+        BOOTSTRAP_TABLE_JS();
     </script>
     <script src="/js/file/file-manager.js"></script>
-    <script src="/js/plugins/twbsPagination/jquery.twbsPagination.js"></script>
 
     <script>
         $(document).ready(function () {

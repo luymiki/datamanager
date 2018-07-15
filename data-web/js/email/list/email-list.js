@@ -55,7 +55,7 @@ window.uplader = [
     ];
 
 var emailList=[];
-
+window.fileNumLimit = 30;
 var emailParser = (function () {
 
     var _init = function () {
@@ -77,6 +77,7 @@ var emailParser = (function () {
         }
     };
     var _parser = function (_data,i) {
+        //console.log(_data)
         $.ajax.proxy({
             url:"/api/admin/email/parser",
             type:"post",
@@ -90,7 +91,7 @@ var emailParser = (function () {
                     var email = d.data;
                     emailList[emailList.length] = email;
 
-                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+ (email['subject']===''?(email['subject']='无标题'):email['subject'])+'</a></li>').appendTo($tabs);
+                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+ (email['subject']===''?(email['subject']='无标题'):email['subject'])+'<br>'+_data["name"]+'</a></li>').appendTo($tabs);
                     //$('<div id="tab-'+i+'" class="tab-pane '+(i===0?('active'):(' '))+'"><div class="panel-body">'+ email['from']+'</div></div>').appendTo($contents);
 
                     var file = [];//附件

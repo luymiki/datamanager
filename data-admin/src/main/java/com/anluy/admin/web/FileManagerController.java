@@ -58,7 +58,7 @@ public class FileManagerController {
     @ApiOperation(value = "上传文件", response = Result.class)
     @ApiResponses(value = {@ApiResponse(code = 500, message = "上传文件失败")})//错误码说明
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody Object upload(HttpServletRequest request, @RequestParam(required = false) MultipartFile file, String name, Long size, String folder, String tags,String suspName,String suspId,String md5) {
+    public @ResponseBody Object upload(HttpServletRequest request, @RequestParam(required = false) MultipartFile file, String name, Long size, String folder, String tags,String suspName,String suspId,String md5,String cfdr) {
         try {
             if(file == null  ){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"上传的文件为空"));
@@ -66,9 +66,9 @@ public class FileManagerController {
             if(StringUtils.isBlank(folder)){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件夹为空"));
             }
-            if(StringUtils.isBlank(tags)){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"标签为空"));
-            }
+//            if(StringUtils.isBlank(tags)){
+//                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"标签为空"));
+//            }
             if(StringUtils.isBlank(suspName)){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"嫌疑人姓名为空"));
             }
@@ -96,13 +96,7 @@ public class FileManagerController {
             attachment.setSuspName(suspName);
             attachment.setSuspId(suspId);
             attachment.setMd5(md5);
-//            params.put("id", UUID.randomUUID().toString());
-//            params.put("name", name);
-//            params.put("size", String.valueOf(size));
-//            params.put("folder", folder);
-//            params.put("tags", tags.split(","));
-//            params.put("path", path);
-//            params.put("create_time", DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+            attachment.setCfdr(cfdr);
             String regName = name.toLowerCase().trim();
             if(Pattern.matches(PATTERN_VIDEO, regName)){
                 //params.put("type", "视频");
@@ -121,7 +115,6 @@ public class FileManagerController {
             String suffix = ns[ns.length-1];
             params.put("suffix", suffix);
             attachment.setSuffix(suffix);
-            //elasticsearchRestClient.save(params,(String) params.get("id"),"attachment");
             attachmentService.save(attachment);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(attachment).setPath(request.getRequestURI()));
         } catch (Exception exception) {

@@ -63,6 +63,10 @@ public class Attachment extends BaseEntity<String> {
      */
     @JSONField(name = "md5")
     private String md5;
+    /**
+     * 重复导入
+     */
+    private String cfdr;
 
     public String getFolder() {
         return folder;
@@ -150,5 +154,13 @@ public class Attachment extends BaseEntity<String> {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public String getCfdr() {
+        return cfdr;
+    }
+
+    public void setCfdr(String cfdr) {
+        this.cfdr = cfdr;
     }
 }

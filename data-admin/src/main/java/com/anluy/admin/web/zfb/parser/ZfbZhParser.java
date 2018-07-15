@@ -79,6 +79,9 @@ public class ZfbZhParser {
                 }else {
                     regInfo.setJycjsj(sdf1.parse(list.get(2)));
                 }
+                if(regInfo.getJycjsj()!=null){
+                    regInfo.setJysj(regInfo.getJycjsj());
+                }
             }
             if(StringUtils.isNotBlank(list.get(3))){
                 if(list.get(3).indexOf("/")>0){
@@ -103,16 +106,32 @@ public class ZfbZhParser {
             }
             if(StringUtils.isNotBlank(list.get(8))){
                 String[] yhxx = list.get(8).split("\\(|\\)");
-                if(yhxx.length>0)
+                if(yhxx.length>0) {
                     regInfo.setDfUserId(yhxx[0]);
+                    regInfo.setDsId(regInfo.getDfUserId());
+                }
                 if(yhxx.length>1)
                     regInfo.setDfName(yhxx[1]);
             }
             regInfo.setXfmc(list.get(9));
             if(StringUtils.isNotBlank(list.get(10))){
                 regInfo.setJe(Double.valueOf(list.get(10)));
+                regInfo.setJyje(regInfo.getJe());
+                if (regInfo.getJyje() != null) {
+                    Double mod = regInfo.getJyje() % 100;
+                    regInfo.setZc100(mod);
+                } else {
+                    regInfo.setZc100(-1.0);
+                }
             }
             regInfo.setSjbj(list.get(11));
+            if(StringUtils.isNotBlank(regInfo.getSjbj())){
+                if("支出".equals(regInfo.getSjbj()))
+                    regInfo.setJdlx("出");
+                else
+                    regInfo.setJdlx("入");
+            }
+
             regInfo.setJyzt(list.get(12));
             regInfo.setBz(list.get(13));
             regInfo.setXcbh(list.get(14));

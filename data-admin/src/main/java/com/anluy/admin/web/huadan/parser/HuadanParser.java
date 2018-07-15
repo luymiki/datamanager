@@ -152,6 +152,10 @@ public class HuadanParser {
      * @return
      */
     private HuadanInfo parserYd(HuadanInfo huadanInfo,  List<List<String>> datalist) {
+        List<String> columns = new ArrayList<>(20);
+        for (int i = 0; i <8 ; i++) {
+            columns.add(null);
+        }
         String zjhm = null;
         int start = 6;
         for (int i = 0; i < datalist.size(); i++) {
@@ -161,25 +165,36 @@ public class HuadanParser {
                 zjhm = row.get(0).split(" ")[0].split(":")[1];
             } else if (row.get(0) != null && row.get(0).startsWith("通话合并短彩详单")) {
                 start = i + 2;
+                columns.set(5, "thlx");
+                columns.set(1, "thdd");
+                columns.set(3, "ddhm");
+                columns.set(0, "kssj");
+                columns.set(4, "thsc");
+                columns.set(2, "hjlx");
                 break;
+            }else if(row.get(0) !=null && row.get(0).startsWith("通话详单")){
+                start = i + 2;
+                columns.set(6, "thlx");
+                columns.set(2, "thdd");
+                columns.set(4, "ddhm");
+                columns.set(1, "kssj");
+                columns.set(5, "thsc");
+                columns.set(3, "hjlx");
+                break;
+            }else {
+                for (int j = 0; j < row.size() ; j++) {
+                    if(row.get(j)!=null && row.get(j).startsWith("手机号码:")){
+                        zjhm = row.get(j).replace("手机号码:","").trim();
+                        break;
+                    }
+                }
             }
         }
         huadanInfo.setYys("移动");
         huadanInfo.setZjhm(zjhm);
 
-        List<String> columns = new ArrayList<>(20);
-        for (int i = 0; i <8 ; i++) {
-            columns.add(null);
-        }
-        columns.set(5, "thlx");
-        columns.set(1, "thdd");
-        //columns.set(2, "zjhm");
-        //columns.set(12, "ddhmgsd");
-        columns.set(3, "ddhm");
-        columns.set(0, "kssj");
-        columns.set(4, "thsc");
-        columns.set(2, "hjlx");
-        columns.set(6, "thlx");
+
+
         setHuadanList(start,huadanInfo,datalist,columns);
         return huadanInfo;
     }
@@ -241,7 +256,21 @@ public class HuadanParser {
                     if(!data.containsKey(key)
                             || StringUtils.isBlank(data.getString(key))){
                         if("thsc".equals(key) && value instanceof String && StringUtils.isNotBlank((String)value)){
-                            value = Double.valueOf(value.toString()).longValue();
+                            String str = value.toString();
+                            long sc = 0;
+                            if(str.indexOf("时")>0){
+                                String[] h = str.split("时");
+                                sc += Long.valueOf(h[0])*60*60;
+                                str = h[1];
+                            }
+                            if(str.indexOf("分")>0){
+                                String[] h = str.split("分");
+                                sc += Long.valueOf(h[0])*60;
+                                str = h[1];
+                            }
+                            str = str.replace("秒","");
+                            sc += Long.valueOf(str);
+                            value = Double.valueOf(sc).longValue();
                         }else if("ddhm".equals(key) && value instanceof String && StringUtils.isNotBlank((String)value)){
                             value = value.toString().replace("0086|\\+86","");
                         }

@@ -1,0 +1,77 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>EMAIL文件管理 | 数据管理系统</title>
+
+    <meta name="keywords" content="EMAIL文件管理,数据管理系统">
+    <meta name="description" content="EMAIL文件管理 | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+    <style>
+        .search-input{
+            width: 160px;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title" style="padding-top: 7px">
+                    <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                    <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
+                    <div class="ibox-tools" >
+                        <div class="btn btn-primary btn-sm" id="copy-row" data-clipboard-target="copyText">复制行</div>
+                        <div class="btn btn-primary btn-sm" id="addBtn" >新增</div>
+                        <div class="btn btn-primary btn-sm" id="pizhu" data-table="email-table">批注</div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table id="email-table" data-mobile-responsive="true">
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
+
+<script src="/js/email/list/email-list-list.js"></script>
+
+
+</body>
+</html>

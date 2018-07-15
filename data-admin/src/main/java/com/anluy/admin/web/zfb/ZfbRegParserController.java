@@ -127,10 +127,12 @@ public class ZfbRegParserController {
                 attachmentService.delete(fileId);
             }
             Map map = elasticsearchRestClient.get("zfbreginfo",id,null,null);
-            String deleteDsl = "{\"query\": { \"match\": {\"user_id\": \""+map.get("user_id")+"\"}}}";
+            String deleteDsl = "{\"query\": { \"match\": {\"xcbh\": \""+map.get("xcbh")+"\"}}}";
             elasticsearchRestClient.deleteByQuery(deleteDsl,"zfblogininfo");
             elasticsearchRestClient.deleteByQuery(deleteDsl,"zfbzhinfo");
             elasticsearchRestClient.deleteByQuery(deleteDsl,"zfbtxinfo");
+            elasticsearchRestClient.deleteByQuery(deleteDsl,"zfbzzinfo");
+            elasticsearchRestClient.deleteByQuery(deleteDsl,"zfbjyjlinfo");
             elasticsearchRestClient.remove(id,"zfbreginfo");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setPath(request.getRequestURI()));
         } catch (Exception exception) {

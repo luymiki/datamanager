@@ -68,12 +68,14 @@
                 "searchType": 1,
                 "dataType":2,
             };
-            con[con.length]={
-                "field": "jyje",
-                "values": range.replace("*","").split("-"),
-                "searchType": 6,
-                "dataType":2,
-            };
+            if(range) {
+                con[con.length] = {
+                    "field": "jyje",
+                    "values": range.replace("*", "").split("-"),
+                    "searchType": 6,
+                    "dataType": 2,
+                };
+            }
             if(ds_id){
                 con[con.length]={
                     "field": "ds_id",

@@ -9,7 +9,7 @@ import java.io.IOException;
  * <p>
  * Created by hc.zeng on 2018/3/22.
  */
-public interface TjfxCftService extends TjfxService{
+public interface TjfxCftService extends TjfxJylsService{
 
     /**
      * 整合数据

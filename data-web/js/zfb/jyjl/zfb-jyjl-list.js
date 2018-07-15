@@ -72,7 +72,7 @@
                     {field: 'mj_id',title: '买家ID',sortable:true},
                     {field: 'mjxx',title: '买家户名',sortable:true},
                     {field: 'maijia_id',title: '卖家ID',sortable:true},
-                    {field: 'maijiaxx',title: '卖家户名'},
+                    {field: 'maijiaxx',title: '卖家户名',sortable:true},
                     {field: 'je',title: '交易金额（元）',sortable:true},
                     {field: 'spmc',title: '商品名称',sortable:true},
                     {field: 'sksj',title: '收款时间',sortable:true},
@@ -121,12 +121,12 @@
                             }
                         ];
                     }
-                    con[con.length]={
-                        "field": "user_id",
-                        "values": [zfbInfo["user_id"]],
-                        "searchType": 1,
-                        "dataType":2,
-                    };
+                    // con[con.length]={
+                    //     "field": "user_id",
+                    //     "values": [zfbInfo["user_id"]],
+                    //     "searchType": 1,
+                    //     "dataType":2,
+                    // };
                     con[con.length]={
                         "field": "xcbh",
                         "values": [zfbInfo["xcbh"]],

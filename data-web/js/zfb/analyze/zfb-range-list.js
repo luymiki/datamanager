@@ -76,12 +76,15 @@
                 "searchType": 1,
                 "dataType":2,
             };
-            con[con.length]={
-                "field": "jyje",
-                "values": range.replace("*","").split("-"),
-                "searchType": 6,
-                "dataType":2,
-            };
+            if(range){
+                con[con.length]={
+                    "field": "jyje",
+                    "values": range.replace("*","").split("-"),
+                    "searchType": 6,
+                    "dataType":2,
+                };
+            }
+
             if(ds_id){
                 con[con.length]={
                     "field": "ds_id",
@@ -175,7 +178,7 @@
                     {field: 'name',title: '账户名称',sortable:true},
                     {field: 'df_user_id',title: '对方ID',sortable:true},
                     {field: 'df_name',title: '对方户名',sortable:true},
-                    {field: 'xfmc',title: '消费名称'},
+                    {field: 'xfmc',title: '消费名称',sortable:true},
                     {field: 'je',title: '转账金额（元）',sortable:true},
                     {field: 'sjbj',title: '收/支标记',sortable:true},
                     {field: 'fksj',title: '付款时间',sortable:true},
@@ -235,8 +238,8 @@
                     {field: 'txlx',title: '提现类型',sortable:true},
                     {field: 'khyh',title: '开户银行',sortable:true},
                     {field: 'yhzh',title: '银行账号',sortable:true},
-                    {field: 'sqsj',title: '申请时间'},
-                    {field: 'clsj',title: '处理时间'},
+                    {field: 'sqsj',title: '申请时间',sortable:true},
+                    {field: 'clsj',title: '处理时间',sortable:true},
                     {field: 'je',title: '转账金额（元）',sortable:true},
                     {field: 'zt',title: '状态',sortable:true},
                     {field: 'jyzt',title: '交易状态',sortable:true},
@@ -295,8 +298,9 @@
                     {field: 'fkf_id',title: '付款方账号',sortable:true},
                     {field: 'skf_id',title: '收款方账号',sortable:true},
                     {field: 'skjgmc',title: '收款机构信息',sortable:true},
-                    {field: 'dzsj',title: '到账时间'},
+                    {field: 'dzsj',title: '到账时间',sortable:true},
                     {field: 'je',title: '转账金额（元）',sortable:true},
+                    {field: 'jdlx',title: '借贷类型',sortable:true},
                     {field: 'zzcpmc',title: '转账产品名称',sortable:true},
                     {field: 'jyfsd',title: '交易发生地',sortable:true},
                     {field: 'txlsh',title: '提现流水号',sortable:true},
@@ -355,7 +359,7 @@
                     {field: 'mj_id',title: '买家ID',sortable:true},
                     {field: 'mjxx',title: '买家户名',sortable:true},
                     {field: 'maijia_id',title: '卖家ID',sortable:true},
-                    {field: 'maijiaxx',title: '卖家户名'},
+                    {field: 'maijiaxx',title: '卖家户名',sortable:true},
                     {field: 'je',title: '交易金额（元）',sortable:true},
                     {field: 'spmc',title: '商品名称',sortable:true},
                     {field: 'sksj',title: '收款时间',sortable:true},

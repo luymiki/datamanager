@@ -447,10 +447,10 @@ jQuery(function() {
                 toastrMsg.error("请选择人员信息");
                 return false;
             }
-            if(!$("#image-tags").val()){
-                toastrMsg.error("请填写标签");
-                return false;
-            }
+            // if(!$("#image-tags").val()){
+            //     toastrMsg.error("请填写标签");
+            //     return false;
+            // }
             if(!$("#image-folder").val()){
                 toastrMsg.error("请选择文件夹");
                 return false;

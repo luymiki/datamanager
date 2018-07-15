@@ -34,12 +34,17 @@ public class ExcelUtils {
                 List<String> list = new ArrayList<>();
                 row = sheet.getRow(i);
                 if (row != null) {
+                    //System.out.println(i+":"+row.getPhysicalNumberOfCells());
                     for (int j = 0; j <  row.getPhysicalNumberOfCells(); j++) {
                         cellData = (String) getCellFormatValue(row.getCell(j));
-                        list.add(cellData);
+                        if("-".equals(cellData)){
+                            list.add(null);
+                        }else {
+                            list.add(cellData);
+                        }
                     }
                 } else {
-                    break;
+                    continue;
                 }
                 dataList.add(list);
             }

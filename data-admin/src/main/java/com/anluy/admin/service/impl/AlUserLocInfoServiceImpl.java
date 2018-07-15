@@ -84,14 +84,18 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
     public List<Map> importSql(String filePath,String backPath,String tags) {
         List<String> stringList = new ArrayList<>();
         try {
+            //读取文件数据
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filePath)));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                stringList.add(line);
+                if(line.toUpperCase().trim().startsWith("INSERT")){
+                    stringList.add(line);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException("文件读取异常", e);
         }
+        //生成备份的sql语句
         List<String> relist = jdbcTemplate.query("select * from al_user_loc_infoa", new RowMapper<String>() {
             @Override
             public String mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -112,7 +116,7 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
                 return buffer.toString();
             }
         });
-
+        //写入备份文件
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(backPath)));
             for (String str : relist) {
@@ -125,9 +129,10 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
             throw new RuntimeException("生成备份文件异常", e);
         }
 
-
+        //删除数据
         jdbcTemplate.execute("delete from al_user_loc_infoa");
 
+        //插入导入的数据
         jdbcTemplate.execute(new StatementCallback<Object>() {
             @Override
             public Object doInStatement(Statement statement) throws SQLException, DataAccessException {
@@ -138,6 +143,7 @@ public class AlUserLocInfoServiceImpl extends BaseServiceImpl<String, Suspicious
                 return null;
             }
         });
+
         String[] tagsArr = tags.split(",");
         //读取新的数据
         List<Map> savelist = jdbcTemplate.query("select * from al_user_loc_infoa", new RowMapper<Map>() {

@@ -33,6 +33,14 @@ public class ZfbTxInfo extends BaseEntity<String> {
     private String sbyy; // 失败原因
     private String xcbh;// 对应的协查数据
 
+    private Double jyje;//	交易金额
+    @JSONField(name = "jysj", format = "yyyy-MM-dd HH:mm:ss")
+    private Date jysj;//	交易时间
+    @JSONField(name = "ds_id")
+    private String dsId;//	对手id
+    private String jdlx;//	借贷标志
+    private Double zc100;//	被100整除的余数
+
     public String getFileId() {
         return fileId;
     }
@@ -151,5 +159,45 @@ public class ZfbTxInfo extends BaseEntity<String> {
 
     public void setSbyy(String sbyy) {
         this.sbyy = sbyy;
+    }
+
+    public Double getJyje() {
+        return jyje;
+    }
+
+    public void setJyje(Double jyje) {
+        this.jyje = jyje;
+    }
+
+    public Date getJysj() {
+        return jysj;
+    }
+
+    public void setJysj(Date jysj) {
+        this.jysj = jysj;
+    }
+
+    public String getDsId() {
+        return dsId;
+    }
+
+    public void setDsId(String dsId) {
+        this.dsId = dsId;
+    }
+
+    public String getJdlx() {
+        return jdlx;
+    }
+
+    public void setJdlx(String jdlx) {
+        this.jdlx = jdlx;
+    }
+
+    public Double getZc100() {
+        return zc100;
+    }
+
+    public void setZc100(Double zc100) {
+        this.zc100 = zc100;
     }
 }

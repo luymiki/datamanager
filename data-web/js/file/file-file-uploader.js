@@ -421,32 +421,45 @@ jQuery(function() {
                 //存在不能导入
                 if(hasFile){
                     var rsl = false;
-                    swal({
-                        title: "该文件已导过，是否再次导入？",
-                        text: "重新导入可能会导致数据重复，请谨慎操作！",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "导入",
-                        cancelButtonColor: "#DD6B55",
-                        cancelButtonText: "取消",
-                        closeOnConfirm: true
-                    }, function (f) {
-                        if(f){
-                            if ( fileCount === 1 ) {
-                                $placeHolder.addClass( 'element-invisible' );
-                                $statusBar.show();
-                            }
-                            addFile( file );
-                            setState( 'ready' );
-                            updateTotalProgress();
-                            return false;
-                        }else {
-                            uploader.removeFile(file, true);
+                    if(window.confirm("文件"+file.name+"已导过，是否再次导入？\n重新导入可能会导致数据重复，请谨慎操作！")){
+                        if ( fileCount >= 1 ) {
+                            $placeHolder.addClass( 'element-invisible' );
+                            $statusBar.show();
                         }
-                    });
+                        file["cfdr"]="是";
+                        addFile( file );
+                        setState( 'ready' );
+                        updateTotalProgress();
+                    }else {
+                        uploader.removeFile(file, true);
+                    }
+                    // swal({
+                    //     title: "该文件已导过，是否再次导入？",
+                    //     text: "重新导入可能会导致数据重复，请谨慎操作！",
+                    //     type: "warning",
+                    //     showCancelButton: true,
+                    //     confirmButtonColor: "#DD6B55",
+                    //     confirmButtonText: "导入",
+                    //     cancelButtonColor: "#DD6B55",
+                    //     cancelButtonText: "取消",
+                    //     closeOnConfirm: true
+                    // }, function (f) {
+                    //     if(f){
+                    //         if ( fileCount >= 1 ) {
+                    //             $placeHolder.addClass( 'element-invisible' );
+                    //             $statusBar.show();
+                    //         }
+                    //         file["cfdr"]="是";
+                    //         addFile( file );
+                    //         setState( 'ready' );
+                    //         updateTotalProgress();
+                    //         return;
+                    //     }else {
+                    //         uploader.removeFile(file, true);
+                    //     }
+                    // });
                 }else{
-                    if ( fileCount === 1 ) {
+                    if ( fileCount >= 1 ) {
                         $placeHolder.addClass( 'element-invisible' );
                         $statusBar.show();
                     }
@@ -502,10 +515,10 @@ jQuery(function() {
                 toastrMsg.error("请选择人员信息");
                 return false;
             }
-            if(!$("#file-tags").val()){
-                toastrMsg.error("请填写标签");
-                return false;
-            }
+            // if(!$("#file-tags").val()){
+            //     toastrMsg.error("请填写标签");
+            //     return false;
+            // }
             if(!$("#file-folder").val()){
                 toastrMsg.error("请选择文件夹");
                 return false;

@@ -100,6 +100,25 @@ public class CftTradesParser {
             if(list.size()>14 && StringUtils.isNotBlank(list.get(14))){
                 regInfo.setJsje(Double.valueOf(list.get(14))/100);
             }
+            if (StringUtils.isBlank(regInfo.getFsf()) && StringUtils.isBlank(regInfo.getJsf())) {
+                regInfo.setDsId("-");
+            } else if ("出".equals(regInfo.getJdlx())) {
+                if (StringUtils.isBlank(regInfo.getJsf()))
+                    regInfo.setDsId( "-");
+                else
+                    regInfo.setDsId(regInfo.getJsf());
+            } else {
+                if (StringUtils.isBlank(regInfo.getFsf()))
+                    regInfo.setDsId( "-");
+                else
+                    regInfo.setDsId( regInfo.getFsf());
+            }
+            if (regInfo.getJyje() != null) {
+                Double mod = regInfo.getJyje() % 100;
+                regInfo.setZc100(mod);
+            } else {
+                regInfo.setZc100( -1.0);
+            }
             dataList.add(regInfo);
         }
         return dataList;

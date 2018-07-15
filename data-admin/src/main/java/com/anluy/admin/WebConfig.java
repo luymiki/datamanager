@@ -40,6 +40,9 @@ public class WebConfig {
                 registry.addInterceptor(authorizedInterceptor).addPathPatterns("/**")
                         .excludePathPatterns(
                                 "/api/admin/authorization/**",
+                                "/api/admin/websocketServer/**",
+                                "/api/admin/websocket/**",
+                                "/error",
                                 "/login",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",

@@ -26,7 +26,7 @@ public interface AttachmentMapper extends BaseDAO<String, Attachment> {
     })
     Attachment get(String id);
 
-    @Select("SELECT * FROM Attachment WHERE md5 = #{md5}")
+    @Select("SELECT * FROM Attachment WHERE md5 = #{md5} limit 0,1")
     @Results({
             @Result(property = "createTime", column = "create_time")
     })

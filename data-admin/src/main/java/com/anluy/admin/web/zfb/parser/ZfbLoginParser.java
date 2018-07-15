@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 功能说明：支付宝流水文件解析
+ * 功能说明：支付宝登录流水文件解析
  * <p>
  * Created by hc.zeng on 2018/3/27.
  */

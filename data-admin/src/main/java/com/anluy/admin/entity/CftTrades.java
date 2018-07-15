@@ -44,6 +44,9 @@ public class CftTrades extends BaseEntity<String> {
     private String jssj;//接收时间
     private Double jsje;//接收金额
 
+    @JSONField(name = "ds_id")
+    private String dsId;//	对手id
+    private Double zc100;//	被100整除的余数
 
     public String getFileId() {
         return fileId;
@@ -211,5 +214,21 @@ public class CftTrades extends BaseEntity<String> {
 
     public void setCftId(String cftId) {
         this.cftId = cftId;
+    }
+
+    public String getDsId() {
+        return dsId;
+    }
+
+    public void setDsId(String dsId) {
+        this.dsId = dsId;
+    }
+
+    public Double getZc100() {
+        return zc100;
+    }
+
+    public void setZc100(Double zc100) {
+        this.zc100 = zc100;
     }
 }

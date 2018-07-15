@@ -2,14 +2,6 @@
   "indexName": "zfbjyjlinfo,zfbtxinfo,zfbzhinfo,zfbzzinfo",
   "conditions": [
     {
-      "field": "user_id",
-      "values": [
-        "%s"
-      ],
-      "searchType": 1,
-      "dataType":2
-    },
-    {
       "field": "xcbh",
       "values": [
         "%s"

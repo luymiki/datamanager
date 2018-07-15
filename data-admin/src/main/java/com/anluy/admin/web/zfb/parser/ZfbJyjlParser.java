@@ -76,11 +76,20 @@ public class ZfbJyjlParser {
             regInfo.setJyzt(list.get(2));
             regInfo.setHzhbid(list.get(3));
             regInfo.setMjId(list.get(4));
+            regInfo.setDsId(regInfo.getMjId());
             regInfo.setMjxx(list.get(5));
             regInfo.setMaijiaid(list.get(6));
             regInfo.setMaijiaxx(list.get(7));
             if(StringUtils.isNotBlank(list.get(8))){
                 regInfo.setJe(Double.valueOf(list.get(8)));
+                regInfo.setJyje(regInfo.getJe());
+                if (regInfo.getJyje() != null) {
+                    Double mod = regInfo.getJyje() % 100;
+                    regInfo.setZc100(mod);
+                } else {
+                    regInfo.setZc100(-1.0);
+                }
+                regInfo.setJdlx("出");
             }
             if(StringUtils.isNotBlank(list.get(9))){
                 if(list.get(9).indexOf("/")>0){
@@ -102,6 +111,9 @@ public class ZfbJyjlParser {
                 }else {
                     regInfo.setCjsj(sdf1.parse(list.get(11)));
                 }
+                if(regInfo.getCjsj()!=null){
+                    regInfo.setJysj(regInfo.getCjsj());
+                }
             }
 
             regInfo.setJylx(list.get(12));
@@ -115,10 +127,11 @@ public class ZfbJyjlParser {
     }
 
     private List<String> split(String line) {
-        String[] infos = line.split(",\t");
+        line = line.replace("o.,","o.，");
+        String[] infos = line.split(",");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {
-            hylist.add(hy.replace("\"","").trim());
+            hylist.add(hy.replace("\"","").replaceFirst("\t","").trim());
         }
         return hylist;
     }
