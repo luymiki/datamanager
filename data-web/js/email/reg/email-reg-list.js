@@ -34,13 +34,11 @@
                     {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
                     {field: 'xh',title: '序号',width:'50px'},
                     {field: 'id',title: 'ID',visible:false},
-                    {field: 'susp_name', title: '姓名', sortable: true, width: '100px'},
-                    {field: 'to', title: '接收人', sortable: true},
-                    {field: 'to_address', title: '接收地址', sortable: true},
-                    {field: 'from', title: '发送人'},
-                    {field: 'from_address', title: '发送地址'},
-                    {field: 'received_date', title: '接收时间'},
-                    {field: 'subject', title: '邮件主题'},
+                    {field: 'susp_name', title: '姓名', sortable: true},
+                    {field: 'type', title: '邮箱类型', sortable: true},
+                    {field: 'email', title: '邮箱地址', sortable: true},
+                    {field: 'sjhm', title: '手机号码'},
+                    {field: 'dhhm', title: '电话号码'},
                     {field: 'create_time', title: '创建时间'},
                     {field: 'opt', title: '操作', width: '130px'}
                 ],
@@ -53,42 +51,36 @@
                     if (_search) {
                         con = [
                             {
+                                "groupId":"1",
+                                "groupType":"should",
                                 "field": "susp_name",
                                 "values": [_search],
                                 "searchType": 2,
-                                "dataType": 1,
+                                "dataType": 2,
+                            },
+                            {
+                                "groupId":"2",
+                                "groupType":"should",
+                                "field": "email",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":2,
+                            },{
+                                "groupId":"3",
+                                "groupType":"should",
+                                "field": "type",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":2,
+                            },
+                            {
+                                "groupId":"4",
+                                "groupType":"should",
+                                "field": "txt_data",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
                             }
-                            // ,
-                            // {
-                            //     "field": "subject",
-                            //     "values": [_search],
-                            //     "searchType": 2,
-                            //     "dataType":1,
-                            // },
-                            // {
-                            //     "field": "to",
-                            //     "values": [_search],
-                            //     "searchType": 2,
-                            //     "dataType":1,
-                            // },
-                            // {
-                            //     "field": "from",
-                            //     "values": [_search],
-                            //     "searchType": 2,
-                            //     "dataType":1,
-                            // },
-                            // {
-                            //     "field": "from_address",
-                            //     "values": [_search],
-                            //     "searchType": 2,
-                            //     "dataType":1,
-                            // },
-                            // {
-                            //     "field": "to_address",
-                            //     "values": [_search],
-                            //     "searchType": 2,
-                            //     "dataType":1,
-                            // }
                         ];
                     }
                     //con[con.length] = isDelete;
@@ -97,23 +89,15 @@
                             "field": "susp_id",
                             "values": [suspid],
                             "searchType": 1,
-                            "dataType":1,
+                            "dataType":2,
                         };
-                        if("qq" === type){
-                            con[con.length]={
-                                "field": "to_address",
-                                "values": [code],
-                                "searchType": 2,
-                                "dataType":1,
-                            };
-                        }else if("email" === type){
-                            con[con.length]={
-                                "field": "to_address",
-                                "values": [code],
-                                "searchType": 1,
-                                "dataType":1,
-                            };
-                        }
+                        con[con.length]={
+                            "field": "email",
+                            "values": [code],
+                            "searchType": 1,
+                            "dataType":2,
+                        };
+
 
 
                     }
@@ -159,7 +143,7 @@
 
         var _event = function () {
             $("#addBtn").on('click', function () {
-                top.contabs.addMenuItem("/view/file/email/file-email.html", '导入邮件');
+                top.contabs.addMenuItem("/view/email/reg/email-reg.html", '导入邮件注册信息');
             });
 
             // /**
@@ -170,7 +154,7 @@
             // });
 
             $("#email-table").on('click', '.detail', function () {
-                top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id=" + $(this).attr("data-id"), '查看邮件');
+                top.contabs.addMenuItem("/view/email/reg/email-reg-detail.html?id=" + $(this).attr("data-id"), '查看邮件');
             });
             $("#email-table").on('click', '.delete', function () {
                 _delete($(this).attr("data-id"), $(this).attr("data-fileId"));

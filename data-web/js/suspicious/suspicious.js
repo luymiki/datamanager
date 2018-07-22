@@ -22,6 +22,7 @@
 
         var _initListTable = function(){
             $('#suspicious-table').myTable({
+                comment:$("#pizhu"),
                 columns:[
                     {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
                     {field: 'xh',title: '序号',width:'50px'},
@@ -128,12 +129,12 @@
                 });
                 $('#addModal').modal("show");
             });
-            /**
-             * 批注
-             */
-            $("#pizhu").on('click',function () {
-                $("#suspicious-table").myTable("comment");
-            });
+            // /**
+            //  * 批注
+            //  */
+            // $("#pizhu").on('click',function () {
+            //     $("#suspicious-table").myTable("comment");
+            // });
 
             $("#suspicious-table").on('click','.update',function () {
                 $(".import-btn").show();

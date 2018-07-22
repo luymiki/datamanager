@@ -1,12 +1,11 @@
-package com.anluy.admin.web;
+package com.anluy.admin.web.email;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.Email;
 import com.anluy.admin.service.AttachmentService;
-import com.anluy.admin.utils.EmailEmlParser;
+import com.anluy.admin.web.email.parser.EmailEmlParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
 import io.swagger.annotations.*;

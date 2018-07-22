@@ -1,4 +1,4 @@
-package com.anluy.admin.utils;
+package com.anluy.admin.web.email.parser;
 
 import java.io.*;
 import java.util.*;
@@ -13,12 +13,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.anluy.admin.entity.Email;
+import com.anluy.admin.utils.FileUtils;
 import com.sun.mail.util.BASE64DecoderStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.mail.util.MimeMessageUtils;
 import org.w3c.dom.*;
 import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 
 /**

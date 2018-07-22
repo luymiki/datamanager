@@ -67,8 +67,11 @@
 
             }
         });
-        var data = dataTable.data('bootstrap.table');
-        data["comment"] = comment;
+        if(options["comment"] && options["comment"] !== undefined){
+            var comment = options["comment"];
+            comment.on('click',commentFunction);
+        }
+
     };
 
     /**
@@ -159,7 +162,7 @@
     /**
      * 批注事件触发
      */
-    var comment = function () {
+    var commentFunction = function () {
         var $this = $(this);
         var rows = dataTable.bootstrapTable('getSelections');
         //console.log(rows)
@@ -222,10 +225,10 @@
                     _msg("批注内容为空")
                     return false;
                 }
-                console.log(indexName);
-                console.log(ids);
-                console.log(tags);
-                console.log(comment);
+                // console.log(indexName);
+                // console.log(ids);
+                // console.log(tags);
+                // console.log(comment);
                 var data = {"indexName":indexName,"tags":tags,"source":ids,"comment":comment};
                 $.ajax.proxy({
                     url:"/api/admin/comment/save",
