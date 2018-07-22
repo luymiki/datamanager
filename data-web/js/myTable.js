@@ -1,13 +1,13 @@
+
 /**
  * Created by hc.zeng on 2018/4/26.
  */
 (function($) {
 
     var dataTable;
-
+    var copyText;
     var _init = function( tb, options){
         dataTable = $(tb);
-        _initCopy();
         options["colResizable"] = options["colResizable"] === undefined?true : options["colResizable"];
         var height = options["height"] === undefined ? utils.getWidowHeight()-75 : (options["height"] === -1 ? undefined:options["height"]);
         var pagination = options["pagination"];
@@ -71,26 +71,45 @@
             var comment = options["comment"];
             comment.on('click',commentFunction);
         }
+        if(options["copyRow"] && options["copyRow"] !== undefined){
+            var copyRow = options["copyRow"];
+            _initCopyRow(copyRow);
+        }
+        if(options["exportXls"] && options["exportXls"] !== undefined){
+            var exportXls = options["exportXls"];
+            exportXls.click(_initExportXls);
+           // _initExportXls(exportXls);
+        }
 
     };
 
     /**
+     * 初始化导出需要的元素和插件
+     * @private
+     */
+    var _initExportXls = function () {
+        var exportXls = $(this);
+
+    }
+    /**
      * 初始化复制需要的元素和插件
      * @private
      */
-    var _initCopy = function () {
-        var copy = $("#copyText");
+    var _initCopyRow = function (copyRow) {
+        var id = new Date().getTime();
+        copyText = "copyText-"+id;
+        var copy = $("#"+copyText);
         if (copy.length === 0) {
-            copy = $("<textarea id='copyText' style='display: none;'></textarea>").appendTo($("body"));
+            copy = $("<textarea id='"+copyText+"' style='display: none;'></textarea>").appendTo($("body"));
         }
-        var clip = new ZeroClipboard($("#copy-row"));
+        copyRow.attr("data-clipboard-target",copyText);
+        var clip = new ZeroClipboard(copyRow);
         clip.on('ready', function(){
             this.on('aftercopy', function(event){
                 // alert( event.data['text/plain'])
                 toastrMsg.info("已经复制剪贴板");
             });
         });
-
     }
 
     /**
@@ -100,63 +119,64 @@
      * @private
      */
     var _copyRow = function (columns, meta) {
-        var rows = dataTable.bootstrapTable('getSelections');
-        console.log(rows)
-        var title = "";
-        var sb = "";
-        var incloude = {};
-        if (rows && rows.length > 0) {
-            for (var i = 0; i < columns.length; i++) {
-                var c = columns[i];
-                var ft = c["title"];
-                if (c["field"] === "checkbox" || c["field"] === 'opt') {
-                    continue;
-                }
-                title +=  ft+"\t";
-            }
-            for (var j = 0; j < rows.length; j++) {
-                sb += "\n";
-                var row = rows[j];
+        if(copyText){
+            var rows = dataTable.bootstrapTable('getSelections');
+            console.log(rows)
+            var title = "";
+            var sb = "";
+            var incloude = {};
+            if (rows && rows.length > 0) {
                 for (var i = 0; i < columns.length; i++) {
-                    var col = columns[i];
-                    var field = col["field"];
-                    incloude[field] = field;
-                    if (field.indexOf("_") === 0 || field === "checkbox" || field === 'opt') {
+                    var c = columns[i];
+                    var ft = c["title"];
+                    if (c["field"] === "checkbox" || c["field"] === 'opt') {
                         continue;
                     }
-                    var dd = row[field]||"";
-                    if(dd instanceof Array){
-                        dd =  dd.join(",");
-                    }
-                    sb += dd+"\t";
-                    // console.log(sb);
+                    title +=  ft+"\t";
                 }
+                for (var j = 0; j < rows.length; j++) {
+                    sb += "\n";
+                    var row = rows[j];
+                    for (var i = 0; i < columns.length; i++) {
+                        var col = columns[i];
+                        var field = col["field"];
+                        incloude[field] = field;
+                        if (field.indexOf("_") === 0 || field === "checkbox" || field === 'opt') {
+                            continue;
+                        }
+                        var dd = row[field]||"";
+                        if(dd instanceof Array){
+                            dd =  dd.join(",");
+                        }
+                        sb += dd+"\t";
+                        // console.log(sb);
+                    }
 
-                // for (var f in row) {
-                //     if (f.indexOf("_") === 0 || f.indexOf("_na") === f.length - 3 || f === "checkbox" || f === 'opt' || incloude[f]) {
-                //         continue;
-                //     }
-                //     var d = row[f]||"";
-                //     sb += "\t" + d;
-                //     if(j===0){
-                //         var m="";
-                //         for (var k = 0; k < meta.length  ; k++) {
-                //             if(meta[k]["fieldCode"] === f){
-                //                 m = meta[k]["fieldName"];
-                //                 console.log(f+"  "+m)
-                //                 break;
-                //             }
-                //         }
-                //         m = m ||"";
-                //         title += "\t" + m;
-                //     }
-                // }
+                    // for (var f in row) {
+                    //     if (f.indexOf("_") === 0 || f.indexOf("_na") === f.length - 3 || f === "checkbox" || f === 'opt' || incloude[f]) {
+                    //         continue;
+                    //     }
+                    //     var d = row[f]||"";
+                    //     sb += "\t" + d;
+                    //     if(j===0){
+                    //         var m="";
+                    //         for (var k = 0; k < meta.length  ; k++) {
+                    //             if(meta[k]["fieldCode"] === f){
+                    //                 m = meta[k]["fieldName"];
+                    //                 console.log(f+"  "+m)
+                    //                 break;
+                    //             }
+                    //         }
+                    //         m = m ||"";
+                    //         title += "\t" + m;
+                    //     }
+                    // }
+                }
             }
+
+            $("#"+copyText).html(title+sb);
         }
 
-        //console.log(row);
-        //console.log(sb);
-        $("#copyText").html(title+sb);
     }
 
     /**
