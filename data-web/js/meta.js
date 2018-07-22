@@ -41,7 +41,8 @@ var BOOTSTRAP_TABLE_JS = function(){
     document.write('<script src="/js/plugins/bootstrap-table/bootstrap-table.js"></script>');
     document.write('<script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>');
     document.write('<script src="/js/colResizable.js"></script>');
-    document.write('<script src="/js/plugins/zeroclipboard/ZeroClipboard.js"></script>');
+    document.write('<script src="/js/plugins/zeroclipboard-2.1.6/ZeroClipboard.js"></script>');
+    //document.write('<script src="/js/plugins/clipboard.js-2.0.1/clipboard.js"></script>');
     document.write('<script src="/js/myTable.js"></script>');
     //<!-- Wijmo -->
     // document.write('<script src="/js/plugins/wijmo/controls/wijmo.min.js" type="text/javascript"></script>');

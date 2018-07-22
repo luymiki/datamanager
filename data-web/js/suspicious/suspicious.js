@@ -22,6 +22,8 @@
 
         var _initListTable = function(){
             $('#suspicious-table').myTable({
+                copyRow:$("#copyRow"),
+                exportXls:$("#exportXls"),
                 comment:$("#pizhu"),
                 columns:[
                     {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
