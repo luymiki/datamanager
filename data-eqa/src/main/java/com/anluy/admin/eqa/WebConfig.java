@@ -40,6 +40,8 @@ public class WebConfig {
             public void addInterceptors(InterceptorRegistry registry) {
                 registry.addInterceptor(authorizedInterceptor).addPathPatterns("/**")
                         .excludePathPatterns(
+                                "/api/eqa/exportEXcel",
+                                "/api/eqa/exportEXcelFullText",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",
                                 "/swagger-resources/**",

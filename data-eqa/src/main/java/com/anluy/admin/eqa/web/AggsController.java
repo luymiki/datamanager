@@ -53,28 +53,12 @@ public class AggsController {
     @ApiResponses(value = {@ApiResponse(code = 500, message = "统计失败"),
             @ApiResponse(code = 501, message = "统计参数异常")})//错误码说明
     @RequestMapping(value = "/aggs",method = {RequestMethod.GET,RequestMethod.POST})
-    public Object aggs(HttpServletRequest request,String paramsStr,Integer pageNum,Integer pageSize) {
+    public Object aggs(HttpServletRequest request,Integer pageNum,Integer pageSize,String paramsStr) {
         try {
             if(StringUtils.isBlank(paramsStr)){
                 LOGGER.error("统计失败，查询条件为空");
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(500,"统计失败，统计条件为空"));
             }
-//            Map result = null;
-//            EhCacheCache cache = (EhCacheCache) cacheManager.getCache(CACHE_NAME);
-//            String key = MD5.encode(paramsStr);
-//            Object cacheObj = cache.get(key);
-//            if(cacheObj != null){
-//                result = (Map)((SimpleValueWrapper)cacheObj).get();
-//            }else {
-//                result = elasticsearchQueryAnalyzeEngine.aggs(paramsStr,pageNum,pageSize);
-//            }
-//            boolean chf = true;
-//            if(((Map)result.get("aggs")).isEmpty()){
-//                chf = false;
-//            }
-//            if(chf){
-//                cache.put(key, result);
-//            }
             Map result = elasticsearchQueryAnalyzeEngine.aggs(paramsStr,pageNum,pageSize);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {

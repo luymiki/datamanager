@@ -117,12 +117,12 @@
                 if (indexName === "all_index") {
                     $("#search-list").show();
                     $("#pagination_box").show();
-                    $("#data-table").hide();
+                    $("#show-data-list").hide();
                     $('#data-table').bootstrapTable("destroy");
                 } else {
                     $("#search-list").hide();
                     $("#pagination_box").hide();
-                    $("#data-table").show();
+                    $("#show-data-list").show();
                     showDataTable(indexName,val);
                 }
             });
@@ -175,7 +175,7 @@
             if (val !== "") {
                 $("#search-list").show();
                 $("#pagination_box").show();
-                $("#data-table").hide();
+                $("#show-data-list").hide();
                 $('#data-table').bootstrapTable("destroy");
 
                 var vals = val.split(" ");
@@ -297,10 +297,20 @@
                     columns[columns.length] = {field: col["fieldCode"], title: col["fieldName"], sortable: true};
                 }
             }
+            var sort;
             $('#data-table').myTable({
+                copyRow:$("#copyRow"),
+                exportXls:$("#exportXls"),
+                exportXlsFun:function () {
+                    var from = $('<form method="post" action="/api/eqa/exportEXcelFullText" target="_blank"></form>').appendTo('body');
+                    $('<input type="text" name="keyword">').val(keyword).appendTo(from);
+                    $('<input type="text" name="indexName">').val(indexName).appendTo(from);
+                    $('<input type="text" name="sort">').val(sort).appendTo(from);
+                    from.submit().remove();
+                },
                 columns: columns,
                 ajax : function (request) {
-                    var sort = "create_time desc";
+                    sort = "create_time desc";
                     if(request.data.sortName){
                         sort = request.data.sortName +" "+request.data.sortOrder;
                     }

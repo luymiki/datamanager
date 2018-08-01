@@ -71,62 +71,42 @@ public class ElasticsearchQueryAnalyzeEngine {
         return dsl;
     }
 
-    public Map query(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
-        JSONObject dsl = createDsl(pageNum, pageSize);
-        //query.put("match_all",new HashMap<>());
-        //JSONObject bool = new JSONObject();
-        //JSONArray must = new JSONArray();
-        //JSONObject should = new JSONObject();
-        //JSONObject must_not = new JSONObject();
-        //query.put("bool", bool);
-        //bool.put("must", must);
-        //bool.put("should", should);
-        //bool.put("must_not", must_not);
 
+    public Map query(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
+        DSLPOJO DSL = this.parseQueryDsl(paramsStr,pageNum,pageSize);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(DSL.toString());
+        }
+        Map result = elasticsearchRestClient.query(DSL.getDsl(), DSL.getIndexName());
+        result.put("dsl",DSL);
+        return this.setMeta(result, DSL.getIndexName());
+    }
+
+    /**
+     * 解析并生成dsl
+     * @param paramsStr
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public DSLPOJO parseQueryDsl(String paramsStr, Integer pageNum, Integer pageSize){
+        JSONObject dsl = createDsl(pageNum, pageSize);
         Configuration root = Configuration.from(paramsStr);
+        String indexName = root.getString("indexName");
         String sortVal = root.getString("sort");
         List sortList = this.sort(sortVal);
         if (sortList != null && !sortList.isEmpty()) {
             dsl.put("sort", sortList);
         }
-        String indexName = root.getString("indexName");
         List<Configuration> conditionList = root.getListConfiguration("conditions");
         if (conditionList != null && !conditionList.isEmpty()) {
             JSONObject query = queryDsl(conditionList);
             dsl.put("query", query);
         }
-        //bool.put("must", must);
-//        for (Configuration condition : conditionList) {
-//            Integer searchType = condition.getInt("searchType",SEARCH_TYPE_EXACTLY);
-//            Integer dataType = condition.getInt("dataType",DATA_TYPE_TEXT);
-//            String field = condition.getString("field");
-//            List<String> values = condition.getList("values", String.class);
-//            JSONObject itemBool = new JSONObject();
-//            JSONObject items = new JSONObject();
-//            itemBool.put("bool",items);
-//            must.add(itemBool);
-//            switch (searchType) {
-//                case SEARCH_TYPE_EXACTLY: {
-//                    items.put("should",this.condition(field,values,dataType,false));
-//                    break;
-//                }
-//                case SEARCH_TYPE_FUZZY: {
-//                    items.put("should",this.condition(field,values,dataType,true));
-//                    break;
-//                }
-//                case SEARCH_TYPE_NOT_INCLUD: {
-//                    items.put("must_not",this.condition(field,values,dataType,true));
-//                    break;
-//                }
-//            }
-//
-//        }
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(dsl.toJSONString());
         }
-        Map result = elasticsearchRestClient.query(dsl.toJSONString(), indexName);
-//        LOGGER.info("ES返回数据"+ JSON.toJSONString(result));
-        return this.setMeta(result, indexName);
+        return  new DSLPOJO(dsl.toJSONString(),indexName);
     }
 
     private JSONObject queryDsl(List<Configuration> conditionList) {
@@ -166,34 +146,6 @@ public class ElasticsearchQueryAnalyzeEngine {
         if (!notList.isEmpty()) {
             must.add(this.not(notList));
         }
-//
-//
-//
-//
-//        for (Configuration condition : conditionList) {
-//            Integer searchType = condition.getInt("searchType", SEARCH_TYPE_EXACTLY);
-//            Integer dataType = condition.getInt("dataType", DATA_TYPE_TEXT);
-//            String field = condition.getString("field");
-//            List<String> values = condition.getList("values", String.class);
-//            JSONObject itemBool = new JSONObject();
-//            JSONObject items = new JSONObject();
-//            itemBool.put("bool", items);
-//            must.add(itemBool);
-//            switch (searchType) {
-//                case SEARCH_TYPE_EXACTLY: {
-//                    items.put("should", this.condition(field, values, dataType, false));
-//                    break;
-//                }
-//                case SEARCH_TYPE_FUZZY: {
-//                    items.put("should", this.condition(field, values, dataType, true));
-//                    break;
-//                }
-//                case SEARCH_TYPE_NOT_INCLUD: {
-//                    items.put("must_not", this.condition(field, values, dataType, true));
-//                    break;
-//                }
-//            }
-//        }
         bool.put("must", must);
         return query;
     }
@@ -207,12 +159,6 @@ public class ElasticsearchQueryAnalyzeEngine {
 
         groupMap.forEach((g, conditionList) -> {
             should.add(must(conditionList));
-//            JSONObject subquery = new JSONObject();
-//            JSONObject subbool = new JSONObject();
-//            subquery.put("bool", subbool);
-//            JSONArray subshould = new JSONArray();
-//            subbool.put("should",subshould);
-//            this.dsl(conditionList,subshould);
         });
 
         return query;
@@ -376,8 +322,33 @@ public class ElasticsearchQueryAnalyzeEngine {
         return conditions;
     }
 
-
+    /**
+     * 聚合统计
+     * @param paramsStr
+     * @param pageNum
+     * @param pageSize
+     * @return
+     * @throws IOException
+     */
     public Map aggs(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
+        DSLPOJO DSL = this.parseAggsDsl(paramsStr,pageNum,pageSize);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(DSL.toString());
+        }
+        Map result = elasticsearchRestClient.aggs(DSL.getDsl(), DSL.getIndexName());
+        result.put("dsl",DSL);
+        return result;
+    }
+
+    /**
+     * 解析生成统计的dsl
+     * @param paramsStr
+     * @param pageNum
+     * @param pageSize
+     * @return
+     * @throws IOException
+     */
+    public DSLPOJO parseAggsDsl(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
         JSONObject dsl = createDsl(pageNum, 0);
         Configuration root = Configuration.from(paramsStr);
         String indexName = root.getString("indexName");
@@ -392,13 +363,8 @@ public class ElasticsearchQueryAnalyzeEngine {
         }
         JSONObject aggs = this.aggsDsl(aggsList);
         dsl.put("aggregations", aggs);
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(dsl.toJSONString());
-        }
-        return elasticsearchRestClient.aggs(dsl.toJSONString(), indexName);
+        return new DSLPOJO(dsl.toJSONString(),indexName);
     }
-
     /**
      * @param aggsList
      * @return
@@ -493,24 +459,6 @@ public class ElasticsearchQueryAnalyzeEngine {
         }
         return group;
     }
-//    private Map aggs(String aggsGroupName, String field, int dataType) {
-//        Map<String, Object> item = new HashMap<>();
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("field", field);
-//        switch (dataType) {
-//            case DATA_TYPE_TEXT:
-//            case DATA_TYPE_DIC: {
-//                item.put("terms", map);
-//                break;
-//            }
-//            case DATA_TYPE_TAG: {
-//                item.put("terms", map);
-//                break;
-//            }
-//        }
-//        map.put("size", 1000);
-//        return item;
-//    }
 
     private List sort(String sortVal) {
         if (StringUtils.isNotBlank(sortVal)) {
@@ -534,15 +482,12 @@ public class ElasticsearchQueryAnalyzeEngine {
     }
 
     /**
-     * 全文检索
-     *
-     * @param keyword
+     * 解析并生成dsl
      * @param pageNum
      * @param pageSize
      * @return
-     * @throws IOException
      */
-    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort) throws IOException {
+    public DSLPOJO parseFulltextDsl(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort){
         JSONObject dsl = createDsl(pageNum, pageSize);
         JSONObject query = new JSONObject();
         JSONObject bool = new JSONObject();
@@ -576,8 +521,23 @@ public class ElasticsearchQueryAnalyzeEngine {
         if (sortList != null && !sortList.isEmpty()) {
             dsl.put("sort", sortList);
         }
-        LOGGER.info(dsl.toJSONString());
-        Map result = elasticsearchRestClient.query(dsl.toJSONString(), indexName);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(dsl.toJSONString());
+        }
+        return  new DSLPOJO(dsl.toJSONString(),indexName);
+    }
+    /**
+     * 全文检索
+     *
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     * @throws IOException
+     */
+    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort) throws IOException {
+        DSLPOJO dslpojo = this.parseFulltextDsl(keyword,pageNum,pageSize,indexName,sort);
+        Map result = elasticsearchRestClient.query(dslpojo.getDsl(), indexName);
         if(result.get("aggs")!=null){
             Configuration aggsConfig = Configuration.from(result.get("aggs"));
             result.put("indexs",aggsConfig.get("terms_index.buckets"));
@@ -610,7 +570,13 @@ public class ElasticsearchQueryAnalyzeEngine {
         return result;
     }
 
-    private Map setMeta(Map result, String indexName) {
+    /**
+     * 给结果集设置元数据
+     * @param result
+     * @param indexName
+     * @return
+     */
+    public Map setMeta(Map result, String indexName) {
         if (StringUtils.isNotBlank(indexName)) {
             EqaIndex list = eqaMetaMap.getEqaMetaList(indexName);
             if (list != null) {
@@ -623,6 +589,49 @@ public class ElasticsearchQueryAnalyzeEngine {
             }
         }
         return result;
+    }
+
+    /**
+     * 对象
+     */
+    public class DSLPOJO{
+        private String dsl;
+        private String indexName;
+
+        public DSLPOJO(String dsl, String indexName) {
+            this.dsl = dsl;
+            this.indexName = indexName;
+        }
+
+        public String getDsl() {
+            return dsl;
+        }
+
+        public void setDsl(String dsl) {
+            this.dsl = dsl;
+        }
+
+        public String getIndexName() {
+            return indexName;
+        }
+
+        public void setIndexName(String indexName) {
+            this.indexName = indexName;
+        }
+
+        @Override
+        public String toString() {
+            return JSON.toJSONString(this);
+        }
+    }
+
+    public ElasticsearchRestClient getElasticsearchRestClient() {
+        return elasticsearchRestClient;
+    }
+
+
+    public EqaMetaMap getEqaMetaMap() {
+        return eqaMetaMap;
     }
 
 }

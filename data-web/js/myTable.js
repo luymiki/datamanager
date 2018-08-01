@@ -75,22 +75,14 @@
             var copyRow = options["copyRow"];
             _initCopyRow(copyRow);
         }
-        if(options["exportXls"] && options["exportXls"] !== undefined){
+        if(options["exportXls"] && options["exportXls"] !== undefined && options["exportXlsFun"] && options["exportXlsFun"] !== undefined){
             var exportXls = options["exportXls"];
-            exportXls.click(_initExportXls);
-           // _initExportXls(exportXls);
+            exportXls.click(options["exportXlsFun"]);
         }
 
     };
 
-    /**
-     * 初始化导出需要的元素和插件
-     * @private
-     */
-    var _initExportXls = function () {
-        var exportXls = $(this);
 
-    }
     /**
      * 初始化复制需要的元素和插件
      * @private

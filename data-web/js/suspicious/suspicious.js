@@ -24,6 +24,13 @@
             $('#suspicious-table').myTable({
                 copyRow:$("#copyRow"),
                 exportXls:$("#exportXls"),
+                exportXlsFun:function () {
+                    params["conditions"]=[kyr];
+                    console.log(JSON.stringify(params));
+                    var from = $('<form method="post" action="/api/eqa/exportEXcel" target="_blank"></form>').appendTo('body');
+                    $('<input type="text" name="paramsStr">').val(JSON.stringify(params)).appendTo(from);
+                    from.submit().remove();
+                },
                 comment:$("#pizhu"),
                 columns:[
                     {field: 'checkbox',title: '选择',width:'50px',checkbox:true},
