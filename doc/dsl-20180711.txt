@@ -1,0 +1,168 @@
+kdydxx/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "flid": {
+      "type": "keyword"
+    },
+    "susp_name": {
+      "type": "keyword"
+    },
+	"susp_id": {
+      "type": "keyword"
+    }
+  }
+}
+
+kdydfl/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+   "id": {
+            "type": "keyword"
+    },
+    "create_time": {
+      "type": "date",
+      "format": "yyyy-MM-dd HH:mm:ss"
+    },
+    "jls": {
+      "type": "long"
+    },
+    "file_id": {
+      "type": "keyword"
+    },
+    "susp_id": {
+      "type": "keyword"
+    },
+    "susp_name": {
+      "type": "keyword"
+    },
+    "tags": {
+      "type": "keyword"
+    }
+  }
+}
+
+
+
+email_reg/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "id": {
+       "type": "keyword"
+    },
+    "create_time": {
+      "type": "date",
+      "format": "yyyy-MM-dd HH:mm:ss"
+    },
+    "email": {
+      "type": "keyword"
+    },
+	"sjhm": {
+      "type": "keyword"
+    },
+	"dhhm": {
+      "type": "keyword"
+    },
+	"type": {
+      "type": "keyword"
+    },
+	"txt_data": {
+      "type": "text"
+    },
+    "file_id": {
+      "type": "keyword"
+    },
+    "susp_id": {
+      "type": "keyword"
+    },
+    "susp_name": {
+      "type": "keyword"
+    },
+    "tags": {
+      "type": "keyword"
+    }
+  }
+}
+
+email_ip/doc/_mapping
+{
+  "dynamic": "strict",
+  "properties": {
+    "id": {
+       "type": "keyword"
+    },
+    "create_time": {
+      "type": "date",
+      "format": "yyyy-MM-dd HH:mm:ss"
+    },
+    "email": {
+      "type": "keyword"
+    },
+	"reg_id": {
+      "type": "keyword"
+    },
+	"type": {
+      "type": "keyword"
+    },
+	"time": {
+      "type": "date",
+      "format": "yyyy-MM-dd HH:mm:ss"
+    },
+	"ip": {
+      "type": "keyword"
+    },
+    "file_id": {
+      "type": "keyword"
+    },
+    "susp_id": {
+      "type": "keyword"
+    },
+    "susp_name": {
+      "type": "keyword"
+    },
+    "tags": {
+      "type": "keyword"
+    }
+  }
+}
+
+########################
+INSERT INTO `eqa_meta` VALUES (467, 'kdydxx', '分类id', 'flid', 2, 1, 7);
+INSERT INTO `eqa_meta` VALUES (468, 'kdydxx', '嫌疑人id', 'susp_id', 2, 1, 8);
+INSERT INTO `eqa_meta` VALUES (469, 'kdydxx', '嫌疑人姓名', 'susp_name', 2, 1, 9);
+INSERT INTO `eqa_meta` VALUES (470, 'kdydfl', '文件id', 'file_id', 2, 1, 1);
+INSERT INTO `eqa_meta` VALUES (471, 'kdydfl', '创建时间', 'create_time', 4, 1, 2);
+INSERT INTO `eqa_meta` VALUES (472, 'kdydfl', '标签', 'tags', 2, 1, 3);
+INSERT INTO `eqa_meta` VALUES (473, 'kdydfl', '主键', 'id', 2, 0, 4);
+INSERT INTO `eqa_meta` VALUES (474, 'kdydfl', '嫌疑人id', 'susp_id', 2, 1, 5);
+INSERT INTO `eqa_meta` VALUES (475, 'kdydfl', '嫌疑人姓名', 'susp_name', 2, 1, 6);
+INSERT INTO `eqa_meta` VALUES (476, 'kdydfl', '记录数', 'jls', 2, 1, 7);
+INSERT INTO `eqa_meta` VALUES (477, 'email_reg', '文件id', 'file_id', 2, 1, 1);
+INSERT INTO `eqa_meta` VALUES (478, 'email_reg', '创建时间', 'create_time', 4, 1, 2);
+INSERT INTO `eqa_meta` VALUES (479, 'email_reg', '标签', 'tags', 2, 1, 3);
+INSERT INTO `eqa_meta` VALUES (480, 'email_reg', '主键', 'id', 2, 0, 4);
+INSERT INTO `eqa_meta` VALUES (481, 'email_reg', '嫌疑人id', 'susp_id', 2, 1, 5);
+INSERT INTO `eqa_meta` VALUES (482, 'email_reg', '嫌疑人姓名', 'susp_name', 2, 1, 6);
+INSERT INTO `eqa_meta` VALUES (483, 'email_reg', '记录数', 'jls', 2, 1, 7);
+INSERT INTO `eqa_meta` VALUES (484, 'email_reg', '邮箱地址', 'email', 2, 1, 8);
+INSERT INTO `eqa_meta` VALUES (485, 'email_reg', '手机号码', 'sjhm', 2, 1, 9);
+INSERT INTO `eqa_meta` VALUES (486, 'email_reg', '电话号码', 'dhhm', 2, 1, 10);
+INSERT INTO `eqa_meta` VALUES (487, 'email_reg', '邮箱类型', 'type', 2, 1, 11);
+INSERT INTO `eqa_meta` VALUES (488, 'email_reg', '数据原文', 'txt_data', 1, 1, 12);
+INSERT INTO `eqa_meta` VALUES (489, 'email_ip', '文件id', 'file_id', 2, 1, 1);
+INSERT INTO `eqa_meta` VALUES (490, 'email_ip', '创建时间', 'create_time', 4, 1, 2);
+INSERT INTO `eqa_meta` VALUES (491, 'email_ip', '标签', 'tags', 2, 1, 3);
+INSERT INTO `eqa_meta` VALUES (492, 'email_ip', '主键', 'id', 2, 0, 4);
+INSERT INTO `eqa_meta` VALUES (493, 'email_ip', '嫌疑人id', 'susp_id', 2, 1, 5);
+INSERT INTO `eqa_meta` VALUES (494, 'email_ip', '嫌疑人姓名', 'susp_name', 2, 1, 6);
+INSERT INTO `eqa_meta` VALUES (495, 'email_ip', '邮箱地址', 'email', 2, 1, 7);
+INSERT INTO `eqa_meta` VALUES (496, 'email_ip', '注册信息id', 'reg_id', 2, 1, 8);
+INSERT INTO `eqa_meta` VALUES (497, 'email_ip', '邮箱类型', 'type', 2, 1, 9);
+INSERT INTO `eqa_meta` VALUES (498, 'email_ip', '登录ip', 'ip', 2, 1, 10);
+INSERT INTO `eqa_meta` VALUES (499, 'email_ip', '登录时间', 'time', 3, 1, 11);
+
+INSERT INTO `eqa_index` VALUES ('kdydfl', '快递运单分类', 27);
+INSERT INTO `eqa_index` VALUES ('email_ip', '邮箱登录ip信息', 29);
+INSERT INTO `eqa_index` VALUES ('email_reg', '邮箱注册信息', 28);
