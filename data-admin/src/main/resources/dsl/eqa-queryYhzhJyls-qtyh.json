@@ -8,22 +8,6 @@
       ],
       "searchType": 1,
       "dataType":2
-    },
-    {
-      "field": "kh",
-      "values": [
-        "%s"
-      ],
-      "searchType": 1,
-      "dataType":2
-    },
-    {
-      "field": "zh",
-      "values": [
-        "%s"
-      ],
-      "searchType": 1,
-      "dataType":2
     }
   ],
   "aggs": [],

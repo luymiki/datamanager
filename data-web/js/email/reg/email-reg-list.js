@@ -180,7 +180,7 @@
                     if (f) {
 
                         $.ajax.proxy({
-                            url: "/api/admin/email/delete",
+                            url: "/api/admin/email_reg/delete",
                             type: "post",
                             dataType: "json",
                             data: {id: id, fileId: fileId},

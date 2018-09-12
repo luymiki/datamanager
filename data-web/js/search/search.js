@@ -18,6 +18,18 @@
             $("#search-list ").on("click", ".search-result", function () {
                 var index = $(this).attr("data-index");
                 switch (index) {
+                    case "email_reg": {
+                        top.contabs.addMenuItem("/view/email/reg/email-reg-detail.html?id=" + $(this).attr("data-id"), '查看邮件注册信息');
+                        break;
+                    }
+                    case "email_ip": {
+                        top.contabs.addMenuItem("/view/email/reg/email-reg-detail.html?id=" + $(this).attr("data-infoid"), '查看邮件登录IP信息');
+                        break;
+                    }
+                    case "kdydxx": {
+                        top.contabs.addMenuItem("/view/kdyd/kdyd-xx-list.html?id=" + $(this).attr("data-infoid"), '查看快递运单信息');
+                        break;
+                    }
                     case "yhzh_khxx": {
                         top.contabs.addMenuItem("/view/yhzh/yhzh-reg-detail.html?id=" + $(this).attr("data-id"), '查看银行开户信息');
                         break;
@@ -217,7 +229,7 @@
                                         str = str.replace(vals[kk], "<code>" + vals[kk] + "</code>");
                                     }
                                     str.replace(",", ", ");
-                                    var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="' + f["id"] + '" data-index="' + f["_index"] + '"  data-infoid="' + (f["info_id"] || f["cft_id"] || f["hd_id"]) + '"></div>').appendTo($searchList);
+                                    var $sr = $('<div class="search-result" style="cursor: pointer;" data-id="' + f["id"] + '" data-index="' + f["_index"] + '"  data-infoid="' + (f["info_id"] || f["cft_id"] || f["hd_id"]|| f["flid"]|| f["reg_id"]) + '"></div>').appendTo($searchList);
                                     $('<div class="search-info" ></div>').appendTo($sr).html(str);
                                     $('<div class="hr-line-dashed"></div>').appendTo($searchList);
 

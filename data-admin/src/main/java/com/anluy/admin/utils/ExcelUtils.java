@@ -19,35 +19,62 @@ import java.util.*;
 public class ExcelUtils {
 
     public static List<List<String>> read(File file) {
+        return read(file,0);
+    }
+    public static List<List<String>> read(File file,String sheetName) {
         Sheet sheet = null;
-        Row row = null;
-        List<List<String>> dataList = new ArrayList<>();//用来存放表中数据
-        String cellData = null;
+        Workbook wb = readExcel(file);
+        int sheets = wb.getNumberOfSheets();
+        int sheetIndex = 0;
+        for (int i = 0; i < sheets; i++) {
+            //获取第一个sheet
+            sheet = wb.getSheetAt(i);
+            String name = sheet.getSheetName();
+            if(name.equals(sheetName)){
+                sheetIndex = i;
+                break;
+            }
+        }
+        if (wb != null) {
+            sheet = wb.getSheetAt(sheetIndex);
+            return read(sheet);
+        }
+        return new ArrayList<>();
+    }
+
+    public static List<List<String>> read(File file,int sheetIndex) {
         Workbook wb = readExcel(file);
         if (wb != null) {
             //获取第一个sheet
-            sheet = wb.getSheetAt(0);
-            //获取最大行数
-            int rownum = sheet.getPhysicalNumberOfRows();
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+            return read(sheet);
+        }
+        return new ArrayList<>();
+    }
 
-            for (int i = 0; i < rownum; i++) {
-                List<String> list = new ArrayList<>();
-                row = sheet.getRow(i);
-                if (row != null) {
-                    //System.out.println(i+":"+row.getPhysicalNumberOfCells());
-                    for (int j = 0; j <  row.getPhysicalNumberOfCells(); j++) {
-                        cellData = (String) getCellFormatValue(row.getCell(j));
-                        if("-".equals(cellData)){
-                            list.add(null);
-                        }else {
-                            list.add(cellData);
-                        }
+    private static List<List<String>> read(Sheet sheet){
+        List<List<String>> dataList = new ArrayList<>();//用来存放表中数据
+        //获取最大行数
+        int rownum = sheet.getPhysicalNumberOfRows();
+        Row row = null;
+        String cellData = null;
+        for (int i = 0; i < rownum; i++) {
+            List<String> list = new ArrayList<>();
+            row = sheet.getRow(i);
+            if (row != null) {
+                //System.out.println(i+":"+row.getPhysicalNumberOfCells());
+                for (int j = 0; j <  row.getPhysicalNumberOfCells(); j++) {
+                    cellData = (String) getCellFormatValue(row.getCell(j));
+                    if("-".equals(cellData)){
+                        list.add(null);
+                    }else {
+                        list.add(cellData);
                     }
-                } else {
-                    continue;
                 }
-                dataList.add(list);
+            } else {
+                continue;
             }
+            dataList.add(list);
         }
         return dataList;
     }

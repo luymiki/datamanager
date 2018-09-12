@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,10 +66,32 @@ public class TjfxYhzhServiceImpl extends BaseServiceImpl implements TjfxYhzhServ
     }
 
     private String getDsl(String ssyh,String kh,String zh){
-        if("农业银行".equals(ssyh)){
-            return String.format(queryNyyhDsl, kh);
+        JSONObject jsonObject = (JSONObject) JSON.parse(String.format(queryQtyhDsl, ssyh));
+        if(StringUtils.isNotBlank(kh)){
+            Map map = new HashMap();
+            map.put("groupId","kh");
+            map.put("groupType","should");
+            map.put("field","kh");
+            map.put("values",new String[]{kh});
+            map.put("searchType","1");
+            map.put("dataType","2");
+            jsonObject.getJSONArray("conditions").add(map);
         }
-        return String.format(queryQtyhDsl, ssyh,kh,zh);
+        if(StringUtils.isNotBlank(zh)){
+            Map map = new HashMap();
+            map.put("groupId","zh");
+            map.put("groupType","should");
+            map.put("field","zh");
+            map.put("values",new String[]{zh});
+            map.put("searchType","1");
+            map.put("dataType","2");
+            jsonObject.getJSONArray("conditions").add(map);
+        }
+        return jsonObject.toJSONString();
+//        if("农业银行".equals(ssyh)){
+//            return String.format(queryNyyhDsl, kh);
+//        }
+//        return String.format(queryQtyhDsl, ssyh,kh,zh);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.CftRegInfo;
 import com.anluy.admin.entity.CftTrades;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.cft.parser.CftRegParser;
 import com.anluy.admin.web.cft.parser.CftTradesParser;
@@ -43,7 +44,8 @@ public class CftTradesParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 财付通流水文件保存
      *
@@ -99,6 +101,12 @@ public class CftTradesParserController {
             });
 
             elasticsearchRestClient.batchSave(saveMapList,"cfttrades");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"zh");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"fsf");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"fsf");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"jsf");
+            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"jsf");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

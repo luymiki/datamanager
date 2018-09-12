@@ -5,6 +5,7 @@ import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.YhzhKhxxInfo;
 import com.anluy.admin.entity.ZfbJyjlInfo;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.yhzh.parser.YhzhKhxxParser;
 import com.anluy.admin.web.zfb.parser.ZfbJyjlParser;
@@ -44,7 +45,8 @@ public class YhzhKhxxInfoParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
 
     /**
      * 银行账户交易记录文件保存
@@ -109,6 +111,9 @@ public class YhzhKhxxInfoParserController {
             });
 
             elasticsearchRestClient.batchSave(saveList,"yhzh_khxx");
+            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"kh");
+            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"zh");
+            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"lxsj");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(saveList).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

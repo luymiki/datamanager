@@ -7,6 +7,7 @@ import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.Email;
 import com.anluy.admin.entity.EmailReg;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.email.parser.EmailEmlParser;
 import com.anluy.admin.web.email.parser.EmailRegParser;
@@ -46,6 +47,8 @@ public class EmailRegParserController {
     @Resource
     private FileManagerConfig fileManagerConfig;
 
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 解析
      *
@@ -140,9 +143,10 @@ public class EmailRegParserController {
                     }
                 });
 
-
                 elasticsearchRestClient.batchSave(ipsaveList, "email_ip");
                 elasticsearchRestClient.batchSave(regsaveList, "email_reg");
+
+                analyzeCodeAndPushMessage.analyze(regsaveList,AnalyzeCodeAndPushMessage.ANALYZE_TYPE_EMAIL,"email");
                 return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setPath(request.getRequestURI()));
             }else {
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(404,"没有解析到数据").setPath(request.getRequestURI()));
@@ -179,7 +183,7 @@ public class EmailRegParserController {
                 attachmentService.delete(fileId);
             }
 
-            elasticsearchRestClient.remove(id, "email");
+            elasticsearchRestClient.remove(id, "email_reg");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("删除失败:" + exception.getMessage(), exception);

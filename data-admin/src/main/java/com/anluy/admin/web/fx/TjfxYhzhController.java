@@ -52,7 +52,7 @@ public class TjfxYhzhController {
             if(StringUtils.isBlank(ssyh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"所属银行为空"));
             }
-            if(StringUtils.isBlank(kh) ){
+            if(StringUtils.isBlank(kh) && StringUtils.isBlank(zh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"银行卡号为空"));
             }
             String token = request.getHeader(AuthorizationController.AUTHORIZATION);
@@ -79,7 +79,7 @@ public class TjfxYhzhController {
             if(StringUtils.isBlank(ssyh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"所属银行为空"));
             }
-            if(StringUtils.isBlank(kh) ){
+            if(StringUtils.isBlank(kh)  && StringUtils.isBlank(zh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"银行卡号为空"));
             }
 
@@ -109,7 +109,7 @@ public class TjfxYhzhController {
             if(StringUtils.isBlank(ssyh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"所属银行为空"));
             }
-            if(StringUtils.isBlank(kh) ){
+            if(StringUtils.isBlank(kh)  && StringUtils.isBlank(zh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"银行卡号为空"));
             }
 
@@ -138,7 +138,7 @@ public class TjfxYhzhController {
             if(StringUtils.isBlank(ssyh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"所属银行为空"));
             }
-            if(StringUtils.isBlank(kh) ){
+            if(StringUtils.isBlank(kh)  && StringUtils.isBlank(zh) ){
                 return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"银行卡号为空"));
             }
 

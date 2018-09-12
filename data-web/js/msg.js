@@ -3,7 +3,8 @@
  */
 var toastrMsg = (function(){
     'use strict';
-    var _msg = function(){
+    var _msg = function(timeOut){
+        var tt = timeOut || 7000;
         top.toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -12,7 +13,7 @@ var toastrMsg = (function(){
             "onclick": null,
             "showDuration": "400",
             "hideDuration": "1000",
-            "timeOut": "7000",
+            "timeOut": tt,
             "extendedTimeOut": "1000",
             "showEasing": "swing",
             "hideEasing": "linear",
@@ -24,10 +25,11 @@ var toastrMsg = (function(){
         _msg();
         top.toastr.success(title, msg);
     }
-    var _info =function (msg,title){
-        _msg();
+    var _info =function (msg,title,timeOut){
+        _msg(timeOut);
         top.toastr.info(title, msg);
     }
+
     var _error =function (msg,title){
         _msg();
         top.toastr.error(title, msg);

@@ -3,6 +3,7 @@ package com.anluy.admin.web.qq;
 import com.alibaba.fastjson.JSON;
 import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.*;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.qq.parser.QQLoginIpParser;
 import com.anluy.admin.web.qq.parser.QQRegParser;
@@ -41,6 +42,8 @@ public class QQLoginIpController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 解析
      *
@@ -163,12 +166,14 @@ public class QQLoginIpController {
 
                 if(subList.size()==10000){
                     elasticsearchRestClient.batchSave(subList,"qqloginip_list");
+                    analyzeCodeAndPushMessage.analyze(subList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_IP,"ip");
                     subList.clear();
                     idList.clear();
                 }
             }
             if(subList.size()>0){
                 elasticsearchRestClient.batchSave(subList,"qqloginip_list");
+                analyzeCodeAndPushMessage.analyze(subList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_IP,"ip");
                 subList.clear();
                 idList.clear();
             }

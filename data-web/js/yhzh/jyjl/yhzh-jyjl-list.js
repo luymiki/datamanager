@@ -219,7 +219,7 @@
 
         var _event = function () {
             $("#data-table").on('click','.detail',function () {
-                top.contabs.addMenuItem("/view/zfb/jyjl/zfb-jyjl-detail.html?id="+$(this).attr("data-id"),'查看信息');
+                top.contabs.addMenuItem("/view/yhzh/jyjl/yhzh-jyjl-detail.html?id="+$(this).attr("data-id"),'查看信息');
             });
 
             $("#search-btn").on('click',function () {

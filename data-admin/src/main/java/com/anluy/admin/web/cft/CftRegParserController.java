@@ -3,6 +3,7 @@ package com.anluy.admin.web.cft;
 import com.alibaba.fastjson.JSON;
 import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.*;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.cft.parser.CftRegParser;
 import com.anluy.admin.web.weixin.parser.WeiXinRegParser;
@@ -42,7 +43,8 @@ public class CftRegParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 解析
      *
@@ -122,6 +124,11 @@ public class CftRegParserController {
                 }
             });
             elasticsearchRestClient.save(jsonMap,regInfo.getId(),"cftreginfo");
+            List<Map> rlist = new ArrayList<>();
+            rlist.add(jsonMap);
+            analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"zh");
+            analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
+            analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"dh");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

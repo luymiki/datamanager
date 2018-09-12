@@ -128,6 +128,7 @@ public class ZfbJyjlParser {
 
     private List<String> split(String line) {
         line = line.replace("o.,","o.，");
+        line = line.replace(",\",","，\",");
         String[] infos = line.split(",");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {

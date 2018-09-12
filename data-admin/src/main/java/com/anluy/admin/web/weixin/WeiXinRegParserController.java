@@ -3,6 +3,7 @@ package com.anluy.admin.web.weixin;
 import com.alibaba.fastjson.JSON;
 import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.*;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.qq.parser.QQRegParser;
 import com.anluy.admin.web.weixin.parser.WeiXinRegParser;
@@ -42,7 +43,8 @@ public class WeiXinRegParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 解析
      *
@@ -148,6 +150,8 @@ public class WeiXinRegParserController {
                     wxlxrMapList.add(m);
                 });
                 elasticsearchRestClient.batchSave(wxlxrMapList,"wxlxr");
+                analyzeCodeAndPushMessage.analyze(wxlxrMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"weixin");
+                analyzeCodeAndPushMessage.analyze(wxlxrMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"qq");
             }
             if(wxqunList!=null && !wxqunList.isEmpty()){
                 List<Map> wxqunMapList = new ArrayList<>();
@@ -157,6 +161,7 @@ public class WeiXinRegParserController {
                     wxqunMapList.add(m);
                 });
                 elasticsearchRestClient.batchSave(wxqunMapList,"wxqun");
+//                analyzeCodeAndPushMessage.analyze(wxqunMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
             }
             if(wxloginipList!=null && !wxloginipList.isEmpty()){
                 List<Map> wxloginipMapList = new ArrayList<>();
@@ -166,9 +171,15 @@ public class WeiXinRegParserController {
                     wxloginipMapList.add(m);
                 });
                 elasticsearchRestClient.batchSave(wxloginipMapList,"wxloginip");
+                analyzeCodeAndPushMessage.analyze(wxloginipMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_IP,"ip");
             }
 
             elasticsearchRestClient.save(jsonMap,regInfo.getId(),"wxreginfo");
+            analyzeCodeAndPushMessage.analyze(jsonMap, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"weixin");
+            analyzeCodeAndPushMessage.analyze(jsonMap, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"qq");
+            analyzeCodeAndPushMessage.analyze(jsonMap, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_EMAIL,"email");
+            analyzeCodeAndPushMessage.analyze(jsonMap, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"dh");
+
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

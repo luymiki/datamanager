@@ -260,8 +260,8 @@ public interface TjfxJylsService extends TjfxService {
         }
 
         JSONObject cond1 = new JSONObject();
-        cond1.put("groupId", "group-field-1527089623689");
-        cond1.put("groupType", "should");
+//        cond1.put("groupId", "group-field-1527089623689");
+//        cond1.put("groupType", "should");
         cond1.put("field", "ds_id");
         cond1.put("values", null);
         cond1.put("searchType", 1);

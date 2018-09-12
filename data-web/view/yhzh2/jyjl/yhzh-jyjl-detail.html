@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>银行交易记录信息 | 数据管理系统</title>
+
+    <meta name="keywords" content="银行交易记录信息 | 数据管理系统">
+    <meta name="description" content="银行交易记录信息 | 数据管理系统">
+
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" id="eml-upload">
+                <div class="ibox-content" id="eml-content">
+
+                    <script type="text/html" id="eml-template">
+                        <div class="panel-body">
+                            <div class="mail-tools tooltip-demo m-t-md">
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <h5><span class="font-noraml">所属银行： </span>{{file.ssyh}}</h5>
+                                        <h5><span class="font-noraml">查询卡号： </span>{{file.kh}}</h5>
+                                        <h5><span class="font-noraml">查询账号： </span>{{file.zh}}</h5>
+                                    </div>
+                                </div>
+
+
+                                <div class="feed-activity-list">
+                                    <div class="feed-element">
+                                        <h5><span class="font-noraml">查询反馈结果： </span>{{file.cxfkjg}}</h5>
+                                        <h5><span class="font-noraml">查询反馈结果原因： </span>{{file.cxfkjgyy}}</h5>
+                                        <h5><span class="font-noraml">查询卡号： </span>{{file.kh}}</h5>
+                                        <h5><span class="font-noraml">查询账号： </span>{{file.zh}}</h5>
+                                        <h5><span class="font-noraml">交易类型： </span>{{file.jylx}}</h5>
+                                        <h5><span class="font-noraml">借贷标志： </span>{{file.jdlx}}</h5>
+                                        <h5><span class="font-noraml">币种： </span>{{file.jybz}}</h5>
+                                        <h5><span class="font-noraml">交易金额： </span>{{file.jyje}}</h5>
+                                        <h5><span class="font-noraml">交易余额： </span>{{file.jyye}}</h5>
+                                        <h5><span class="font-noraml">交易时间： </span>{{file.jysj}}</h5>
+                                        <h5><span class="font-noraml">交易流水号： </span>{{file.jylsh}}</h5>
+                                        <h5><span class="font-noraml">交易对方名称： </span>{{file.dfmc}}</h5>
+                                        <h5><span class="font-noraml">交易对方账号： </span>{{file.dfzh}}</h5>
+                                        <h5><span class="font-noraml">交易对方卡号： </span>{{file.dfkh}}</h5>
+                                        <h5><span class="font-noraml">交易对方证件号码： </span>{{file.dfzjhm}}</h5>
+                                        <h5><span class="font-noraml">交易对手余额： </span>{{file.dfye}}</h5>
+                                        <h5><span class="font-noraml">交易对方账号开户行： </span>{{file.dfzhkhh}}</h5>
+                                        <h5><span class="font-noraml">交易摘要： </span>{{file.jyzy}}</h5>
+                                        <h5><span class="font-noraml">交易网点名称： </span>{{file.jywdmc}}</h5>
+                                        <h5><span class="font-noraml">交易网点代码： </span>{{file.jywddm}}</h5>
+                                        <h5><span class="font-noraml">日志号： </span>{{file.rzh}}</h5>
+                                        <h5><span class="font-noraml">传票号： </span>{{file.cph}}</h5>
+                                        <h5><span class="font-noraml">凭证种类： </span>{{file.pzzl}}</h5>
+                                        <h5><span class="font-noraml">凭证号： </span>{{file.pzh}}</h5>
+                                        <h5><span class="font-noraml">现金标志： </span>{{file.xjbz}}</h5>
+                                        <h5><span class="font-noraml">终端号： </span>{{file.zdh}}</h5>
+                                        <h5><span class="font-noraml">交易是否成功： </span>{{file.jysfcg}}</h5>
+                                        <h5><span class="font-noraml">交易发生地： </span>{{file.jyfsd}}</h5>
+                                        <h5><span class="font-noraml">商户名称： </span>{{file.shmc}}</h5>
+                                        <h5><span class="font-noraml">商户号： </span>{{file.shh}}</h5>
+                                        <h5><span class="font-noraml">IP地址： </span>{{file.ip}}</h5>
+                                        <h5><span class="font-noraml">MAC地址： </span>{{file.mac}}</h5>
+                                        <h5><span class="font-noraml">交易柜员号： </span>{{file.jygyh}}</h5>
+                                        <h5><span class="font-noraml">备注： </span>{{file.bz}}</h5>
+                                        <h5><span class="font-noraml">交易手续费币种： </span>{{file.jyssfbz}}</h5>
+                                        <h5><span class="font-noraml">交易手续费金额： </span>{{file.jyssfje}}</h5>
+                                        <h5><span class="font-noraml">交易手续费摘要： </span>{{file.jyssfzy}}</h5>
+                                        <h5><span class="font-noraml">登录用户名： </span>{{file.dlyhm}}</h5>
+                                        <h5><span class="font-noraml">代办人姓名： </span>{{file.dbrxm}}</h5>
+                                        <h5><span class="font-noraml">代办人证件类型： </span>{{file.dbrzjlx}}</h5>
+                                        <h5><span class="font-noraml">代办人证件号码： </span>{{file.dbrzjhm}}</h5>
+                                        <h5><span class="font-noraml">代办人联系电话： </span>{{file.dbrlxdhg}}</h5>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
+<script src="/js/yhzh2/jyjl/yhzh-jyjl-detail.js"></script>
+
+</body>
+
+</html>

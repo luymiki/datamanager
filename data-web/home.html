@@ -59,6 +59,7 @@
                         <div class="logo-element">GA</div>
                     </li>
                     <li><a class="J_menuItem" href="/view/search/search.html"><i class="fa fa-search"></i> <span class="nav-label">一键搜索</span></a></li>
+
                     <li><a class="J_menuItem" href="/view/suspicious/suspicious.html"><i class="fa fa-users"></i> <span class="nav-label">可疑人员管理</span></a></li>
                     <li>
                         <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">数据管理</span><span class="fa arrow"></span></a>
@@ -97,7 +98,7 @@
                                     <!--<li><a class="J_menuItem" href="form_avatar.html">联通</a></li>-->
                                 <!--</ul>-->
                             <!--</li>-->
-                            <li><a class="J_menuItem" href="/view/yhzh/yhzh-reg-list.html">银行账单</a></li>
+                            <li><a class="J_menuItem" href="/view/yhzh2/yhzh-reg-list.html">银行账单</a></li>
                             <li><a class="J_menuItem" href="/view/kdyd/kdyd-list.html">快递运单</a></li>
                             <li>
                                 <a href="#">虚拟定位 <span class="fa arrow"></span></a>
@@ -124,7 +125,7 @@
                             <li><a class="J_menuItem" href="/view/mxfx/tjtb/tjtb.html">统计图表</a></li>
                         </ul>
                     </li>
-
+                    <li><a class="J_menuItem" href="/view/messages/messages-list.html"><i class="fa fa-comments"></i> <span class="nav-label">系统提示</span></a></li>
 
                 </ul>
             </div>
@@ -146,7 +147,11 @@
                         <!--</form>-->
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
-
+                        <li class="">
+                            <a class=" count-info" id="message-info">
+                                <i class="fa fa-bell"></i> <span class="label label-primary" id="message-count">0</span>
+                            </a>
+                        </li>
                         <li class="dropdown hidden-xs">
                             <a class="right-sidebar-toggle" aria-expanded="false">
                                 <i class="fa fa-tasks"></i> 主题
@@ -293,6 +298,7 @@
     <script src="/js/plugins/websocket/stomp.js"></script>
     <script src="/js/utils.js"></script>
     <script src="/js/msg.js"></script>
+    <script src="/js/ajax.proxy.js"></script>
     <script src="/js/home.js"></script>
 </body>
 

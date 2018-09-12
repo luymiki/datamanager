@@ -6,6 +6,7 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.CftRegInfo;
 import com.anluy.admin.entity.HuadanInfo;
 import com.anluy.admin.entity.HuadanList;
+import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.web.cft.parser.CftRegParser;
 import com.anluy.admin.web.huadan.parser.HuadanParser;
@@ -44,7 +45,8 @@ public class HuadanParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
     /**
      * 话单文件保存
      *
@@ -129,6 +131,8 @@ public class HuadanParserController {
 
             elasticsearchRestClient.batchSave(hdSavelist,"huaduan_list");
             elasticsearchRestClient.save(jsonMap,regInfo.getId(),"huaduan");
+            analyzeCodeAndPushMessage.analyze(hdSavelist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"ddhm");
+            analyzeCodeAndPushMessage.analyze(jsonMap, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"zjhm");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

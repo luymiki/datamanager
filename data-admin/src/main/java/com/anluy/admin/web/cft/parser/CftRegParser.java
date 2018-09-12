@@ -62,36 +62,39 @@ public class CftRegParser {
         CftRegInfo regInfo = new CftRegInfo();
         regInfo.setFileId(fileId);
         List<String> infolist = split( txtContent.get(1));
-        if(infolist.size() != 8){
+        if(infolist.size() < 5){
             throw new RuntimeException("文件格式不正确，不能解析");
         }
-        regInfo.setZhzt(infolist.get(0));
-        regInfo.setZh(infolist.get(1));
-        regInfo.setName(infolist.get(2));
-        regInfo.setZcsj(infolist.get(3));
-        if(StringUtils.isNotBlank(infolist.get(4))){
-            regInfo.setSfzh(infolist.get(4).replace("[","").replace("]",""));
+        regInfo.setZhzt(infolist.size()>0? infolist.get(0):null);
+        regInfo.setZh(infolist.size()>1? infolist.get(1):null);
+        regInfo.setName(infolist.size()>2? infolist.get(2):null);
+        regInfo.setZcsj(infolist.size()>3? infolist.get(3):null);
+        String i4 = infolist.size()>4? infolist.get(4):null;
+        if(StringUtils.isNotBlank(i4)){
+            regInfo.setSfzh(i4.replace("[","").replace("]",""));
         }
-        regInfo.setDh(infolist.get(5));
+        regInfo.setDh(infolist.size()>5? infolist.get(5):null);
         List<String> kyhList = new ArrayList<>();
         List<String> yhzhList = new ArrayList<>();
         regInfo.setKhxxList(kyhList);
         regInfo.setYhzhList(yhzhList);
 
-        kyhList.add(infolist.get(6));
-        if(StringUtils.isNotBlank(infolist.get(7))){
-            yhzhList.add(infolist.get(7).replace("[","").replace("]",""));
+        kyhList.add(infolist.size()>6? infolist.get(6):null);
+        String i7 = infolist.size()>7? infolist.get(7):null;
+        if(StringUtils.isNotBlank(i7)){
+            yhzhList.add(i7.replace("[","").replace("]",""));
         }
 
         for (int i = 2; i < txtContent.size(); i++) {
             String line = txtContent.get(i);
             List<String> list = split( line);
-            if(list.size() != 8){
+            if(list.size() <7 ){
                 continue;
             }
             kyhList.add(list.get(6));
-            if(StringUtils.isNotBlank(list.get(7))){
-                yhzhList.add(list.get(7).replace("[","").replace("]",""));
+            String ii7 = list.size()>0? list.get(0):null;
+            if(StringUtils.isNotBlank(ii7)){
+                yhzhList.add(ii7.replace("[","").replace("]",""));
             }
         }
         return regInfo;
