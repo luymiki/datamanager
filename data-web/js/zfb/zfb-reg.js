@@ -31,7 +31,7 @@ var parser = (function () {
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(_data),
-                async:false,
+                async:true,
                 success:function (d) {
                     if(d.status===200) {
                         console.log(d.data);

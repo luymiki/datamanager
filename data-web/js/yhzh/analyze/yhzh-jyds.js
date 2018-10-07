@@ -76,7 +76,7 @@
                 type:"post",
                 dataType:"json",
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"],"dsId":ds_id,"zcType":zcType||""},
-                async:false,
+                async:true,
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
@@ -86,6 +86,29 @@
                             data[i]['xh'] = xh++;
                             data[i]['name'] = yhzhInfo["name"];
                         }
+                        $('#data-table').myTable({
+                            height:120,
+                            pagination:false,
+                            columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
+                                {field: 'name',title: '户名',sortable:true},
+                                {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
+                                {field: 'ljjybs',title: '累计交易笔数',sortable:true},
+                                {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
+                                {field: 'zxjyje',title: '最小交易金额',sortable:true,formatter:formatter},
+                                {field: 'ljzrje',title: '累计转入金额',sortable:true,formatter:formatter},
+                                {field: 'ljzrbs',title: '累计转入笔数',sortable:true},
+                                {field: 'zdzrje',title: '最大转入金额',sortable:true,formatter:formatter},
+                                {field: 'zxzrje',title: '最小转入金额',sortable:true,formatter:formatter},
+                                {field: 'ljzcje',title: '累计转出金额',sortable:true,formatter:formatter},
+                                {field: 'ljzcbs',title: '累计转出笔数',sortable:true},
+                                {field: 'zdzcje',title: '最大转出金额',sortable:true,formatter:formatter},
+                                {field: 'zxzcje',title: '最小转出金额',sortable:true,formatter:formatter},
+                                {field: 'pjjyje',title: '平均交易金额',sortable:true,formatter:formatter},
+                                {field: 'zzjysj',title: '最早交易时间',sortable:true},
+                                {field: 'zwjysj',title: '最晚交易时间',sortable:true}
+                            ],
+                            data : data
+                        });
                     }
                 },
                 error:function(){
@@ -93,29 +116,7 @@
                 }
             });
 
-            $('#data-table').myTable({
-                height:120,
-                pagination:false,
-                columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
-                    {field: 'name',title: '户名',sortable:true},
-                    {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
-                    {field: 'ljjybs',title: '累计交易笔数',sortable:true},
-                    {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
-                    {field: 'zxjyje',title: '最小交易金额',sortable:true,formatter:formatter},
-                    {field: 'ljzrje',title: '累计转入金额',sortable:true,formatter:formatter},
-                    {field: 'ljzrbs',title: '累计转入笔数',sortable:true},
-                    {field: 'zdzrje',title: '最大转入金额',sortable:true,formatter:formatter},
-                    {field: 'zxzrje',title: '最小转入金额',sortable:true,formatter:formatter},
-                    {field: 'ljzcje',title: '累计转出金额',sortable:true,formatter:formatter},
-                    {field: 'ljzcbs',title: '累计转出笔数',sortable:true},
-                    {field: 'zdzcje',title: '最大转出金额',sortable:true,formatter:formatter},
-                    {field: 'zxzcje',title: '最小转出金额',sortable:true,formatter:formatter},
-                    {field: 'pjjyje',title: '平均交易金额',sortable:true,formatter:formatter},
-                    {field: 'zzjysj',title: '最早交易时间',sortable:true},
-                    {field: 'zwjysj',title: '最晚交易时间',sortable:true}
-                ],
-                data : data
-            });
+
         };
 
         /**

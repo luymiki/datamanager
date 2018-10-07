@@ -363,6 +363,9 @@ public class ElasticsearchQueryAnalyzeEngine {
         }
         JSONObject aggs = this.aggsDsl(aggsList);
         dsl.put("aggregations", aggs);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(dsl.toJSONString());
+        }
         return new DSLPOJO(dsl.toJSONString(),indexName);
     }
     /**

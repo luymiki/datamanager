@@ -26,7 +26,7 @@
                 data:{"pageNum":1,"pageSize":1,"paramsStr":JSON.stringify(params)},
                 async:false,
                 success : function (d) {
-                    console.log(d);
+                    //console.log(d);
                     if(d.status===200){
                         var file = d.data.data;
                         if(file && file.length===1){
@@ -74,15 +74,36 @@
                 type:"post",
                 dataType:"json",
                 data:{"hdId":hdId},
-                async:false,
+                async:true,
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
-                        console.log(data)
+                        //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
                             data[i]['xh'] = xh++;
                         }
+                        $('#data-table').myTable({
+                            height:120,
+                            pagination:false,
+                            columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
+                                {field: 'ddsl',title: '对端数量',sortable:true},
+                                {field: 'zthcs',title: '总通话次数',sortable:true},
+                                {field: 'zthsc',title: '总通话时长',sortable:true},
+                                {field: 'zcthsc',title: '最长通话时长',sortable:true},
+                                {field: 'zdthsc',title: '最短通话时长',sortable:true},
+                                {field: 'zjcs',title: '主叫次数',sortable:true},
+                                {field: 'zjthsc',title: '主叫总通话时长',sortable:true},
+                                {field: 'zjzcthsc',title: '主叫最长通话时长',sortable:true},
+                                {field: 'zjzdthsc',title: '主叫最短通话时长',sortable:true},
+                                {field: 'bjcs',title: '被叫次数',sortable:true},
+                                {field: 'bjthsc',title: '被叫总通话时长',sortable:true},
+                                {field: 'bjzcthsc',title: '被叫最长通话时长',sortable:true},
+                                {field: 'bjzdthsc',title: '被叫最短通话时长',sortable:true},
+                                {field: 'qtcs',title: '其他通讯次数',sortable:true}
+                            ],
+                            data : data
+                        });
                     }
                 },
                 error:function(){
@@ -90,27 +111,7 @@
                 }
             });
 
-            $('#data-table').myTable({
-                height:120,
-                pagination:false,
-                columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
-                    {field: 'ddsl',title: '对端数量',sortable:true},
-                    {field: 'zthcs',title: '总通话次数',sortable:true},
-                    {field: 'zthsc',title: '总通话时长',sortable:true},
-                    {field: 'zcthsc',title: '最长通话时长',sortable:true},
-                    {field: 'zdthsc',title: '最短通话时长',sortable:true},
-                    {field: 'zjcs',title: '主叫次数',sortable:true},
-                    {field: 'zjthsc',title: '主叫总通话时长',sortable:true},
-                    {field: 'zjzcthsc',title: '主叫最长通话时长',sortable:true},
-                    {field: 'zjzdthsc',title: '主叫最短通话时长',sortable:true},
-                    {field: 'bjcs',title: '被叫次数',sortable:true},
-                    {field: 'bjthsc',title: '被叫总通话时长',sortable:true},
-                    {field: 'bjzcthsc',title: '被叫最长通话时长',sortable:true},
-                    {field: 'bjzdthsc',title: '被叫最短通话时长',sortable:true},
-                    {field: 'qtcs',title: '其他通讯次数',sortable:true}
-                ],
-                data : data
-            });
+
         };
         /**
          * 统计对端信息
@@ -127,7 +128,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = msg.data;
-                        console.log(data)
+                        //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
                             data[i]['xh'] = xh++;
@@ -177,7 +178,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = msg.data["group_thsc"];
-                        console.log(data)
+                        //console.log(data)
                         $("#loadding-icon-jyje").hide();
                         var labels = [];
                         var chartData = [];
@@ -245,7 +246,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = msg.data["group_kssj_hh"];
-                        console.log(data)
+                       // console.log(data)
                         $("#loadding-icon-thsjd").hide();
                         var labels = [];
                         var chartData = [];
