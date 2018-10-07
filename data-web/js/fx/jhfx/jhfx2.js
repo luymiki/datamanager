@@ -44,6 +44,13 @@
                 window.clearInterval(invid);
                 f.remove();
                 $("#"+id).remove();
+                zdycxArr=[];
+                $(".J_iframe").each(function (i,e) {
+                    var ww =  e.contentWindow;
+                    var zdycx = ww.zdycx;
+                    zdycxArr[zdycxArr.length] = zdycx;
+                });
+
             });
             //重置按钮
             $("#rest-btn").on("click",function () {
@@ -128,7 +135,7 @@
                     type:"post",
                     dataType:"json",
                     data:{"paramsArr":JSON.stringify(paramsArr),"fieldArr":JSON.stringify(fieldArr)},
-                    async:false,
+                    async:true,
                     success : function (d) {
                         //console.log(d);
                         if(d.status===200){
