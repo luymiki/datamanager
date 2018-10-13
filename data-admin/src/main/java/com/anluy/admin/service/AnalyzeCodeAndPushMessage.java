@@ -64,7 +64,6 @@ public class AnalyzeCodeAndPushMessage {
                 });
             }
         }
-
     }
     /**
      * 比对数据
@@ -154,6 +153,8 @@ public class AnalyzeCodeAndPushMessage {
             total += this.query("qq", keyCode, fileId, "wxreginfo");
             total += this.query("qq", keyCode, fileId, "wxlxr");
             total += this.query("qq", keyCode, fileId, "xndw_wsk");
+            total += this.query("fsf", keyCode, fileId, "cfttrades");
+            total += this.query("jsf", keyCode, fileId, "cfttrades");
             if (total > 0) {
                 dataMap.put("total", total);
                 dataMap.put("tips", String.format("根据[%s]比中QQ信息%s条", keyCode, total));
@@ -179,6 +180,8 @@ public class AnalyzeCodeAndPushMessage {
             total += this.query("zh", keyCode, fileId, "wxlxr");
             total += this.query("weixin", keyCode, fileId, "wxqun");
             total += this.query("weixin", keyCode, fileId, "wxloginip");
+            total += this.query("fsf", keyCode, fileId, "cfttrades");
+            total += this.query("jsf", keyCode, fileId, "cfttrades");
             if (total > 0) {
                 dataMap.put("total", total);
                 dataMap.put("tips", String.format("根据[%s]比中微信数据%s条", keyCode, total));

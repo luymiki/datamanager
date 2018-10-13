@@ -3,11 +3,15 @@ package com.anluy.admin.web.yhzh2;
 import com.alibaba.fastjson.JSON;
 import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.Attachment;
+import com.anluy.admin.entity.TjfxYhzhJyls;
 import com.anluy.admin.entity.YhzhJylsInfo;
 import com.anluy.admin.entity.YhzhKhxxInfo;
 import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.service.TjfxJylsService;
+import com.anluy.admin.service.TjfxYhzhService;
 import com.anluy.admin.utils.MD5;
+import com.anluy.admin.web.AuthorizationController;
 import com.anluy.admin.web.yhzh2.parser.YhzhJylsParser;
 import com.anluy.admin.web.yhzh2.parser.YhzhKhxxParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
@@ -48,6 +52,8 @@ public class YhzhKhxxInfoParserController {
     private FileManagerConfig fileManagerConfig;
     @Resource
     private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
+    @Resource
+    private TjfxYhzhService tjfxYhzhService;
 
     /**
      * 银行账户交易记录文件保存
@@ -140,8 +146,24 @@ public class YhzhKhxxInfoParserController {
                 });
                 jylsList.add(jsonMap);
             });
+
             elasticsearchRestClient.batchSave(saveList,"yhzh_khxx");
-            elasticsearchRestClient.batchSave(jylsList,"yhzh_jyls");
+            if(jylsList!=null && !jylsList.isEmpty()){
+                elasticsearchRestClient.batchSave(jylsList,"yhzh_jyls");
+            }
+
+            String token = request.getHeader(AuthorizationController.AUTHORIZATION);
+            for (Map map :saveList ) {
+                TjfxYhzhJyls tjfxCftJyls = (TjfxYhzhJyls)tjfxYhzhService.analyzeJyls(attachment.getFolder(),(String) map.get("kh"),(String) map.get("zh"),null,null,null,token);
+                int ljjybs = 0;
+                if(tjfxCftJyls!=null){
+                    ljjybs = tjfxCftJyls.getLjjybs();
+                }
+                String id = (String)map.get("id");
+                Map um = new HashMap();
+                um.put("ljjybs",ljjybs);
+                elasticsearchRestClient.update(um,id,"yhzh_khxx");
+            }
 
             analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"kh");
             analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"zh");

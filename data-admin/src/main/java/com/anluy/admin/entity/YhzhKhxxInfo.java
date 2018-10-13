@@ -20,49 +20,89 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     private String tags;//标签
 
     private String ssyh;//	所属银行
+    @Field("序号")
     private String xh;//	序号
+    @Field("查询反馈结果")
     private String cxfkjg;//	查询反馈结果
+    @Field("证照类型")
     private String zzlx;//	证照类型
+    @Field("证照号码")
     private String zzhm;//	证照号码
+    @Field("客户名称")
     private String name;//	客户名称
+    @Field("联系电话")
     private String lxdh;//	联系电话
+    @Field("账卡号")
     private String kzhinfo;//	卡账号信息
+    @Field("卡号")
     private String kh;//	卡号
+    @Field("账号")
     private String zh;//	账号
+    @Field("开户日期")
     @JSONField(name = "khrq", format = "yyyy-MM-dd")
     private Date khrq;//	开户日期
+    @Field("销户日期")
     @JSONField(name = "xhrq", format = "yyyy-MM-dd")
     private Date xhrq;//	销户日期
+    @Field("开户网点")
     private String khwd;//	开户网点
+    @Field("联系手机")
     private String lxsj;//	联系手机
+    @Field("代办人姓名")
     private String dbrxm;//	代办人姓名
+    @Field("代办人证件类型")
     private String dbrzjlx;//	代办人证件类型
+    @Field("代办人证件号码")
     private String dbrzjhm;//	代办人证件号码
+    @Field("住宅地址")
     private String zzdz;//	住宅地址
+    @Field("住宅电话")
     private String zzdh;//	住宅电话
+    @Field("工作单位")
     private String gzdw;//	工作单位
+    @Field("单位地址")
     private String dwdz;//	单位地址
+    @Field("单位电话")
     private String dwdh;//	单位电话
+    @Field("邮箱地址")
     private String email;//	邮箱地址
+    @Field("法人代表")
     private String frdb;//	法人代表
+    @Field("法人代表证件类型")
     private String frdbzjlx;//	法人代表证件类型
+    @Field("法人代表证件号码")
     private String frdbzjhm;//	法人代表证件号码
+    @Field("客户工商执照号码")
     private String khgszzhm;//	客户工商执照号码
+    @Field("国税纳税号")
     private String gsnsh;//	国税纳税号
+    @Field("地税纳税号")
     private String dsnsh;//	地税纳税号
+    @Field("代办人联系电话")
     private String dbrlxdh;//	代办人联系电话
+    @Field("网银账户名")
     private String wyzhm;//	网银账户名
+    @Field("网银办理日期")
     @JSONField(name = "wyblrq", format = "yyyy-MM-dd HH:mm:ss")
     private Date wyblrq;//	网银办理日期
+    @Field("网银开户网点")
     private String wykhwd;//	网银开户网点
+    @Field("网银开户网点代码")
     private String wykhwddm;//	网银开户网点代码
+    @Field("网银开户网点所在地")
     private String wykhwdszd;//	网银开户网点所在地
+    @Field("手机银行账户名")
     private String sjyhzhm;//	手机银行账户名
+    @Field("手机银行办理日期")
     @JSONField(name = "sjyhblrq", format = "yyyy-MM-dd HH:mm:ss")
     private Date sjyhblrq;//	手机银行办理日期
+    @Field("手机银行开户网点")
     private String sjyhkhwd;//	手机银行开户网点
+    @Field("手机银行开户网点代码")
     private String sjyhkhwddm;//	手机银行开户网点代码
+    @Field("手机银行开户网点所在地")
     private String sjyhkhwdszd;//	手机银行开户网点所在地
+    private Integer ljjybs;//	交易流水记录数
 
     public String getFileId() {
         return fileId;
@@ -406,5 +446,13 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
 
     public void setSjyhkhwdszd(String sjyhkhwdszd) {
         this.sjyhkhwdszd = sjyhkhwdszd;
+    }
+
+    public Integer getLjjybs() {
+        return ljjybs;
+    }
+
+    public void setLjjybs(Integer ljjybs) {
+        this.ljjybs = ljjybs;
     }
 }

@@ -2,6 +2,7 @@ package com.anluy.admin.web.zfb.parser;
 
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbJyjlInfo;
+import com.anluy.admin.utils.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +36,8 @@ public class ZfbJyjlParser {
      * @throws Exception
      */
     public List<ZfbJyjlInfo> parser( File file) throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"GBK"));
-        String line = null;
-        List<String> stringList = new ArrayList<>();
-        while ((line = bufferedReader.readLine()) != null) {
-            stringList.add(line);
-        }
+        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+        List<List<String>> stringList = csvReader.readAll();
         return parse(stringList);
     }
 
@@ -55,7 +52,7 @@ public class ZfbJyjlParser {
         return parser(new File(path));
     }
 
-    private List<ZfbJyjlInfo> parse(List<String> txtContent) throws Exception{
+    private List<ZfbJyjlInfo> parse(List<List<String>> txtContent) throws Exception{
         if(txtContent.size()<2){
             throw new RuntimeException("文件格式不正确，不能解析");
         }
@@ -63,8 +60,7 @@ public class ZfbJyjlParser {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         List<ZfbJyjlInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
-            String line = txtContent.get(i);
-            List<String> list = split( line);
+            List<String> list = txtContent.get(i);
             if(list.size() < 17){
                 continue;
             }
@@ -76,10 +72,11 @@ public class ZfbJyjlParser {
             regInfo.setJyzt(list.get(2));
             regInfo.setHzhbid(list.get(3));
             regInfo.setMjId(list.get(4));
-            regInfo.setDsId(regInfo.getMjId());
+            regInfo.setUserId(list.get(4));
             regInfo.setMjxx(list.get(5));
             regInfo.setMaijiaid(list.get(6));
             regInfo.setMaijiaxx(list.get(7));
+            regInfo.setDsId(regInfo.getMaijiaid());
             if(StringUtils.isNotBlank(list.get(8))){
                 regInfo.setJe(Double.valueOf(list.get(8)));
                 regInfo.setJyje(regInfo.getJe());
@@ -127,7 +124,7 @@ public class ZfbJyjlParser {
     }
 
     private List<String> split(String line) {
-        line = line.replace("o.,","o.，");
+        line = line.replace("o.,","o.，").replace("O.,","O.，");
         line = line.replace(",\",","，\",");
         String[] infos = line.split(",");
         List<String> hylist = new ArrayList<>();

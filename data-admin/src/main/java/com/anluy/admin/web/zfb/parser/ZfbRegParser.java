@@ -3,6 +3,7 @@ package com.anluy.admin.web.zfb.parser;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.entity.ZfbRegInfo;
+import com.anluy.admin.utils.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +33,8 @@ public class ZfbRegParser {
      * @throws Exception
      */
     public List<ZfbRegInfo>  parser(File file) throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"GBK"));
-        String line = null;
-        List<String> stringList = new ArrayList<>();
-        while ((line = bufferedReader.readLine()) != null) {
-            stringList.add(line);
-        }
+        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+        List<List<String>> stringList = csvReader.readAll();
         return parse(stringList);
     }
 
@@ -52,14 +49,13 @@ public class ZfbRegParser {
         return parser(new File(path));
     }
 
-    private List<ZfbRegInfo>  parse(List<String> txtContent) {
+    private List<ZfbRegInfo>  parse(List<List<String>> txtContent) {
         if(txtContent.size()<2){
             throw new RuntimeException("文件格式不正确，不能解析");
         }
         List<ZfbRegInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
-
-            List<String> infolist = split( txtContent.get(i));
+            List<String> infolist = txtContent.get(i);
             if(infolist.size() < 10){
                 throw new RuntimeException("文件格式不正确，不能解析");
             }

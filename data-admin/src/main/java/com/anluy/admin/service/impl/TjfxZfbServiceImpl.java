@@ -398,7 +398,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      */
     @Override
     public Object analyzeJyls(String userId, String xcbh,String jyjeRange,String dsId,  String zcType, String token) throws IOException {
-        String dsl = String.format(queryDsl, xcbh);
+        String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxZfbJyls tjfxZfbJyls = new TjfxZfbJyls();
@@ -420,7 +420,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      */
     @Override
     public Object analyzeJyds(String userId, String xcbh, String zcType,  String token) throws IOException {
-        String dsl = String.format(queryDsl, xcbh);
+        String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         TjfxZfbJyds jyds = new TjfxZfbJyds();
         jyds.setUserId(userId);
@@ -438,7 +438,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      */
     @Override
     public Object analyzeJyje(String userId, String xcbh,String dsId, String zcType,  String token) throws IOException {
-        String dsl = String.format(queryDsl, xcbh);
+        String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         return this.analyzeJyje(dslJson,dsId,zcType,token);
     }
@@ -455,7 +455,7 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
      */
     @Override
     public Object analyzeJyjeZc100(String userId, String xcbh, String dsId, String token) throws IOException {
-        String dsl = String.format(queryDsl, xcbh);
+        String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         return this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
     }

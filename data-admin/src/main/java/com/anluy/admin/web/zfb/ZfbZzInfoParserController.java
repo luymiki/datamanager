@@ -91,8 +91,8 @@ public class ZfbZzInfoParserController {
                     List<Map> lm = (List<Map> ) rm.get("data");
                     if(lm!=null){
                         lm.forEach(map->{
-                            if(!mapping.containsKey(map.get("xcbh"))){
-                                mapping.put((String) map.get("xcbh"),(String)map.get("user_id"));
+                            if(!mapping.containsKey(map.get("user_id"))){
+                                mapping.put((String)map.get("user_id"),(String) map.get("xcbh"));
                             }
                         });
                     }
@@ -103,10 +103,24 @@ public class ZfbZzInfoParserController {
             zfbJyjlInfoList.forEach(regInfo->{
                 regInfo.setId(UUID.randomUUID().toString() );
                 regInfo.setCreateTime(new Date());
-                if(!mapping.containsKey( regInfo.getXcbh())){
+
+                if(!mapping.containsKey( regInfo.getSkfId()) && !mapping.containsKey( regInfo.getFkfId())){
                     return;
                 }
-                String userId = mapping.get( regInfo.getXcbh());
+                String userId = null;
+                String xcbh = mapping.get( regInfo.getSkfId());
+                if(StringUtils.isNotBlank(xcbh) && regInfo.getXcbh().equals(xcbh)){
+                    userId = regInfo.getSkfId();
+                }
+                if(userId == null){
+                    xcbh = mapping.get( regInfo.getFkfId());
+                    if(StringUtils.isNotBlank(xcbh) && regInfo.getXcbh().equals(xcbh)){
+                        userId = regInfo.getFkfId();
+                    }
+                }
+                if(userId == null){
+                    return;
+                }
                 regInfo.setUserId(userId);
                 if("提现".equals(regInfo.getZzcpmc())){
                     regInfo.setJdlx("出");

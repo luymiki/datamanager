@@ -150,7 +150,7 @@ public class WeiXinRegParserController {
                     wxlxrMapList.add(m);
                 });
                 elasticsearchRestClient.batchSave(wxlxrMapList,"wxlxr");
-                analyzeCodeAndPushMessage.analyze(wxlxrMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"weixin");
+                analyzeCodeAndPushMessage.analyze(wxlxrMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
                 analyzeCodeAndPushMessage.analyze(wxlxrMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"qq");
             }
             if(wxqunList!=null && !wxqunList.isEmpty()){

@@ -6,14 +6,14 @@ import com.anluy.admin.eqa.entity.EqaIndex;
 import com.anluy.admin.eqa.entity.EqaMeta;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +58,7 @@ public class ExportController {
     public Object exportEXcel(HttpServletResponse response, Integer pageNum, Integer pageSize, String paramsStr) {
         try {
             if (pageSize == null) {
-                pageSize = 1000;
+                pageSize = 10000;
             }
             if (pageNum == null) {
                 pageNum = 1;
@@ -115,9 +117,8 @@ public class ExportController {
      * @param dslpojo
      * @return
      * @throws IOException
-     * @throws InvalidFormatException
      */
-    private Object exprotByDsl(HttpServletResponse response,ElasticsearchQueryAnalyzeEngine.DSLPOJO dslpojo) throws IOException, InvalidFormatException {
+    private Object exprotByDsl(HttpServletResponse response,ElasticsearchQueryAnalyzeEngine.DSLPOJO dslpojo) throws IOException, TemplateException {
         List<Map> result = new ArrayList<>();
         elasticsearchQueryAnalyzeEngine.getElasticsearchRestClient().scroll(dslpojo.getDsl(), null, new ElasticsearchRestClient.TimeWindowCallBack() {
             @Override
@@ -157,7 +158,7 @@ public class ExportController {
             title.add(eqaMeta.getFieldName());
         });
         List<List> dataList = new ArrayList<>();
-        dataList.add(title);
+//        dataList.add(title);
         result.forEach(dataMap -> {
             List data = new ArrayList<>();
             metaList.forEach(eqaMeta -> {
@@ -173,13 +174,23 @@ public class ExportController {
         response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
         response.setCharacterEncoding("UTF-8");
         Map<String, Object> beans = new HashMap<>();
+        beans.put("titleList", title);
         beans.put("dataList", dataList);
 
-        XLSTransformer transformer = new XLSTransformer();
-        Workbook wb = transformer.transformXLS(ExportController.class.getResourceAsStream("/template/export.xls"), beans);
-        OutputStream out = response.getOutputStream();
-        wb.write(out);
-        out.flush();
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setDirectoryForTemplateLoading(new File(ExportController.class.getResource("/template").getFile()));
+        Template template = configuration.getTemplate("export.xml");
+
+//        XLSTransformer transformer = new XLSTransformer();
+//        Workbook wb = transformer.transformXLS(ExportController.class.getResourceAsStream("/template/export.xls"), beans);
+//        OutputStream out = response.getOutputStream();
+//        wb.write(out);
+//        out.flush();
+        Writer writer = response.getWriter();
+        template.process(beans,writer);
+        writer.flush();
+        writer.close();
         return null;
     }
 

@@ -159,7 +159,7 @@
 
         var _event = function () {
             $("#addBtn").on('click', function () {
-                top.contabs.addMenuItem("/view/file/email/file-email.html", '导入邮件');
+                top.contabs.addMenuItem("/view/email/list/email-list.html", '导入邮件');
             });
 
             // /**
@@ -170,7 +170,7 @@
             // });
 
             $("#email-table").on('click', '.detail', function () {
-                top.contabs.addMenuItem("/view/file/email/file-email-detail.html?id=" + $(this).attr("data-id"), '查看邮件');
+                top.contabs.addMenuItem("/view/email/list/email-list-detail.html?id=" + $(this).attr("data-id"), '查看邮件');
             });
             $("#email-table").on('click', '.delete', function () {
                 _delete($(this).attr("data-id"), $(this).attr("data-fileId"));

@@ -2,6 +2,9 @@ package com.anluy.admin.web.email.parser;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -16,6 +19,8 @@ import com.anluy.admin.entity.Email;
 import com.anluy.admin.utils.FileUtils;
 import com.sun.mail.util.BASE64DecoderStream;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import sun.misc.BASE64Decoder;
 
@@ -26,6 +31,8 @@ import sun.misc.BASE64Decoder;
  * Created by hc.zeng on 2018/3/14.
  */
 public class EmailEmlParser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailEmlParser.class);
+    private static ExecutorService executor = Executors.newScheduledThreadPool(5);
     private final String fileDir;
     private final String emailId;
     int ii = 0x17;
@@ -338,11 +345,7 @@ public class EmailEmlParser {
                 if (!ff.exists() && !ff.isDirectory()) {
                     ff.mkdirs();
                 }
-                //System.out.println(new String(bb,charset==null?"GBK":charset));
-                java.io.FileOutputStream out = new FileOutputStream(fileDir + fp);
-                out.write(bb);
-                out.close();
-
+                executor.submit(new FileRunnable(null,new File(fileDir + fp),bb));
                 email.addFile(fp, MimeUtility.decodeText("file"));//内容
             }else {
                 if("base64".equals(encoding)){
@@ -393,14 +396,7 @@ public class EmailEmlParser {
                 if (!ff.exists() && !ff.isDirectory()) {
                     ff.mkdirs();
                 }
-
-                java.io.FileOutputStream out = new FileOutputStream(fileDir + fp);
-                int data;
-                while ((data = in.read()) != -1) {
-                    out.write(data);
-                }
-                in.close();
-                out.close();
+                executor.submit(new FileRunnable(in,new File(fileDir + fp),null));
                 email.addFile(fp, MimeUtility.decodeText(part.getContentType()));//内容
             }
         } else {
@@ -458,14 +454,7 @@ public class EmailEmlParser {
                 if (!ff.exists() && !ff.isDirectory()) {
                     ff.mkdirs();
                 }
-
-                java.io.FileOutputStream out = new FileOutputStream(fileDir + fp);
-                int data;
-                while ((data = in.read()) != -1) {
-                    out.write(data);
-                }
-                in.close();
-                out.close();
+                executor.submit(new FileRunnable(in,new File(fileDir + fp),null));
                 email.addFile(fp, MimeUtility.decodeText(bodyPart.getContentType()));//内容
             } else {
                 if (MimeUtility.decodeText(bodyPart.getContentType()).indexOf("text/html") >= 0) {
@@ -475,6 +464,41 @@ public class EmailEmlParser {
             }
         } else {
             email.addContent(bodyPart.getContent());//内容
+        }
+    }
+
+    private class FileRunnable implements Runnable{
+        InputStream in ;
+        File file ;
+        byte[] bb ;
+
+        public FileRunnable(InputStream in, File file,byte[] bb) {
+            this.in = in;
+            this.file = file;
+            this.bb = bb;
+        }
+
+        @Override
+        public void run() {
+            try {
+                if(in!=null){
+                    int data;
+                    java.io.FileOutputStream out = new FileOutputStream(file);
+                    while ((data = in.read()) != -1) {
+                        out.write(data);
+                    }
+                    in.close();
+                    out.close();
+                }else if(bb !=null){
+                    java.io.FileOutputStream out = new FileOutputStream(file);
+                    out.write(bb);
+                    out.close();
+                }
+
+            } catch (IOException e) {
+                LOGGER.error("本地存储email的附件失败！",e);
+            }
+
         }
     }
 

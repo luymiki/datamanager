@@ -107,8 +107,8 @@ public class YhzhJylsInfoParserController {
             });
 
             elasticsearchRestClient.batchSave(saveList,"yhzh_jyls");
-            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfkh");
-            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfzh");
+//            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfkh");
+//            analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfzh");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(saveList).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

@@ -2,6 +2,7 @@ package com.anluy.admin.web.zfb.parser;
 
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbZzInfo;
+import com.anluy.admin.utils.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +39,8 @@ public class ZfbZzParser {
      * @throws Exception
      */
     public List<ZfbZzInfo> parser(File file,Set<String> xcbhSet) throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"));
-        String line = null;
-        List<String> stringList = new ArrayList<>();
-        while ((line = bufferedReader.readLine()) != null) {
-            stringList.add(line);
-        }
+        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+        List<List<String>> stringList = csvReader.readAll();
         return parse(stringList,xcbhSet);
     }
 
@@ -58,7 +55,7 @@ public class ZfbZzParser {
         return parser(new File(path),xcbhSet);
     }
 
-    private List<ZfbZzInfo> parse(List<String> txtContent, Set<String> xcbhSet) throws Exception {
+    private List<ZfbZzInfo> parse(List<List<String>> txtContent, Set<String> xcbhSet) throws Exception {
         if (txtContent.size() < 2) {
             throw new RuntimeException("文件格式不正确，不能解析");
         }
@@ -66,8 +63,7 @@ public class ZfbZzParser {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         List<ZfbZzInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
-            String line = txtContent.get(i);
-            List<String> list = split(line);
+            List<String> list = txtContent.get(i);
             if (list.size() < 10) {
                 continue;
             }

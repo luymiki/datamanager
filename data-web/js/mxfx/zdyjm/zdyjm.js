@@ -44,7 +44,15 @@
             columns[columns.length] =  {field: mm["fieldCode"],title: mm["fieldName"],formatter:formatter};
         }
         dataTable.myTable({
+            // copyRow:$("#copy-row"),
             columns:columns,
+            exportXls:$("#exportXls"),
+            exportXlsFun:function () {
+                console.log(JSON.stringify(params));
+                var from = $('<form method="post" action="/api/eqa/exportEXcel" target="_blank"></form>').appendTo('body');
+                $('<input type="text" name="paramsStr">').val(JSON.stringify(params)).appendTo(from);
+                from.submit().remove();
+            },
             ajax : function (request) {
                 var sort = "create_time desc";
                 if(request.data.sortName){

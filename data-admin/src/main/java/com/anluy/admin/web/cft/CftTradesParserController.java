@@ -75,6 +75,7 @@ public class CftTradesParserController {
             CftTradesParser parser = new CftTradesParser(attachment.getId());
             List<CftTrades> regInfo = parser.parser(attachment,path);
             List<Map> saveMapList = new ArrayList<>();
+            Set<String> zhSet = new HashSet<>();
             regInfo.forEach(cftTrades -> {
                 cftTrades.setId(UUID.randomUUID().toString());
                 cftTrades.setCreateTime(new Date());
@@ -98,15 +99,29 @@ public class CftTradesParserController {
                 });
                 jsonMap.put("_id",cftTrades.getId());
                 saveMapList.add(jsonMap);
+                if(!zhSet.contains((String)jsonMap.get("zh"))) {
+                    zhSet.add((String) jsonMap.get("zh"));
+                }
             });
 
             elasticsearchRestClient.batchSave(saveMapList,"cfttrades");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"zh");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"fsf");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"fsf");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"jsf");
-            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"jsf");
+            if(!zhSet.isEmpty()){
+
+                List<Map> zhMapList = new ArrayList<>();
+                zhSet.forEach(str->{
+                    Map<String,String> zhMap = new HashMap<>();
+                    zhMap.put("zh",str);
+                    zhMap.put("file_id",attachment.getId());
+                    zhMapList.add(zhMap);
+                });
+                analyzeCodeAndPushMessage.analyze(zhMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"zh");
+                analyzeCodeAndPushMessage.analyze(zhMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
+            }
+
+//            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"fsf");
+//            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"fsf");
+//            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"jsf");
+//            analyzeCodeAndPushMessage.analyze(saveMapList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"jsf");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

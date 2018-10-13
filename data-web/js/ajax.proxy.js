@@ -23,13 +23,14 @@ $.ajax.proxy = function (option) {
             window.top.location.href = "/index.html";
         }
         try {
+            parent.layer.closeAll();
             if (v_success) {
                 v_success(d);
             }
         } catch (e) {
             console.error(e);
         }
-        parent.layer.closeAll();
+
 
     };
     option["success"] = _success;
