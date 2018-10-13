@@ -36,8 +36,9 @@ var parser = (function () {
             contentType: "application/json",
             success: function (d) {
                 for(var i =0 ;i<d.length;i++) {
-                    input.append('<option value="'+d[i]+'">'+d[i]+'</option>');
+                    input.append('<option value="'+d[i].text+'">'+d[i].text+'</option>');
                 }
+                $("#yys").chosen({});
             }
         });
     }

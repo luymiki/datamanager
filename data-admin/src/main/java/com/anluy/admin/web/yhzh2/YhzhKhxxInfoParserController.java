@@ -169,8 +169,8 @@ public class YhzhKhxxInfoParserController {
             analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"zh");
             analyzeCodeAndPushMessage.analyze(saveList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"lxsj");
 
-            analyzeCodeAndPushMessage.analyze(jylsList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfkh");
-            analyzeCodeAndPushMessage.analyze(jylsList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfzh");
+            //analyzeCodeAndPushMessage.analyze(jylsList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfkh");
+            //analyzeCodeAndPushMessage.analyze(jylsList, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_YHZH,"dfzh");
 
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(saveList).setPath(request.getRequestURI()));
         } catch (Exception exception) {
