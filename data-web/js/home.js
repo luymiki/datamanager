@@ -69,8 +69,14 @@
                     console.log("websocket连接成功");
                     //订阅 用户名为 admin 的消息
                     stomp.subscribe("/user/admin/msg",function (response) {
-                        var v = JSON.parse(response.body);
-                        toastrMsg.info("新的消息："+v["tips"],null,60000);
+                        try{
+                            var v = JSON.parse(response.body);
+                            toastrMsg.info("新的消息："+v["tips"],null,10000);
+                        }catch (e){
+                            var v = response.body;
+                            toastrMsg.info("新的消息："+v,null,10000);
+                        }
+
                     });
                 },function errorCallback() {
                     toastrMsg.error("websocket连接失败");

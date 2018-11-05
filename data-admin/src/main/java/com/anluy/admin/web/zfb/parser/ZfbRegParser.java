@@ -35,6 +35,7 @@ public class ZfbRegParser {
     public List<ZfbRegInfo>  parser(File file) throws Exception {
         CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
         List<List<String>> stringList = csvReader.readAll();
+        csvReader.close();
         return parse(stringList);
     }
 

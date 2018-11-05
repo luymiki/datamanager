@@ -7,6 +7,7 @@ import com.anluy.admin.entity.HuadanInfo;
 import com.anluy.admin.entity.HuadanList;
 import com.anluy.admin.service.AlUserLocInfoService;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.service.MessagingManager;
 import com.anluy.admin.web.huadan.parser.HuadanParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
@@ -44,7 +45,8 @@ public class XndwSxParserController {
     private AttachmentService attachmentService;
     @Resource
     private FileManagerConfig fileManagerConfig;
-
+    @Resource
+    private MessagingManager messagingManager;
     @Resource
     protected AlUserLocInfoService alUserLocInfoService;
 
@@ -74,7 +76,7 @@ public class XndwSxParserController {
             String path = uploadDir + attachment.getPath();
             String backDir = fileManagerConfig.getBackDir();
             String backPath = backDir +"/"+DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS")+".sql";
-            alUserLocInfoService.importSql(path,backPath,attachment.getTags());
+            alUserLocInfoService.importSql(path,backPath,attachment.getTags(),messagingManager);
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);

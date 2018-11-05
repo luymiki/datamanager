@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface AlUserLocInfoService extends BaseService<String,Suspicious> {
 
-    List<Map> importSql(String importPath, String backPath,String tags);
+    List<Map> importSql(String importPath, String backPath,String tags,MessagingManager messagingManager);
 }

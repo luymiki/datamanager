@@ -40,9 +40,17 @@ public class MessagingManager {
      * @param message
      * @return
      */
+    public void push(String message) {
+        simpMessagingTemplate.convertAndSendToUser("admin", "/msg", message);
+    }
+    /**
+     * 推送消息
+     *
+     * @param message
+     * @return
+     */
     public void pushMessage(String message) {
         this.pushMessage((JSONObject)JSON.toJSON(message));
-
     }
 
     /**

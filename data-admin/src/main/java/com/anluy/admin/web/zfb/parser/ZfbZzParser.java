@@ -41,6 +41,7 @@ public class ZfbZzParser {
     public List<ZfbZzInfo> parser(File file,Set<String> xcbhSet) throws Exception {
         CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
         List<List<String>> stringList = csvReader.readAll();
+        csvReader.close();
         return parse(stringList,xcbhSet);
     }
 

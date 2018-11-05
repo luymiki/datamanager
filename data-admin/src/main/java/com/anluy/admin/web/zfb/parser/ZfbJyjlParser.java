@@ -38,6 +38,7 @@ public class ZfbJyjlParser {
     public List<ZfbJyjlInfo> parser( File file) throws Exception {
         CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
         List<List<String>> stringList = csvReader.readAll();
+        csvReader.close();
         return parse(stringList);
     }
 
