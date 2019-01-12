@@ -4,6 +4,7 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbLoginInfo;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.utils.CSVReader;
+import com.anluy.admin.utils.IPAddrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,10 @@ import java.util.List;
 public class ZfbLoginParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(ZfbLoginParser.class);
     private final Attachment attachment;
-
-    public ZfbLoginParser(Attachment attachment) {
+    private IPAddrUtil ipAddrUtil;
+    public ZfbLoginParser(Attachment attachment, IPAddrUtil ipAddrUtil) {
         this.attachment = attachment;
+        this.ipAddrUtil = ipAddrUtil;
     }
 
     /**
@@ -70,6 +72,7 @@ public class ZfbLoginParser {
             regInfo.setUserId(list.get(1));
             regInfo.setName(list.get(2));
             regInfo.setIp(list.get(3));
+            regInfo.setGsd(ipAddrUtil.findCityInfoString(regInfo.getIp()));
             if(StringUtils.isNotBlank(list.get(4))){
                 regInfo.setCzsj(sdf.parse(list.get(4)));
             }
@@ -87,14 +90,14 @@ public class ZfbLoginParser {
         }
         return hylist;
     }
-
-    public static void main(String[] args) {
-        ZfbLoginParser zfbRegParser = new ZfbLoginParser(new Attachment());
-        try {
-            List<ZfbLoginInfo> info = zfbRegParser.parser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\支付宝模板\\登陆日志.csv");
-            System.out.println(info);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public static void main(String[] args) {
+//        ZfbLoginParser zfbRegParser = new ZfbLoginParser(new Attachment());
+//        try {
+//            List<ZfbLoginInfo> info = zfbRegParser.parser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\支付宝模板\\登陆日志.csv");
+//            System.out.println(info);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

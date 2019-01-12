@@ -21,10 +21,11 @@ public class QQLoginIpInfo extends BaseEntity<String> {
     private String loginId;//登录信息的id
 
     private String ip;//登录ip
+    private String gsd;//ip归属地
 
-    @JSONField(name = "login_time")
+    @JSONField(name = "login_time", format = "yyyy-MM-dd HH:mm:ss")
     private String loginTime;
-    @JSONField(name = "logout_time")
+    @JSONField(name = "logout_time", format = "yyyy-MM-dd HH:mm:ss")
     private String logoutTime;
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -116,5 +117,13 @@ public class QQLoginIpInfo extends BaseEntity<String> {
 
     public void setLogoutTime(String logoutTime) {
         this.logoutTime = logoutTime;
+    }
+
+    public String getGsd() {
+        return gsd;
+    }
+
+    public void setGsd(String gsd) {
+        this.gsd = gsd;
     }
 }

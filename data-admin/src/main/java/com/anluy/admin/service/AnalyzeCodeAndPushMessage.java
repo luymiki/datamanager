@@ -261,7 +261,7 @@ public class AnalyzeCodeAndPushMessage {
         try {
             int total = 0;
             total += this.query("ip_list", keyCode, fileId, "qqloginip");
-            total += this.query("ip", keyCode, fileId, "wxloginip");
+            total += this.query("ip_list", keyCode, fileId, "wxreginfo");
             total += this.query("ip", keyCode, fileId, "zfblogininfo");
             total += this.query("ip", keyCode, fileId, "xndw_sx");
             total += this.query("ip", keyCode, fileId, "xndw_wsk");

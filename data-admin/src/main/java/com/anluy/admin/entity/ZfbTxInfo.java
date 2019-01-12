@@ -25,7 +25,9 @@ public class ZfbTxInfo extends BaseEntity<String> {
     private String userId;// 支付宝用户id
     private String khyh;// 会员开户银行
     private String yhzh;// 会员银行账号
+    @JSONField(name = "sqsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date sqsj;//申请日期和时间
+    @JSONField(name = "clsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date clsj;// 处理时间
     private Double je; // 提现金额（元）
     private String zt; // 状态

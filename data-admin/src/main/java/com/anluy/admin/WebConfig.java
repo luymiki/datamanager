@@ -1,18 +1,17 @@
 package com.anluy.admin;
 
 import com.anluy.admin.interceptor.AuthorizedInterceptor;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
+import com.anluy.admin.utils.IPAddrUtil;
+import com.anluy.admin.utils.PhoneAddrUtil;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.io.InputStream;
 
 /**
  * 功能说明：
@@ -23,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 public class WebConfig {
     @Resource
     private AuthorizedInterceptor authorizedInterceptor;
+
+    @Resource
+    private JdbcTemplate jdbcTemplate;
     /**
      * 实例化WebMvcConfigurer接口
      *
@@ -50,5 +52,15 @@ public class WebConfig {
                                 "/webjars/**");
             }
         };
+    }
+
+    @Bean
+    public IPAddrUtil iPAddrUtil() {
+        InputStream inputStream = WebConfig.class.getResourceAsStream("/ipipfree.ipdb");
+        return new IPAddrUtil(inputStream);
+    }
+    @Bean
+    public PhoneAddrUtil phoneAddrUtil( ) {
+        return new PhoneAddrUtil(jdbcTemplate);
     }
 }

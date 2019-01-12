@@ -5,6 +5,7 @@ import com.anluy.admin.entity.CftRegInfo;
 import com.anluy.admin.entity.EmailIp;
 import com.anluy.admin.entity.EmailReg;
 import com.anluy.admin.utils.FileUtils;
+import com.anluy.admin.utils.IPAddrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,10 @@ import java.util.Map;
 public class EmailRegParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailRegParser.class);
     private final String fileId;
-
-    public EmailRegParser(String fileId) {
+    private IPAddrUtil ipAddrUtil;
+    public EmailRegParser(String fileId, IPAddrUtil ipAddrUtil) {
         this.fileId = fileId;
+        this.ipAddrUtil = ipAddrUtil;
     }
 
     /**
@@ -121,6 +123,7 @@ public class EmailRegParser {
                     EmailIp ipmap = new EmailIp();
                     ipmap.setTime(sdf.parse(ipstrs[0].replace("/","-")));
                     ipmap.setIp(ipstrs[1]);
+                    ipmap.setGsd(ipAddrUtil.findCityInfoString(ipmap.getIp()));
                     ipmap.setEmail(dataMap.getEmail());
                     ipmap.setType(dataMap.getType());
                     dataMap.addIplist(ipmap);
@@ -185,14 +188,14 @@ public class EmailRegParser {
         //System.out.println(JSON.toJSONString(resultList));
         return resultList;
     }
-
-    public static void main(String[] args) {
-        EmailRegParser parser = new EmailRegParser("");
-        try {
-            Object resultList = parser.parser("H:\\数据管理系统\\数据导入20180629\\colin8787@163.com 查询结果.txt");
-            System.out.println(JSON.toJSONString(resultList));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public static void main(String[] args) {
+//        EmailRegParser parser = new EmailRegParser("");
+//        try {
+//            Object resultList = parser.parser("H:\\数据管理系统\\数据导入20180629\\colin8787@163.com 查询结果.txt");
+//            System.out.println(JSON.toJSONString(resultList));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

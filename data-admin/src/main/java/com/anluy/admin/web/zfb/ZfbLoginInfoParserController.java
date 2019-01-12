@@ -6,6 +6,7 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbLoginInfo;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.web.zfb.parser.ZfbLoginParser;
 import com.anluy.admin.web.zfb.parser.ZfbRegParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
@@ -45,7 +46,8 @@ public class ZfbLoginInfoParserController {
     @Resource
     private FileManagerConfig fileManagerConfig;
 
-
+    @Resource
+    private IPAddrUtil ipAddrUtil;
     /**
      * 支付宝登录日志文件保存
      *
@@ -69,7 +71,7 @@ public class ZfbLoginInfoParserController {
             }
             String uploadDir = fileManagerConfig.getUploadDir();
             String path = uploadDir + attachment.getPath();
-            ZfbLoginParser parser = new ZfbLoginParser(attachment);
+            ZfbLoginParser parser = new ZfbLoginParser(attachment,ipAddrUtil);
             List<ZfbLoginInfo> zfbLoginInfoList = parser.parser(path);
             List<Map> saveList = new ArrayList<>();
             zfbLoginInfoList.forEach(regInfo->{

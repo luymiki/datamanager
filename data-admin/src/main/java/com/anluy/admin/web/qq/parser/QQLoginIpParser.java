@@ -4,7 +4,9 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.QQLoginInfo;
 import com.anluy.admin.entity.QQLoginIpInfo;
 import com.anluy.admin.entity.QQRegInfo;
+import com.anluy.admin.utils.IPAddrUtil;
 import com.google.common.hash.HashCode;
+import net.ipip.ipdb.CityInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
@@ -25,10 +27,11 @@ import java.util.*;
 public class QQLoginIpParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(QQLoginIpParser.class);
     private final String fileId;
-    private final SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-    private final SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public QQLoginIpParser(String fileId) {
+    private IPAddrUtil ipAddrUtil;
+
+    public QQLoginIpParser(String fileId, IPAddrUtil ipAddrUtil) {
         this.fileId = fileId;
+        this.ipAddrUtil = ipAddrUtil;
     }
 
     /**
@@ -39,7 +42,7 @@ public class QQLoginIpParser {
      * @return
      * @throws Exception
      */
-    public QQLoginInfo parser(Attachment attachment,String path) throws Exception {
+    public QQLoginInfo parser(Attachment attachment, String path) throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(path)));
         String line = null;
         List<String> stringList = new ArrayList<>();
@@ -47,15 +50,15 @@ public class QQLoginIpParser {
         while ((line = bufferedReader.readLine()) != null) {
             HashCodeBuilder builder = new HashCodeBuilder();
             int hs = builder.append(line).toHashCode();
-            if(!hset.contains(hs)){
+            if (!hset.contains(hs)) {
                 stringList.add(line);
                 hset.add(hs);
             }
         }
-        return parse(attachment,stringList);
+        return parse(attachment, stringList);
     }
 
-    private QQLoginInfo parse(Attachment attachment,List<String> txtContent) throws ParseException {
+    private QQLoginInfo parse(Attachment attachment, List<String> txtContent) throws ParseException {
 
         QQLoginInfo loginInfo = new QQLoginInfo();
         loginInfo.setFileId(fileId);
@@ -71,16 +74,16 @@ public class QQLoginIpParser {
                     infoIndex = i + 1;//基本信息的行下标
                     continue;
                 }
-                if (infoIndex>0) {
+                if (infoIndex > 0) {
                     String[] infos = line.split("\t");
-                    if(infos.length != 5){
+                    if (infos.length != 5) {
                         throw new RuntimeException("文件格式不正确，不能解析");
                     }
                     QQLoginIpInfo ipInfo = split(infos);
                     ipInfo.setSuspId(attachment.getSuspId());
                     ipInfo.setSuspName(attachment.getSuspName());
                     ipset.add(ipInfo.getIp());
-                    if(StringUtils.isBlank(loginInfo.getQq())){
+                    if (StringUtils.isBlank(loginInfo.getQq())) {
                         loginInfo.setQq(ipInfo.getQq());
                     }
                     iplist.add(ipInfo);
@@ -89,21 +92,22 @@ public class QQLoginIpParser {
         }
         loginInfo.setIpinfoList(iplist);
         List<String> list = new ArrayList<>();
-        ipset.forEach(s->{
-           list.add(s);
+        ipset.forEach(s -> {
+            list.add(s);
         });
         loginInfo.setIpList(list);
         loginInfo.setSize(iplist.size());
         return loginInfo;
     }
 
-    private QQLoginIpInfo split( String[] infos) throws ParseException {
+    private QQLoginIpInfo split(String[] infos) throws ParseException {
         QQLoginIpInfo info = new QQLoginIpInfo();
-        if(infos.length == 5){
+        if (infos.length == 5) {
             info.setCreateTime(new Date());
             info.setFileId(fileId);
             info.setQq(infos[0]);
             info.setIp(infos[1]);
+            info.setGsd(ipAddrUtil.findCityInfoString(info.getIp()));
             info.setLoginTime(infos[2]);
             info.setLogoutTime(infos[3]);
             info.setLoginType(infos[4]);

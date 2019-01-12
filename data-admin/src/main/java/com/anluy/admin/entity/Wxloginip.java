@@ -27,6 +27,7 @@ public class Wxloginip extends BaseEntity<String> {
     private String infoId;//微信记录id
     private String weixin;//微信号
     private String ip;//ip
+    private String gsd;//归属地
     private String cjsj; //登录时间
 
     public String getFileId() {
@@ -91,5 +92,13 @@ public class Wxloginip extends BaseEntity<String> {
 
     public void setInfoId(String infoId) {
         this.infoId = infoId;
+    }
+
+    public String getGsd() {
+        return gsd;
+    }
+
+    public void setGsd(String gsd) {
+        this.gsd = gsd;
     }
 }

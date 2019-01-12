@@ -1,6 +1,8 @@
 package com.anluy.admin.web.weixin.parser;
 
 import com.anluy.admin.entity.*;
+import com.anluy.admin.utils.IPAddrUtil;
+import net.ipip.ipdb.CityInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +24,11 @@ import java.util.List;
 public class WeiXinRegParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeiXinRegParser.class);
     private final String fileId;
+    private IPAddrUtil ipAddrUtil;
 
-    public WeiXinRegParser(String fileId) {
+    public WeiXinRegParser(String fileId, IPAddrUtil ipAddrUtil) {
         this.fileId = fileId;
+        this.ipAddrUtil = ipAddrUtil;
     }
 
     /**
@@ -150,6 +154,7 @@ public class WeiXinRegParser {
                         }
                         Wxlxr wxlxr = new Wxlxr();
                         wxlxr.setWeixin(regInfo.getWeixin());
+                        wxlxr.setFileId(regInfo.getFileId());
                         wxlxr.setZh(list.get(1));
                         wxlxr.setQq(list.get(2));
                         wxlxr.setDh(list.get(3));
@@ -174,6 +179,7 @@ public class WeiXinRegParser {
                         if(list.size()>3){
                             wxlxr.setCjsj(list.get(3));
                         }
+                        wxlxr.setFileId(regInfo.getFileId());
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
                         wxlxr.setCreateTime(new Date());
@@ -187,7 +193,9 @@ public class WeiXinRegParser {
                         wxlxr.setCjsj(list.get(1));
                         if(list.size()>2){
                             wxlxr.setIp(list.get(2));
+                            wxlxr.setGsd(ipAddrUtil.findCityInfoString(wxlxr.getIp()));
                         }
+                        wxlxr.setFileId(regInfo.getFileId());
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
                         wxlxr.setCreateTime(new Date());

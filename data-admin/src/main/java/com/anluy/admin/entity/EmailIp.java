@@ -16,6 +16,7 @@ public class EmailIp extends BaseEntity<String> {
     @JSONField(name = "time", format = "yyyy-MM-dd HH:mm:ss")
     private Date time ;//登录时间
     private String ip ;//ip
+    private String gsd ;//ip归属地
     private String type;//邮件类型：新浪，163
 
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
@@ -111,5 +112,13 @@ public class EmailIp extends BaseEntity<String> {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getGsd() {
+        return gsd;
+    }
+
+    public void setGsd(String gsd) {
+        this.gsd = gsd;
     }
 }

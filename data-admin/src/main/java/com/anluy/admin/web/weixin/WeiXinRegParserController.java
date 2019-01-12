@@ -5,6 +5,7 @@ import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.*;
 import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.web.qq.parser.QQRegParser;
 import com.anluy.admin.web.weixin.parser.WeiXinRegParser;
 import com.anluy.commons.BaseEntity;
@@ -45,6 +46,9 @@ public class WeiXinRegParserController {
     private FileManagerConfig fileManagerConfig;
     @Resource
     private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
+
+    @Resource
+    private IPAddrUtil ipAddrUtil;
     /**
      * 解析
      *
@@ -70,7 +74,7 @@ public class WeiXinRegParserController {
             }
             String uploadDir = fileManagerConfig.getUploadDir();
             String path = uploadDir + attachment.getPath();
-            WeiXinRegParser parser = new WeiXinRegParser(attachment.getId());
+            WeiXinRegParser parser = new WeiXinRegParser(attachment.getId(),ipAddrUtil);
             WxregInfo regInfo = parser.parser(attachment,path);
             regInfo.setTags(attachment.getTags());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));

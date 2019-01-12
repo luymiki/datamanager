@@ -25,6 +25,8 @@ public class ZfbLoginInfo extends BaseEntity<String> {
     private String dlzh;//登陆账号
     private String name;//账户名称
     private String ip;//客户端ip
+    private String gsd;//ip归属地
+    @JSONField(name = "czsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date czsj;//操作发生时间
     private String xcbh;//对应的协查数据
 
@@ -100,4 +102,11 @@ public class ZfbLoginInfo extends BaseEntity<String> {
         this.xcbh = xcbh;
     }
 
+    public String getGsd() {
+        return gsd;
+    }
+
+    public void setGsd(String gsd) {
+        this.gsd = gsd;
+    }
 }

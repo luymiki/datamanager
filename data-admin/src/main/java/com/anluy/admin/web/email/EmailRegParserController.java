@@ -9,6 +9,7 @@ import com.anluy.admin.entity.Email;
 import com.anluy.admin.entity.EmailReg;
 import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.web.email.parser.EmailEmlParser;
 import com.anluy.admin.web.email.parser.EmailRegParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
@@ -49,6 +50,10 @@ public class EmailRegParserController {
 
     @Resource
     private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
+
+    @Resource
+    private IPAddrUtil ipAddrUtil;
+
     /**
      * 解析
      *
@@ -72,7 +77,7 @@ public class EmailRegParserController {
             }
             String uploadDir = fileManagerConfig.getUploadDir();
             String path = uploadDir + attachment.getPath();
-            EmailRegParser emailEml = new EmailRegParser(attachment.getId());
+            EmailRegParser emailEml = new EmailRegParser(attachment.getId(),ipAddrUtil);
             List<EmailReg> emailRegList = emailEml.parser(path);
             List<Map> ipsaveList = new ArrayList<>();
             List<Map> regsaveList = new ArrayList<>();
@@ -89,12 +94,12 @@ public class EmailRegParserController {
                     jsonMap.put("txt_data",emailReg.getTxtData().toString());
                     jsonMap.forEach((k, v) -> {
                         switch (k) {
-                            case "create_time": {
-                                if (v != null) {
-                                    jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
-                                }
-                                break;
-                            }
+//                            case "create_time": {
+//                                if (v != null) {
+//                                    jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
+//                                }
+//                                break;
+//                            }
                             case "txt_data": {
                                 if (v != null) {
                                     jsonMap.put(k, v.toString());

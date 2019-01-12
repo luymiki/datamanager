@@ -5,6 +5,7 @@ import com.anluy.admin.FileManagerConfig;
 import com.anluy.admin.entity.*;
 import com.anluy.admin.service.AnalyzeCodeAndPushMessage;
 import com.anluy.admin.service.AttachmentService;
+import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.web.qq.parser.QQLoginIpParser;
 import com.anluy.admin.web.qq.parser.QQRegParser;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
@@ -44,6 +45,8 @@ public class QQLoginIpController {
     private FileManagerConfig fileManagerConfig;
     @Resource
     private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
+    @Resource
+    private IPAddrUtil ipAddrUtil;
     /**
      * 解析
      *
@@ -69,7 +72,7 @@ public class QQLoginIpController {
             }
             String uploadDir = fileManagerConfig.getUploadDir();
             String path = uploadDir + attachment.getPath();
-            QQLoginIpParser parser = new QQLoginIpParser(attachment.getId());
+            QQLoginIpParser parser = new QQLoginIpParser(attachment.getId(),ipAddrUtil);
             QQLoginInfo loginInfo = parser.parser(attachment,path);
             loginInfo.setTags(attachment.getTags());
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(loginInfo).setPath(request.getRequestURI()));
