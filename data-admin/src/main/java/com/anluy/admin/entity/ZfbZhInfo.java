@@ -22,8 +22,11 @@ public class ZfbZhInfo extends BaseEntity<String> {
 
     private String jyh;// 交易号
     private String shddh;// 商户订单号
+    @JSONField(name = "jycjsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date jycjsj;// 交易创建时间
+    @JSONField(name = "fksj", format = "yyyy-MM-dd HH:mm:ss")
     private Date fksj;// 付款时间
+    @JSONField(name = "zjxgsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date zjxgsj;// 最近修改时间
     private String jylyd;//交易来源地
     private String jylx;// 类型

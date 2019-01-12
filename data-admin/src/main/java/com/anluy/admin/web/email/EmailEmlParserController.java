@@ -101,13 +101,13 @@ public class EmailEmlParserController {
             Map<String, Object> jsonMap = (Map<String, Object>) JSON.toJSON(email);
             jsonMap.forEach((k, v) -> {
                 switch (k) {
-                    case "received_date":
-                    case "create_time": {
-                        if (v != null) {
-                            jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
-                        }
-                        break;
-                    }
+//                    case "received_date":
+//                    case "create_time": {
+//                        if (v != null) {
+//                            jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
+//                        }
+//                        break;
+//                    }
                     case "file_list": {
                         if (v != null) {
                             List<String> fileList = new ArrayList();

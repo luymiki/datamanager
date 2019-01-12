@@ -27,6 +27,7 @@ public class ZfbZzInfo extends BaseEntity<String> {
     @JSONField(name = "skf_id")
     private String skfId;// 收款方支付宝账号
     private String skjgmc;// 收款机构信息
+    @JSONField(name = "dzsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date dzsj;// 到账时间
     private Double je; // 转账金额（元）
     private String zzcpmc; // 转账产品名称

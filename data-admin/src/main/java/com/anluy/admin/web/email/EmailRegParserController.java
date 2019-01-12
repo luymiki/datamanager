@@ -129,7 +129,7 @@ public class EmailRegParserController {
                             ipsaveList.add(jo);
                             jo.forEach((k, v) -> {
                                 switch (k) {
-                                    case "time":
+//                                    case "time":
                                     case "create_time": {
                                         if (v != null) {
                                             jo.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));

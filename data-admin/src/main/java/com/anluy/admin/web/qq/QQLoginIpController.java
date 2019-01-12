@@ -108,16 +108,6 @@ public class QQLoginIpController {
             loginInfo.setIpinfoList(null);
 
             Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(loginInfo);
-            jsonMap.forEach((k,v)->{
-                switch (k){
-                    case "create_time":{
-                        if(v!=null){
-                            jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                        }
-                        break;
-                    }
-                }
-            });
 
             //新增
             if(StringUtils.isBlank(loginInfo.getId())){
@@ -150,12 +140,6 @@ public class QQLoginIpController {
                 Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(ipInfo);
                 jsonMap.forEach((k,v)->{
                     switch (k){
-                        case "create_time":{
-                            if(v!=null){
-                                jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                            }
-                            break;
-                        }
                         case "tags":{
                             if(v!=null){
                                 jsonMap.put(k,((String)v).split(","));

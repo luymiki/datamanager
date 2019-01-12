@@ -34,8 +34,11 @@ public class ZfbJyjlInfo extends BaseEntity<String> {
     private String maijiaid;// 卖家用户id
     private String maijiaxx;// 卖家信息
     private Double je; // 交易金额（元）
+    @JSONField(name = "sksj", format = "yyyy-MM-dd HH:mm:ss")
     private Date sksj; // 收款时间
+    @JSONField(name = "zhxgsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date zhxgsj; // 最后修改时间
+    @JSONField(name = "cjsj", format = "yyyy-MM-dd HH:mm:ss")
     private Date cjsj; // 创建时间
     private String jylx; // 交易类型
     private String lyd; // 来源地

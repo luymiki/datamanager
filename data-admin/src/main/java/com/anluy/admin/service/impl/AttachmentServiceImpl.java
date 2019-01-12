@@ -36,12 +36,6 @@ public class AttachmentServiceImpl extends BaseServiceImpl<String,Attachment> im
                 }
                 break;
             }
-            case "create_time":{
-                if(value!=null){
-                    return DateFormatUtils.format((Date) value,"yyyy-MM-dd HH:mm:ss");
-                }
-                break;
-            }
             default:
                 break;
         }

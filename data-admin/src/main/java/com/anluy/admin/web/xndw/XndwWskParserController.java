@@ -78,12 +78,6 @@ public class XndwWskParserController {
                 Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(xndwWskInfo);
                 jsonMap.forEach((k,v)->{
                     switch (k){
-                        case "create_time":{
-                            if(v!=null){
-                                jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                            }
-                            break;
-                        }
                         case "tags":{
                             if(v!=null){
                                 jsonMap.put(k,((String)v).split(","));

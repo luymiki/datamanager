@@ -23,9 +23,9 @@ public class QQLoginIpInfo extends BaseEntity<String> {
     private String ip;//登录ip
     private String gsd;//ip归属地
 
-    @JSONField(name = "login_time", format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(name = "login_time")
     private String loginTime;
-    @JSONField(name = "logout_time", format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(name = "logout_time")
     private String logoutTime;
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;

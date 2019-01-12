@@ -130,12 +130,6 @@ public class WeiXinRegParserController {
             jsonMap.remove("wxlxrList");
             jsonMap.forEach((k,v)->{
                 switch (k){
-                    case "create_time":{
-                        if(v!=null){
-                            jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                        }
-                        break;
-                    }
                     case "tags":{
                         if(v!=null){
                             jsonMap.put(k,((String)v).split(","));
@@ -194,16 +188,6 @@ public class WeiXinRegParserController {
     private Map<String, Object> json(BaseEntity w){
         w.setId(UUID.randomUUID().toString() );
         Map<String, Object> m = (Map<String, Object>)JSON.toJSON(w);
-        m.forEach((k,v)->{
-            switch (k){
-                case "create_time":{
-                    if(v!=null){
-                        m.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                    }
-                    break;
-                }
-            }
-        });
         m.put("_id",w.getId());
         return m;
     }
