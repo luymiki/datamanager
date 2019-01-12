@@ -110,6 +110,35 @@ public class ExportController {
             return ResponseEntity.status(HttpStatus.OK).body(Result.error(500, "查询失败").setData(exception.getMessage()));
         }
     }
+    /**
+     * 查询接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "数据导出接口，统计", response = Result.class)
+    @ApiResponses(value = {@ApiResponse(code = 500, message = "查询失败"),
+            @ApiResponse(code = 501, message = "查询参数异常")})//错误码说明
+    @RequestMapping(value = "/exportEXcelAgg", method = {RequestMethod.GET, RequestMethod.POST})
+    public Object exportEXcelAgg(HttpServletResponse response, Integer pageNum, Integer pageSize, String paramsStr,String fieldName) {
+        try {
+            if (pageSize == null) {
+                pageSize = 1000;
+            }
+            if (pageNum == null) {
+                pageNum = 1;
+            }
+            if (StringUtils.isBlank(paramsStr)) {
+                LOGGER.error("查询失败，查询条件为空");
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(500, "查询失败，查询条件为空"));
+            }
+            Map result = elasticsearchQueryAnalyzeEngine.aggs(paramsStr,pageNum,pageSize);
+            this.exprotByAggDsl(response, result,fieldName);
+            return null;
+        } catch (Exception exception) {
+            LOGGER.error("查询失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(500, "查询失败").setData(exception.getMessage()));
+        }
+    }
 
     /**
      * 数据导出公共接口
@@ -158,7 +187,6 @@ public class ExportController {
             title.add(eqaMeta.getFieldName());
         });
         List<List> dataList = new ArrayList<>();
-//        dataList.add(title);
         result.forEach(dataMap -> {
             List data = new ArrayList<>();
             metaList.forEach(eqaMeta -> {
@@ -166,10 +194,53 @@ public class ExportController {
             });
             dataList.add(data);
         });
+        export(response,eqaIndex.getIndexNameCn(),title,dataList);
+        return null;
+    }
+    /**
+     * 数据导出公共接口
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    private Object exprotByAggDsl(HttpServletResponse response, Map result,String fieldName) throws IOException, TemplateException {
+        ElasticsearchQueryAnalyzeEngine.DSLPOJO dsl = (ElasticsearchQueryAnalyzeEngine.DSLPOJO)result.get("dsl");
+        Map aggs = (Map)result.get("aggs");
+        List group = (List)aggs.get(fieldName);
+        EqaIndex eqaIndex = elasticsearchQueryAnalyzeEngine.getEqaMetaMap().getEqaMetaList(dsl.getIndexName());
+        if (eqaIndex == null) {
+            return null;
+        }
+        List<EqaMeta> metaList = eqaIndex.getEqaMetas();
+        //准备导出的数据
+        //如果没有元数据,跳过
+        if (metaList == null) {
+            return null;
+        }
+        List title = new ArrayList<>();
+        metaList.forEach(eqaMeta -> {
+            if(eqaMeta.getFieldCode().equals(fieldName)){
+                title.add(eqaMeta.getFieldName());
+            }
+        });
+        title.add("次数");
+        List<List> dataList = new ArrayList<>();
+        group.forEach(dataMap -> {
+            Map map = (Map)dataMap;
+            List data = new ArrayList<>();
+            data.add(map.get("key"));
+            data.add(map.get("doc_count"));
+            dataList.add(data);
+        });
+        export(response,eqaIndex.getIndexNameCn(),title,dataList);
+        return null;
+    }
+
+    private void export(HttpServletResponse response,String fileNameCn,List title,List dataList) throws IOException, TemplateException {
         //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
         response.setContentType("multipart/form-data");
         //2.设置文件头：最后一个参数是设置下载文件名(假如我们叫a.pdf)
-        String fileName = "数据导出-" + eqaIndex.getIndexNameCn() + ".xls";
+        String fileName = "数据导出-" + fileNameCn + ".xls";
         fileName = new String(fileName.getBytes(),"ISO8859-1");
         response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
         response.setCharacterEncoding("UTF-8");
@@ -179,19 +250,13 @@ public class ExportController {
 
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setDefaultEncoding("UTF-8");
-        configuration.setDirectoryForTemplateLoading(new File(ExportController.class.getResource("/template").getFile()));
+        configuration.setClassForTemplateLoading(ExportController.class,"/template");
+        //configuration.setDirectoryForTemplateLoading(new File(ExportController.class.getResource("/template").getFile()));
         Template template = configuration.getTemplate("export.xml");
 
-//        XLSTransformer transformer = new XLSTransformer();
-//        Workbook wb = transformer.transformXLS(ExportController.class.getResourceAsStream("/template/export.xls"), beans);
-//        OutputStream out = response.getOutputStream();
-//        wb.write(out);
-//        out.flush();
         Writer writer = response.getWriter();
         template.process(beans,writer);
         writer.flush();
         writer.close();
-        return null;
     }
-
 }

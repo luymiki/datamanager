@@ -42,6 +42,7 @@ public class WebConfig {
                         .excludePathPatterns(
                                 "/api/eqa/exportEXcel",
                                 "/api/eqa/exportEXcelFullText",
+                                "/api/eqa/exportEXcelAgg",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",
                                 "/swagger-resources/**",
