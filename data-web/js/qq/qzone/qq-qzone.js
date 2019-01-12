@@ -165,6 +165,7 @@ var Opt = (function () {
                         window.uplader[i]["save"]=true;
                     }
                     toastrMsg.success("空间信息保存成功");
+                    top.contabs.closeTab();
                 }else {
                     console.log(d);
                     toastrMsg.error("空间信息保存失败");

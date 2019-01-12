@@ -121,7 +121,7 @@
                 pagination:false,
                 columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
                     {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
-                    {field: 'ljjybs',title: '累计交易笔数',sortable:true},
+                    {field: 'ljjybs',title: '累计交易笔数',sortable:true,formatter:formatterJybs},
                     {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
                     {field: 'zxjyje',title: '最小交易金额',sortable:true,formatter:formatter},
                     {field: 'ljzrje',title: '累计转入金额',sortable:true,formatter:formatter},
@@ -164,7 +164,7 @@
                             columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
                                 {field: 'dfId',title: '对手账号',sortable:true,formatter:formatterJyds},
                                 {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
-                                {field: 'ljjybs',title: '累计交易笔数',sortable:true},
+                                {field: 'ljjybs',title: '累计交易笔数',sortable:true,formatter:formatterJydsJybs},
                                 {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
                                 {field: 'zxjyje',title: '最小交易金额',sortable:true,formatter:formatter},
                                 {field: 'ljzrje',title: '累计转入金额',sortable:true,formatter:formatter},
@@ -386,11 +386,25 @@
         var formatterJyds = function (val) {
             return val === undefined || val=== null ? val :"<a class='jyds' data-dsid='"+val+"'>"+val+"</a>";
         }
+        var formatterJydsJybs = function (val,o) {
+            return val === undefined || val=== null ? val :"<a class='jybs' data-dsid='"+o["dfId"]+"'>"+val+"</a>";
+        }
+        var formatterJybs = function (val) {
+            return val === undefined || val=== null ? val :"<a class='jybs'>"+val+"</a>";
+        }
         var _event = function () {
             $("#integrated").on('click',_integrated);
             $("#jyds-table").on('click',".jyds",function () {
                 var dsid = $(this).attr("data-dsid");
                 top.contabs.addMenuItem("/view/cft/analyze/cft-jyds.html?id="+cftInfo["id"]+"&ds_id="+dsid+"&zcType="+(zcType||""),'查看对手['+dsid+']流水信息');
+            });
+            $("#jyds-table").on('click',".jybs",function () {
+                var dsid = $(this).attr("data-dsid");
+                top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&ds_id="+dsid+"&zcType="+(zcType||""),'查看['+dsid+']交易流水信息');
+            });
+            $("#data-table").on('click',".jybs",function () {
+                var dsid = $(this).attr("data-jybs");
+                top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&zcType="+(zcType||""),'查看交易流水信息');
             });
         };
 

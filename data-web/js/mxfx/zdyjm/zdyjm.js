@@ -18,7 +18,7 @@
 
     $("#query-btn").on('click', function () {
         var params = zdycx.condtion();
-        console.log(params);
+        // console.log(params);
         if(params){
             $("#data-show-box").show();
             _query($('#data-table'),params);
@@ -29,6 +29,87 @@
         $("#data-show-box").hide();
         zdycx.rest();
     });
+    $("#quchong-row").on('click', function () {
+        var $select = $("#quchong-field");
+        $select.html("");
+        var fieldList = zdycx.fieldList();
+        for (var i = 0; i < fieldList.length; i++) {
+            var mm = fieldList[i];
+            if (mm["isFx"] === 1) {
+                $("<option value='" + mm["fieldCode"] + "' data-type='" + mm["fieldType"] + "'>" + mm["fieldName"] + "</option>").appendTo($select);
+            }
+        }
+        $("#comment-modal").modal("show");
+    });
+
+    $("#comment-submit").click(function () {
+        var field = $.trim($("#quchong-field").val());
+        var params = zdycx.condtion();
+        if(params){
+            params["aggs"]=[{
+                "groupName":field,
+                "field":field,
+                "aggsType":1
+            }];
+            $("#data-show-box").show();
+            _queryQuChong($('#data-table'),params,field);
+            $("#comment-modal").modal("hide");
+        }
+    });
+
+    var _queryQuChong = function(dataTable,params,fieldName){
+        var columns = [];
+        columns[columns.length] = {field: 'checkbox',title: '选择',width:'50px',checkbox:true};
+        columns[columns.length] = {field: 'xh',title: '序号',width:'50px'};
+        var fieldList = zdycx.fieldList();
+        for (var i = 0; i < fieldList.length; i++) {
+            var mm = fieldList[i];
+            if (mm["fieldCode"] === fieldName) {
+                columns[columns.length] =  {field: fieldName,title: mm["fieldName"],formatter:formatter};
+                columns[columns.length] =  {field: "doc_count",title: "次数"};
+            }
+        }
+        $.ajax.proxy({
+            url:"/api/eqa/aggs",
+            type:"post",
+            dataType:"json",
+            data:{"pageNum":1,"pageSize":10,"paramsStr":JSON.stringify(params)},
+            success : function (msg) {
+                var rowdata = [];
+                if(msg.status===200){
+                    var data = msg.data.aggs[fieldName];
+                    var xh =  1;
+                    for(var i= 0;i<data.length;i++){
+                        var d = data[i];
+                        rowdata[i] = {"xh":xh++,"doc_count":d.doc_count};
+                        rowdata[i][fieldName] = d.key;
+                        //console.log(rowdata[i]);
+                    }
+                }
+                dataTable.myTable({
+                    pagination:true,
+                    sidePagination:'client',
+                    columns:columns,
+                    exportXls:$("#exportXls"),
+                    exportXlsFun:function () {
+                        var from = $('<form method="post" action="/api/eqa/exportEXcelAgg" target="_blank"></form>').appendTo('body');
+                        $('<input type="text" name="paramsStr">').val(JSON.stringify(params)).appendTo(from);
+                        $('<input type="text" name="fieldName">').val(fieldName).appendTo(from);
+                        from.submit().remove();
+                    },
+                    data : rowdata,
+                    onDblClickCell:function(field, value, row, $element) {
+                        return false;
+                    }
+                });
+
+            },
+            error:function(){
+                toastrMsg.error("错误！");
+            }
+        });
+
+    }
 
     var _query = function(dataTable,params){
         var columns = [];

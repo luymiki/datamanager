@@ -188,6 +188,7 @@
                         {field: 'xh',title: '序号',width:'50px'},
                         {field: 'id',title: 'ID',visible:false},
                         {field: 'ip',title: '登录IP',sortable:true},
+                        {field: 'gsd',title: 'IP归属地',sortable:true},
                         {field: 'cjsj',title: '登录时间',sortable:true}
                     ],
                     data : file["wxloginipList"]

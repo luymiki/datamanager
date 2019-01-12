@@ -28,6 +28,7 @@
                     {field: 'susp_name',title: '姓名',sortable:true},
                     {field: 'qq',title: 'QQ号',sortable:true},
                     {field: 'ip',title: '登录IP',sortable:true},
+                    {field: 'gsd',title: 'IP归属地',sortable:true},
                     {field: 'login_time',title: '登录时间',sortable:true},
                     {field: 'logout_time',title: '下线时间'},
                     {field: 'login_type',title: '登录方式'},

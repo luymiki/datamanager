@@ -28,6 +28,7 @@
 
             loginfo.loadLoginInfoList();
             //zhmx.loadZhmxList();
+            //txjl.loadZhmxList();
         };
 
         var params = {"indexName":"zfbreginfo","conditions":[],"sort":"create_time desc"};
@@ -78,8 +79,9 @@
                         {field: 'user_id',title: '支付宝账号',sortable:true},
                         {field: 'dlzh',title: '登陆账号',sortable:true},
                         {field: 'name',title: '账户名称',sortable:true},
-                        {field: 'ip',title: 'IP'},
-                        {field: 'czsj',title: '登录时间'},
+                        {field: 'ip',title: 'IP',sortable:true},
+                        {field: 'gsd',title: 'IP归属地',sortable:true},
+                        {field: 'czsj',title: '登录时间',sortable:true},
                         {field: 'xcbh',title: '协查编号'}
                     ],
                     ajax : function (request) {
@@ -368,7 +370,7 @@
                     }
                 });
             };
-            return {loadZhmxList:loadZhmxList};
+            return {loadZhmxList:loadTxjlList};
         })();
 
         return {

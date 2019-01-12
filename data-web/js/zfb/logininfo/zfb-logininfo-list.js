@@ -75,6 +75,7 @@
                     {field: 'dlzh',title: '登陆账号',sortable:true},
                     {field: 'name',title: '账户名称',sortable:true},
                     {field: 'ip',title: 'IP',sortable:true},
+                    {field: 'gsd',title: 'IP归属地',sortable:true},
                     {field: 'czsj',title: '登录时间',sortable:true},
                     {field: 'xcbh',title: '协查编号'}
                 ],

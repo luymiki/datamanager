@@ -99,7 +99,7 @@
                 columns: [{field: 'xh',title: '序号',width:'50px',sortable:true},
                     {field: 'name',title: '户名',sortable:true},
                     {field: 'ljjyje',title: '累计交易金额',sortable:true,formatter:formatter},
-                    {field: 'ljjybs',title: '累计交易笔数',sortable:true},
+                    {field: 'ljjybs',title: '累计交易笔数',sortable:true,formatter:formatterJybs},
                     {field: 'zdjyje',title: '最大交易金额',sortable:true,formatter:formatter},
                     {field: 'zxjyje',title: '最小交易金额',sortable:true,formatter:formatter},
                     {field: 'ljzrje',title: '累计转入金额',sortable:true,formatter:formatter},
@@ -308,8 +308,13 @@
         var formatter = function (val) {
             return val === undefined || val=== null? val :val.toFixed(2);
         }
+        var formatterJybs = function (val) {
+            return val === undefined || val=== null ? val :"<a class='jybs'>"+val+"</a>";
+        }
         var _event = function () {
-
+            $("#data-table").on('click',".jybs",function () {
+                top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&ds_id="+ds_id+"&zcType="+(zcType||""),'查看['+ds_id+']交易流水信息');
+            });
         };
 
         return {

@@ -89,13 +89,19 @@ var Opt = (function () {
     };
 
     var _saveEml = function () {
+        toastrMsg.info("数据量比较大，正在保存中，请等待提示信息。。");
         var count = 0;
         for(var i=0;i<list.length;i++) {
             if(_saveEmlOne(null,i+1)){
                 count++;
             }
         }
-
+        if(count === list.length){
+            toastrMsg.success("文件保存成功");
+            top.contabs.closeTab();
+        }else {
+            toastrMsg.error("文件保存失败");
+        }
     };
     var _saveEmlOne = function (o,indx) {
         var result = false;
@@ -114,7 +120,7 @@ var Opt = (function () {
             _data["suspId"] = up["suspId"];
             _data["suspName"] = up["suspName"];
             var id=_data["id"];
-            //toastrMsg.info("数据量比较大，正在保存中，请等待提示信息。。");
+
             $.ajax.proxy({
                 url:"/api/admin/qq/loginip/save",
                 type:"post",
