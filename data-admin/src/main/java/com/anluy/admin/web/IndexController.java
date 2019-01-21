@@ -1,8 +1,10 @@
 package com.anluy.admin.web;
 
+import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
 import io.swagger.annotations.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +33,8 @@ public class IndexController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
     @Resource
     private ElasticsearchRestClient elasticsearchRestClient;
-
+    @Resource
+    private IPAddrUtil ipAddrUtil;
     /**
      * 首页接口
      *
@@ -56,5 +60,46 @@ public class IndexController {
             LOGGER.error("查询失败:" + exception.getMessage(), exception);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
+    }
+    /**
+     * 首页接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "设置ip", response = Result.class)
+    @ApiResponses(value = {@ApiResponse(code = 500, message = "查询失败")})//错误码说明
+    @RequestMapping(value = "/setip", method = {RequestMethod.GET, RequestMethod.POST})
+    public Object setIP(HttpServletRequest request) {
+        try {
+            setIp("qqloginip_list","ip");
+            setIp("wxloginip","ip");
+            setIp("zfblogininfo","ip");
+            setIp("email_ip","ip");
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("设置完成").setData("").setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("查询失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
+
+    private void setIp(String indexName,String ipField) throws IOException {
+        elasticsearchRestClient.scroll("{\"size\":1000}",null,new ElasticsearchRestClient.TimeWindowCallBack(){
+            @Override
+            public void process(List<Map> var1) {
+                List<Map> listmap = new ArrayList<>();
+                var1.forEach(map->{
+                    String ip = (String) map.get(ipField);
+                    if(StringUtils.isNotBlank(ip)){
+                        String gsd = ipAddrUtil.findCityInfoString(ip);
+                        map.put("gsd",gsd);
+                        map.put("_id",map.get("id"));
+                        listmap.add(map);
+                    }
+                });
+                if(!listmap.isEmpty()){
+                    elasticsearchRestClient.batchUpdate(listmap,indexName);
+                }
+            }
+        },indexName,null,null);
     }
 }

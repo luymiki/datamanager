@@ -69,19 +69,21 @@
                 "dataType":2,
             };
             con[con.length]={
+                "groupId":"1-1",
+                "groupType":"should",
                 "field": "kh",
                 "values": [yhzhInfo["kh"]],
                 "searchType": 1,
                 "dataType":2,
             };
-            if(yhzhInfo["ssyh"]!=="农业银行"){
-                con[con.length]={
-                    "field": "zh",
-                    "values": [yhzhInfo["zh"]],
-                    "searchType": 1,
-                    "dataType":2,
-                };
-            }
+            con[con.length]={
+                "groupId":"1-2",
+                "groupType":"should",
+                "field": "zh",
+                "values": [yhzhInfo["kh"]],
+                "searchType": 1,
+                "dataType":2,
+            };
             if(range) {
                 con[con.length] = {
                     "field": "jyje",

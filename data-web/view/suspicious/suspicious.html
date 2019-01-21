@@ -39,10 +39,12 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
+                        <input id="search-input" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                        <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
                         <div class="ibox-tools" style="margin-top: -7px;">
                             <div class="btn btn-primary btn-sm" id="addBtn" >新增</div>
                             <div class="btn btn-primary btn-sm" id="pizhu" >批注</div>
-                            <div class="btn btn-primary btn-sm" id="copyRow">复制行</div>
+                            <div class="btn btn-primary btn-sm" id="gxr-list">关系人列表</div>
                             <div class="btn btn-primary btn-sm" id="exportXls">导出EXCEL</div>
                         </div>
                     </div>
@@ -191,9 +193,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">情况简介：</label>
                             <div class="col-sm-7">
-                                <textarea id="qkjj" name="qkjj" class="form-control" maxlength="2000">
-
-                                </textarea>
+                                <textarea id="qkjj" name="qkjj" class="form-control" maxlength="2000"></textarea>
                             </div>
                         </div>
                     </form>

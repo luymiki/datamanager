@@ -47,10 +47,6 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
     public Object formater(String field, Object value) {
         if (value != null) {
             switch (field) {
-                case "create_time":
-                case "modify_time": {
-                    return DateFormatUtils.format((Date) value, "yyyy-MM-dd HH:mm:ss");
-                }
                 case "qq":
                 case "weixin":
                 case "cft":

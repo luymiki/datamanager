@@ -76,7 +76,7 @@ public class AnalyzeCodeAndPushMessage {
         if (keys != null && keys.length > 0) {
             for (String key : keys) {
                 String keyCode = (String) map.get(key);
-                if(StringUtils.isBlank(keyCode)){
+                if(StringUtils.isBlank(keyCode) || "-".equals(keyCode)){
                     continue;
                 }
                 JSONObject jo = (JSONObject) JSON.parse(JSON.toJSONString(map));

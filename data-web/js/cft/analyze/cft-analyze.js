@@ -403,7 +403,6 @@
                 top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&ds_id="+dsid+"&zcType="+(zcType||""),'查看['+dsid+']交易流水信息');
             });
             $("#data-table").on('click',".jybs",function () {
-                var dsid = $(this).attr("data-jybs");
                 top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&zcType="+(zcType||""),'查看交易流水信息');
             });
         };

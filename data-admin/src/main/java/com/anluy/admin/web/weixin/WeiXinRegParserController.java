@@ -93,9 +93,9 @@ public class WeiXinRegParserController {
     @RequestMapping(value = "/save",method =RequestMethod.POST)
     public Object save(HttpServletRequest request, @RequestBody WxregInfo regInfo) {
         try {
-            if(StringUtils.isBlank(regInfo.getQq())){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"qq号码为空"));
-            }
+//            if(StringUtils.isBlank(regInfo.getQq())){
+//                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"qq号码为空"));
+//            }
             if(StringUtils.isBlank(regInfo.getSuspName())){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"嫌疑人姓名为空"));
             }

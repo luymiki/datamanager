@@ -6,6 +6,7 @@
 
     var suspicious = (function () {
         var meta;
+        var _search;
         var _init = function init(_data) {
             _initListTable();
             _validator();
@@ -22,7 +23,7 @@
 
         var _initListTable = function(){
             $('#suspicious-table').myTable({
-                copyRow:$("#copyRow"),
+                // copyRow:$("#copyRow"),
                 exportXls:$("#exportXls"),
                 exportXlsFun:function () {
                     params["conditions"]=[kyr];
@@ -59,8 +60,119 @@
                     if(request.data.sortName){
                         sort = request.data.sortName +" "+request.data.sortOrder;
                     }
+                    var con = [];
+                    if(_search){
+                        con=[
+                            {
+                                "groupId":"1",
+                                "groupType":"should",
+                                "field": "name_na",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"1-1",
+                                "groupType":"should",
+                                "field": "gmsfzh",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"1-2",
+                                "groupType":"should",
+                                "field": "qkjj",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"2",
+                                "groupType":"should",
+                                "field": "qq",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"3",
+                                "groupType":"should",
+                                "field": "weixin",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"4",
+                                "groupType":"should",
+                                "field": "phone",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"5",
+                                "groupType":"should",
+                                "field": "imei",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"6",
+                                "groupType":"should",
+                                "field": "imsi",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"7",
+                                "groupType":"should",
+                                "field": "cft",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"8",
+                                "groupType":"should",
+                                "field": "zfb",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"9",
+                                "groupType":"should",
+                                "field": "yhzh",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"10",
+                                "groupType":"should",
+                                "field": "ip",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            },
+                            {
+                                "groupId":"11",
+                                "groupType":"should",
+                                "field": "email",
+                                "values": [_search],
+                                "searchType": 2,
+                                "dataType":1,
+                            }
+                        ];
+                    }
+                    con[con.length]=kyr;
                     params["sort"]=sort;
-                    params["conditions"]=[kyr];
+                    params["conditions"]=con;
+
                     $.ajax.proxy({
                         url:"/api/eqa/query",
                         type:"post",
@@ -128,6 +240,16 @@
 
 
         var _event = function () {
+            $("#search-btn").on('click',function () {
+                _search = $("#search-input").val();
+                if(_search && $.trim(_search) !== ""){
+                    $('#suspicious-table').bootstrapTable("refresh");
+                }else {
+                    _search=null;
+                    $('#suspicious-table').bootstrapTable("refresh");
+                }
+            });
+
             $("#addBtn").on('click',function () {
                 $(".import-btn").hide();
                 $("#signupForm").find("input").each(function(i,o){
@@ -154,6 +276,9 @@
             });
             $("#suspicious-table").on('click','.gxr',function () {
                 top.contabs.addMenuItem("/view/suspicious/suspicious-gxr.html?id="+$(this).attr("data-id"),'关系人列表');
+            });
+            $("#gxr-list").on('click',function () {
+                top.contabs.addMenuItem("/view/suspicious/suspicious-gxr.html",'关系人列表');
             });
             $("#suspicious-table").on('click','.tiqu',function () {
                 _tiqu($(this).attr("data-id"));

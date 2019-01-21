@@ -95,12 +95,6 @@ public class YhzhKhxxInfoParserController {
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
-                        case "create_time":{
-                            if(v!=null){
-                                jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                            }
-                            break;
-                        }
                         case "xhrq":
                         case "khrq":{
                             if(v!=null){
@@ -129,13 +123,6 @@ public class YhzhKhxxInfoParserController {
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
-                        case "jysj":
-                        case "create_time":{
-                            if(v!=null){
-                                jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd HH:mm:ss"));
-                            }
-                            break;
-                        }
                         case "tags":{
                             if(v!=null){
                                 jsonMap.put(k,((String)v).split(","));

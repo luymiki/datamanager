@@ -46,7 +46,7 @@ var parser = (function () {
                     var file = d.data;
                     list[list.length] = file;
 
-                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+file['name']+'['+file['qq']+']</a></li>').appendTo($tabs);
+                    $('<li class="'+(i===0?('active'):(' '))+'" ><a data-toggle="tab" href="#tab-'+i+'"> '+file['name']+'['+file['weixin']+']</a></li>').appendTo($tabs);
                     //$('<div id="tab-'+i+'" class="tab-pane '+(i===0?('active'):(' '))+'"><div class="panel-body">'+ email['from']+'</div></div>').appendTo($contents);
 
 

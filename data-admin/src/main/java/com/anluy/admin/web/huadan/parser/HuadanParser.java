@@ -192,9 +192,6 @@ public class HuadanParser {
         }
         huadanInfo.setYys("移动");
         huadanInfo.setZjhm(zjhm);
-
-
-
         setHuadanList(start,huadanInfo,datalist,columns);
         return huadanInfo;
     }

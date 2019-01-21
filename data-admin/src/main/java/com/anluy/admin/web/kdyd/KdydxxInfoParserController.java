@@ -92,12 +92,6 @@ public class KdydxxInfoParserController {
                 jsonMap.put("_id", regInfo.getId());
                 jsonMap.forEach((k, v) -> {
                     switch (k) {
-//                        case "create_time": {
-//                            if (v != null) {
-//                                jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
-//                            }
-//                            break;
-//                        }
                         case "fhrq": {
                             if (v != null) {
                                 jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd"));
@@ -115,16 +109,6 @@ public class KdydxxInfoParserController {
                 saveList.add(jsonMap);
             });
             JSONObject fljson = (JSONObject) JSON.toJSON(fl);
-            fljson.forEach((k, v) -> {
-                switch (k) {
-                    case "create_time": {
-                        if (v != null) {
-                            fljson.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd HH:mm:ss"));
-                        }
-                        break;
-                    }
-                }
-            });
             elasticsearchRestClient.save(fljson, fl.getId(), "kdydfl");
             elasticsearchRestClient.batchSave(saveList, "kdydxx");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(saveList).setPath(request.getRequestURI()));
