@@ -2,6 +2,7 @@ package com.anluy.admin.web.cft.parser;
 
 import com.anluy.admin.entity.CftRegInfo;
 import com.anluy.admin.entity.QQRegInfo;
+import com.anluy.admin.utils.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +37,8 @@ public class CftRegParser {
      */
     public CftRegInfo parser(File file) throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        String line = null;
-        List<String> stringList = new ArrayList<>();
-        while ((line = bufferedReader.readLine()) != null) {
-            stringList.add(line);
-        }
+        CSVReader csvReader = new CSVReader(bufferedReader,'\t');
+        List< List<String>> stringList = csvReader.readAll();
         return parse(stringList);
     }
 
@@ -55,13 +53,13 @@ public class CftRegParser {
         return parser(new File(path));
     }
 
-    private CftRegInfo parse(List<String> txtContent) {
+    private CftRegInfo parse(List< List<String>> txtContent) {
         if(txtContent.size()<2){
             throw new RuntimeException("文件格式不正确，不能解析");
         }
         CftRegInfo regInfo = new CftRegInfo();
         regInfo.setFileId(fileId);
-        List<String> infolist = split( txtContent.get(1));
+        List<String> infolist = txtContent.get(1);
         if(infolist.size() < 5){
             throw new RuntimeException("文件格式不正确，不能解析");
         }
@@ -86,8 +84,7 @@ public class CftRegParser {
         }
 
         for (int i = 2; i < txtContent.size(); i++) {
-            String line = txtContent.get(i);
-            List<String> list = split( line);
+            List<String> list = txtContent.get(i);
             if(list.size() <7 ){
                 continue;
             }
@@ -109,4 +106,7 @@ public class CftRegParser {
         return hylist;
     }
 
+//    public static void main(String[] args) throws Exception {
+//        new CftRegParser("").parser("H:\\数据管理系统\\导入数据20180601\\cft\\434374098\\tp_434374098_info.txt");
+//    }
 }

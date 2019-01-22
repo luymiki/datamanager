@@ -34,7 +34,7 @@ public class PhoneAddrUtil {
     }
 
     private void init(){
-        LOGGER.info("加载手机归属他数据。。。。");
+        LOGGER.info("加载手机归属地数据。。。。");
         jdbcTemplate.query("select id,pref,phone,province,city,isp,post_code,city_code,area_code,types from phone ", new RowMapper<Map>() {
             @Override
             public Map mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -47,7 +47,7 @@ public class PhoneAddrUtil {
                 return null;
             }
         });
-        LOGGER.info("加载手机归属他数据完成。。。。");
+        LOGGER.info("加载手机归属地数据完成。。。。");
     }
     /**
      * 根据手机号码获取归属地和运营商

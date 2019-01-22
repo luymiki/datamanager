@@ -46,7 +46,7 @@
                     {field: 'ip',title: 'IP',formatter:formatterList},
                     {field: 'email',title: '电子邮箱',formatter:formatterList},
                     {field: 'other',title: '其他码值',formatter:formatterList},
-                    {field: 'gzjd',title: '工作进度'},
+                    {field: 'gzjd',title: '工作进度',sortable:true},
                     {field: 'opt',title: '操作',width:'110px'}
                 ],
                 ajax : function (request) {
