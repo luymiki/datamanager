@@ -92,6 +92,12 @@ public class KdydxxInfoParserController {
                 jsonMap.put("_id", regInfo.getId());
                 jsonMap.forEach((k, v) -> {
                     switch (k) {
+                        case "fhrq": {
+                            if (v != null) {
+                                jsonMap.put(k, DateFormatUtils.format((Date) v, "yyyy-MM-dd"));
+                            }
+                            break;
+                        }
                         case "tags": {
                             if (v != null) {
                                 jsonMap.put(k, ((String) v).split(","));

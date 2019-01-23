@@ -72,14 +72,13 @@ public class CftRegParser {
             regInfo.setSfzh(i4.replace("[","").replace("]",""));
         }
         regInfo.setDh(infolist.size()>5? infolist.get(5):null);
-        regInfo.setBdzt(infolist.size()>6? infolist.get(6):null);
         List<String> kyhList = new ArrayList<>();
         List<String> yhzhList = new ArrayList<>();
         regInfo.setKhxxList(kyhList);
         regInfo.setYhzhList(yhzhList);
 
-        kyhList.add(infolist.size()>7? infolist.get(7):null);
-        String i7 = infolist.size()>8? infolist.get(8):null;
+        kyhList.add(infolist.size()>6? infolist.get(6):null);
+        String i7 = infolist.size()>7? infolist.get(7):null;
         if(StringUtils.isNotBlank(i7)){
             yhzhList.add(i7.replace("[","").replace("]",""));
         }

@@ -95,6 +95,13 @@ public class YhzhKhxxInfoParserController {
                 jsonMap.put("_id",regInfo.getId());
                 jsonMap.forEach((k,v)->{
                     switch (k){
+                        case "xhrq":
+                        case "khrq":{
+                            if(v!=null){
+                                jsonMap.put(k, DateFormatUtils.format((Date)v,"yyyy-MM-dd"));
+                            }
+                            break;
+                        }
                         case "tags":{
                             if(v!=null){
                                 jsonMap.put(k,((String)v).split(","));

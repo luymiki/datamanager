@@ -19,11 +19,7 @@ public class ZfbLoginInfo extends BaseEntity<String> {
     private Date createTime;
 
     private String tags;//标签
-    @JSONField(name = "susp_id")
-    private String suspId;
 
-    @JSONField(name = "susp_name")
-    private String suspName;
     @JSONField(name = "user_id")
     private String userId;//用户Id
     private String dlzh;//登陆账号
@@ -112,21 +108,5 @@ public class ZfbLoginInfo extends BaseEntity<String> {
 
     public void setGsd(String gsd) {
         this.gsd = gsd;
-    }
-
-    public String getSuspId() {
-        return suspId;
-    }
-
-    public void setSuspId(String suspId) {
-        this.suspId = suspId;
-    }
-
-    public String getSuspName() {
-        return suspName;
-    }
-
-    public void setSuspName(String suspName) {
-        this.suspName = suspName;
     }
 }

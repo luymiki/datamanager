@@ -37,8 +37,6 @@ public class Suspicious extends BaseEntity<String> {
     private String other; //其他特征
     @JSONField(name = "kyr_id")
     private String kyrId; //可疑人
-    @JSONField(name = "kyr_name")
-    private String kyrName; //可疑人
 
     private String gzjd;
     @JSONField(name = "create_time",format = "yyyy-MM-dd HH:mm:ss")
@@ -223,13 +221,5 @@ public class Suspicious extends BaseEntity<String> {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public String getKyrName() {
-        return kyrName;
-    }
-
-    public void setKyrName(String kyrName) {
-        this.kyrName = kyrName;
     }
 }

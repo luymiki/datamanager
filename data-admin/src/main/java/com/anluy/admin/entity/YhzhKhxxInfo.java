@@ -18,11 +18,7 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     private Date createTime;
 
     private String tags;//标签
-    @JSONField(name = "susp_id")
-    private String suspId;
 
-    @JSONField(name = "susp_name")
-    private String suspName;
     private String ssyh;//	所属银行
     @Field("序号")
     private String xh;//	序号
@@ -458,21 +454,5 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
 
     public void setLjjybs(Integer ljjybs) {
         this.ljjybs = ljjybs;
-    }
-
-    public String getSuspId() {
-        return suspId;
-    }
-
-    public void setSuspId(String suspId) {
-        this.suspId = suspId;
-    }
-
-    public String getSuspName() {
-        return suspName;
-    }
-
-    public void setSuspName(String suspName) {
-        this.suspName = suspName;
     }
 }

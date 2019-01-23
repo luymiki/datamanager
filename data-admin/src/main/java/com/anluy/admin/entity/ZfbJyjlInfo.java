@@ -18,11 +18,6 @@ public class ZfbJyjlInfo extends BaseEntity<String> {
     private Date createTime;
 
     private String tags;//标签
-    @JSONField(name = "susp_id")
-    private String suspId;
-
-    @JSONField(name = "susp_name")
-    private String suspName;
     @JSONField(name = "user_id")
     private String userId;// 用户id
     private String name;// 用户名称
@@ -273,21 +268,5 @@ public class ZfbJyjlInfo extends BaseEntity<String> {
 
     public void setZc100(Double zc100) {
         this.zc100 = zc100;
-    }
-
-    public String getSuspId() {
-        return suspId;
-    }
-
-    public void setSuspId(String suspId) {
-        this.suspId = suspId;
-    }
-
-    public String getSuspName() {
-        return suspName;
-    }
-
-    public void setSuspName(String suspName) {
-        this.suspName = suspName;
     }
 }

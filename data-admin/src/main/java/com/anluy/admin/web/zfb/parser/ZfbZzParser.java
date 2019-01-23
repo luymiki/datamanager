@@ -71,8 +71,6 @@ public class ZfbZzParser {
             ZfbZzInfo regInfo = new ZfbZzInfo();
             regInfo.setFileId(attachment.getId());
             regInfo.setTags(attachment.getTags());
-            regInfo.setSuspId(attachment.getSuspId());
-            regInfo.setSuspName(attachment.getSuspName());
             regInfo.setJyh(list.get(0));
             regInfo.setFkfId(list.get(1));
 //            regInfo.setUserId(regInfo.getFkfId());

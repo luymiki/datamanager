@@ -73,8 +73,6 @@ public class YhzhJylsParser {
             YhzhJylsInfo jyls = new YhzhJylsInfo();
             jyls.setFileId(attachment.getId());
             jyls.setTags(attachment.getTags());
-            jyls.setSuspId(attachment.getSuspId());
-            jyls.setSuspName(attachment.getSuspName());
             jyls.setSsyh(ssyh);
             ClassUtils.setDataToObject(jyls,list,titleMapping,functionMap);
             if (jyls.getJyje()!=null) {

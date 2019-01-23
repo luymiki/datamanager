@@ -63,8 +63,6 @@ public class ZfbRegParser {
             ZfbRegInfo regInfo = new ZfbRegInfo();
             regInfo.setFileId(attachment.getId());
             regInfo.setTags(attachment.getTags());
-            regInfo.setSuspId(attachment.getSuspId());
-            regInfo.setSuspName(attachment.getSuspName());
             regInfo.setUserId(infolist.get(0));
             regInfo.setEmail(infolist.get(1));
             regInfo.setDlsj(infolist.get(2));

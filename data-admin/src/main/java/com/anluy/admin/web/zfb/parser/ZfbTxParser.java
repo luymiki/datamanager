@@ -68,8 +68,6 @@ public class ZfbTxParser {
             ZfbTxInfo regInfo = new ZfbTxInfo();
             regInfo.setFileId(attachment.getId());
             regInfo.setTags(attachment.getTags());
-            regInfo.setSuspId(attachment.getSuspId());
-            regInfo.setSuspName(attachment.getSuspName());
             regInfo.setTxlx(list.get(0));
             regInfo.setTxlsh(list.get(1));
             regInfo.setUserId(list.get(2));
