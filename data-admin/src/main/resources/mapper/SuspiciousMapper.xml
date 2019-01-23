@@ -21,6 +21,7 @@
         <result column="qkjj" property="qkjj" jdbcType="VARCHAR" />
         <result column="other" property="other" jdbcType="VARCHAR" />
         <result column="kyr_id" property="kyrId" jdbcType="VARCHAR" />
+        <result column="kyr_name" property="kyrName" jdbcType="VARCHAR" />
         <result column="gzjd" property="gzjd" jdbcType="VARCHAR" />
         <result column="ip" property="ip" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="DATE" />
@@ -30,7 +31,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, name, gmsfzh, qq, weixin,cft,zfb,yhzh,phone,imei,imsi,email,type,susp_id,susp_name,qkjj,other,kyr_id,ip,gzjd,create_time,modify_time
+         id, name, gmsfzh, qq, weixin,cft,zfb,yhzh,phone,imei,imsi,email,type,susp_id,susp_name,qkjj,other,kyr_id,kyr_name,ip,gzjd,create_time,modify_time
     </sql>
 
     <select id="getAll" resultMap="BaseResultMap"  >
@@ -51,7 +52,7 @@
         suspicious
         (<include refid="Base_Column_List" />)
         VALUES
-        (#{id}, #{name}, #{gmsfzh}, #{qq}, #{weixin},#{cft},#{zfb},#{yhzh},#{phone},#{imei},#{imsi},#{email},#{type},#{suspId},#{suspName},#{qkjj},#{other},#{kyrId},#{ip},#{gzjd},#{createTime},#{modifyTime})
+        (#{id}, #{name}, #{gmsfzh}, #{qq}, #{weixin},#{cft},#{zfb},#{yhzh},#{phone},#{imei},#{imsi},#{email},#{type},#{suspId},#{suspName},#{qkjj},#{other},#{kyrId},#{kyrName},#{ip},#{gzjd},#{createTime},#{modifyTime})
     </insert>
 
     <update id="update" parameterType="com.anluy.admin.entity.Suspicious" >
@@ -75,6 +76,7 @@
         <if test="qkjj != null">qkjj = #{qkjj},</if>
         <if test="other != null">other = #{other},</if>
         <if test="kyrId != null">kyr_id = #{kyrId},</if>
+        <if test="kyrName != null">kyr_name = #{kyrName},</if>
         <if test="gzjd != null">gzjd = #{gzjd},</if>
         <if test="ip != null">ip = #{ip},</if>
         <if test="createTime != null">create_Time = #{createTime},</if>

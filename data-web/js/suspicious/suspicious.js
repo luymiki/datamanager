@@ -38,7 +38,7 @@
                     {field: 'xh', title: '序号', width: '50px'},
                     {field: 'id', title: 'ID', visible: false},
                     {field: 'type', title: '类型', width: '100px', formatter: formatterType},
-                    {field: 'name', title: '姓名'},
+                    {field: 'name', title: '姓名', formatter: formatterName},
                     {field: 'gmsfzh', title: '身份证号', sortable: true},
                     {field: 'qkjj', title: '情况简介', class: 'qkjj-cell', formatter: formatterStr},
                     {field: 'qq', title: 'QQ', formatter: formatterList},
@@ -289,6 +289,11 @@
             });
 
             //列表数据点击链接
+            $("body").on('click', '.btn-name', function () {
+                var id = $(this).attr("data-id");
+                var name = $(this).attr("data-name");
+                top.contabs.addMenuItem("/view/suspicious/suspicious-detail.html?id=" + id, name);
+            });
             $("body").on('click', '.data-qq', function () {
                 var qq = $(this).attr("data-qq");
                 _addItem($(this).attr("data-id"), qq, "qq", 'QQ[' + qq + ']信息列表');
@@ -547,7 +552,9 @@
             }
             return "可疑人";
         };
-
+        var formatterName = function (d,item) {
+            return "<a class='btn-name' data-id='" + item["id"] + "' data-name='" + item["name"] + "' >" + d + "</a> ";
+        };
 
         var validator;
         var _validator = function () {
