@@ -16,7 +16,11 @@ public class ZfbZhInfo extends BaseEntity<String> {
 
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @JSONField(name = "susp_id")
+    private String suspId;
 
+    @JSONField(name = "susp_name")
+    private String suspName;
     private String tags;//标签
 
 
@@ -250,5 +254,21 @@ public class ZfbZhInfo extends BaseEntity<String> {
 
     public void setZc100(Double zc100) {
         this.zc100 = zc100;
+    }
+
+    public String getSuspId() {
+        return suspId;
+    }
+
+    public void setSuspId(String suspId) {
+        this.suspId = suspId;
+    }
+
+    public String getSuspName() {
+        return suspName;
+    }
+
+    public void setSuspName(String suspName) {
+        this.suspName = suspName;
     }
 }

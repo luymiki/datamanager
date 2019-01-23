@@ -67,6 +67,8 @@ public class ZfbLoginParser {
             ZfbLoginInfo regInfo = new ZfbLoginInfo();
             regInfo.setFileId(attachment.getId());
             regInfo.setTags(attachment.getTags());
+            regInfo.setSuspId(attachment.getSuspId());
+            regInfo.setSuspName(attachment.getSuspName());
            // regInfo.setInfoId(attachment.getFolder());//借用folder字段方注册信息的编号
             regInfo.setDlzh(list.get(0));
             regInfo.setUserId(list.get(1));

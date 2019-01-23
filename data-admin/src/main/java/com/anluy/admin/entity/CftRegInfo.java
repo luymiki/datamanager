@@ -33,6 +33,7 @@ public class CftRegInfo  extends BaseEntity<String> {
     private String zcsj;//注册时间
     private String sfzh;//注册身份证号
     private String dh;//手机号
+    private String bdzt;//绑定状态
     @JSONField(name = "khxx_list")
     private List<String> khxxList;//开户行信息
     @JSONField(name = "yhzh_list")
@@ -140,5 +141,13 @@ public class CftRegInfo  extends BaseEntity<String> {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getBdzt() {
+        return bdzt;
+    }
+
+    public void setBdzt(String bdzt) {
+        this.bdzt = bdzt;
     }
 }

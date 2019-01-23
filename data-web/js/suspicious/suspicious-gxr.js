@@ -15,6 +15,7 @@
             if(kyr){
                 $("#kyr-name").html("可疑人员："+kyr["name"]);
                 $("#kyrId").val(id);
+                $("#addBtn").show();
             }
             _initListTable();
             _validator();
@@ -32,6 +33,7 @@
                     {field: 'xh',title: '序号',width:'50px'},
                     {field: 'id',title: 'ID',visible:false},
                     {field: 'type',title: '类型',width:'100px',formatter:formatterType},
+                    {field: 'kyr_name',title: '可疑人姓名'},
                     {field: 'name',title: '姓名'},
                     {field: 'gmsfzh',title: '身份证号',sortable:true},
                     {field: 'qkjj',title: '情况简介',class:'qkjj-cell',formatter:formatterStr},
@@ -250,11 +252,18 @@
             $("#addBtn").on('click',function () {
                 $(".import-btn").hide();
                 $("#signupForm").find("input").each(function(i,o){
+                    if($(o).attr("name") === "type"){
+                        return;
+                    }
                     $(o).val("");
                 });
                 $("#signupForm").find("textarea").each(function(i,o){
                     $(o).val("");
                 });
+                if(kyr){
+                    $("#kyrId").val(id);
+                    $("#kyrName").val(kyr["name"]);
+                }
                 $('#addModal').modal("show");
             });
             $("#suspicious-table").on('click','.update',function () {

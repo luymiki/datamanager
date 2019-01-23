@@ -68,6 +68,8 @@ public class ZfbJyjlParser {
             ZfbJyjlInfo regInfo = new ZfbJyjlInfo();
             regInfo.setFileId(attachment.getId());
             regInfo.setTags(attachment.getTags());
+            regInfo.setSuspId(attachment.getSuspId());
+            regInfo.setSuspName(attachment.getSuspName());
             regInfo.setJyh(list.get(0));
             regInfo.setWbjyh(list.get(1));
             regInfo.setJyzt(list.get(2));

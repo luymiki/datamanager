@@ -109,6 +109,8 @@ public class YhzhKhxxParser {
                 YhzhKhxxInfo khxx = new YhzhKhxxInfo();
                 khxx.setFileId(attachment.getId());
                 khxx.setTags(attachment.getTags());
+                khxx.setSuspId(attachment.getSuspId());
+                khxx.setSuspName(attachment.getSuspName());
                 khxx.setSsyh(ssyh);
 
                 ClassUtils.setDataToObject(khxx,baseList,titleMapping,functionMap);
