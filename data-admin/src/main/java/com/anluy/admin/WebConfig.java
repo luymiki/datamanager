@@ -1,6 +1,7 @@
 package com.anluy.admin;
 
 import com.anluy.admin.interceptor.AuthorizedInterceptor;
+import com.anluy.admin.utils.BankBinUtil;
 import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.utils.PhoneAddrUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,5 +63,9 @@ public class WebConfig {
     @Bean
     public PhoneAddrUtil phoneAddrUtil( ) {
         return new PhoneAddrUtil(jdbcTemplate);
+    }
+    @Bean
+    public BankBinUtil bankBinUtil( ) {
+        return new BankBinUtil(jdbcTemplate);
     }
 }

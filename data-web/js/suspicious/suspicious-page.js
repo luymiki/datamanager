@@ -23,7 +23,7 @@
                         {title:"QQ注册信息",type:"qqreginfo",url:"/view/qq/reg/qq-reg-list.html"},
                         {title:"QQ登录记录",type:"qqloginip",url:"/view/qq/loginip/qq-loginip-list.html"},
                         {title:"微信注册信息",type:"wxreginfo",url:"/view/weixin/weixin-reg-list.html"},
-                        {title:"电子邮件",type:"email",url:"/view/file/email/file-email-list.html"},
+                        {title:"电子邮件",type:"email",url:"/view/email/list/email-list-list.html"},
                         {title:"QQ空间照片",type:"qqzone",url:"/view/qq/qzone/qq-qzone-list.html"}
                     ];
                     break;
@@ -57,7 +57,7 @@
                 case "email":
                     //email：to_address; qqreginfo:email;wxreginfo:email
                     source=[
-                        {title:"电子邮件",type:"email",url:"/view/file/email/file-email-list.html"},
+                        {title:"电子邮件",type:"email",url:"/view/email/list/email-list-list.html"},
                         {title:"QQ注册信息",type:"qqreginfo",url:"/view/qq/reg/qq-reg-list.html"},
                         {title:"微信注册信息",type:"wxreginfo",url:"/view/weixin/weixin-reg-list.html"}
                     ];

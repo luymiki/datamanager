@@ -2,6 +2,7 @@ package com.anluy.admin.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.anluy.admin.utils.BankBinUtil;
 import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.utils.PhoneAddrUtil;
 import com.anluy.commons.web.Result;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +31,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/location")
 @Api(value = "/api/admin/location", description = "ip、电话归属地查询")
-public class IpGeoLocationController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(IpGeoLocationController.class);
+public class LocationController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class);
 
     @Resource
     private IPAddrUtil ipAddrUtil;
     @Resource
     private PhoneAddrUtil phoneAddrUtil;
+    @Resource
+    private BankBinUtil bankBinUtil;
 
     /**
      * 查询IP归属地信息接口
@@ -88,6 +92,34 @@ public class IpGeoLocationController {
                 Map map = phoneAddrUtil.getPhoneInfo(i);
                 if(map!=null){
                     list.add(map);
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("查询成功").setData(list).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("查询失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
+        }
+    }
+    /**
+     * 查询银行卡卡BIN信息接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询银行卡卡BIN信息接口", response = Result.class)
+    @RequestMapping(value = "/bankbin", method = {RequestMethod.GET, RequestMethod.POST})
+    public Object bankbin(HttpServletRequest request,  @RequestBody String[] yhkh) {
+        try {
+            if (yhkh == null || yhkh.length == 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001, "待查询的银行卡号码为空"));
+            }
+            Map<String,List<Map>> list = new LinkedHashMap();
+            for (String i : yhkh) {
+                if(StringUtils.isBlank(i)){
+                    continue;
+                }
+                List<Map> map = bankBinUtil.getBankBinInfo(i);
+                if(map!=null){
+                    list.put(i,map);
                 }
             }
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("查询成功").setData(list).setPath(request.getRequestURI()));

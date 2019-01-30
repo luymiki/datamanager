@@ -1,0 +1,95 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>统计图表 | 数据管理系统</title>
+
+    <meta name="keywords" content="统计图表,数据管理系统">
+    <meta name="description" content="统计图表 | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link href="/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+    <style>
+        .wrapper-content{
+            /*padding-top: 20px;*/
+            padding: 20px 10px 10px 10px;
+        }
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+            cursor: pointer;
+            border-radius: 0em 0em .5em .5em;
+            background-color: #fff;
+        }
+        .ibox-content{
+            padding-bottom: 20px;
+        }
+        .ibox:hover{
+            background-color: #fbffe9;
+            -webkit-box-shadow: 1px 2px 6px #777;
+            -moz-box-shadow: 1px 2px 6px #777;
+            box-shadow: 1px 2px 6px #777;
+        }
+        .ibox-title,.ibox-content{
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row" id="data-box">
+
+            <script type="text/html" id="data-template">
+                <div class="col-sm-3">
+                    <div class="ibox float-e-margins  kyr-add">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-left">new</span>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">新增</h1>
+                        </div>
+                    </div>
+                </div>
+                {{each aggs as row k}}
+                    <div class="col-sm-3 " >
+                        <div class="ibox float-e-margins kyr-count" data-type="{{row.key}}">
+                            <div class="ibox-title">
+                                <span class="label label-success pull-right">人员</span>
+                                <h5>{{row.key}}</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{row.doc_count}}人</h1>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+
+            </script>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script type="text/javascript">
+        BASE_JS();
+    </script>
+
+    <script src="/js/suspicious/suspicious-index.js"></script>
+
+
+</body>
+</html>

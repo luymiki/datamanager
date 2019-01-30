@@ -102,4 +102,40 @@ public class IndexController {
             }
         },indexName,null,null);
     }
+
+    /**
+     * 设置人员类型
+     *
+     * @return
+     */
+    @ApiOperation(value = "设置人员类型", response = Result.class)
+    @ApiResponses(value = {@ApiResponse(code = 500, message = "设置人员类型失败")})//错误码说明
+    @RequestMapping(value = "/setsusptype", method = {RequestMethod.GET, RequestMethod.POST})
+    public Object setSuspType(HttpServletRequest request) {
+        try {
+            elasticsearchRestClient.scroll("{\"size\":1000}",null,new ElasticsearchRestClient.TimeWindowCallBack(){
+                @Override
+                public void process(List<Map> var1) {
+                    List<Map> listmap = new ArrayList<>();
+                    var1.forEach(map->{
+                        String type = (String) map.get("type");
+                        if("2".equals(type)){
+                            map.put("type","关系人");
+                        }else{
+                            map.put("type","可疑人");
+                        }
+                        map.put("_id",map.get("id"));
+                        listmap.add(map);
+                    });
+                    if(!listmap.isEmpty()){
+                        elasticsearchRestClient.batchUpdate(listmap,"suspicious");
+                    }
+                }
+            },"suspicious",null,null);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("设置完成").setData("").setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error("查询失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
 }
