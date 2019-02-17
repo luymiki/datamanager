@@ -41,7 +41,7 @@ public class BackAction {
                 mf.createNewFile();
             }
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mf), "utf-8"));
-            bufferedWriter.write(JSON.toJSONString(map, SerializerFeature.WriteMapNullValue));
+            bufferedWriter.write(JSON.toJSONString(map, SerializerFeature.WriteMapNullValue,SerializerFeature.PrettyFormat));
             bufferedWriter.newLine();
             bufferedWriter.flush();
             bufferedWriter.close();
