@@ -193,6 +193,7 @@
                                     data[i]['opt'] =
                                         "<div class='btn btn-primary btn-outline btn-xs update' data-id='" + data[i]["id"] + "'>修改</div><br>" +
                                         "<div class='btn btn-info btn-outline btn-xs tiqu' data-id='" + data[i]["id"] + "'>提取</div><br>" +
+                                        "<div class='btn btn-info btn-outline btn-xs neo4j' data-id='" + data[i]["id"] + "'>上图</div><br>" +
                                         "<div class='btn btn-danger btn-outline btn-xs delete' data-id='" + data[i]["id"] + "'>删除</div>";
                                 }
                                 request.success({
@@ -260,6 +261,9 @@
             });
             $("#suspicious-table").on('click', '.tiqu', function () {
                 _tiqu($(this).attr("data-id"));
+            });
+            $("#suspicious-table").on('click', '.neo4j', function () {
+                _neo4j($(this).attr("data-id"));
             });
 
             //列表数据点击链接
@@ -388,12 +392,9 @@
                     }
                 }
             });
-
-
         }
 
         var _tiqu = function (id) {
-            // toastrMsg.success("提取信息中，请稍后。。。");
             $.ajax.proxy({
                 url: "/api/admin/suspicious/analyze",
                 type: "post",
@@ -409,13 +410,40 @@
                     else {
                         console.log(d);
                         toastrMsg.error("提取失败");
-                        $('#addModal').modal('hide');
                     }
 
                 },
                 error: function (d) {
                     console.log(d);
                     top.toastrMsg.error("提取失败");
+                }
+            });
+        };
+        /**
+         * 数据上neo4j图库
+         * @param id
+         * @private
+         */
+        var _neo4j = function (id) {
+            toastrMsg.success("信息上图中，请稍后。。。");
+            $.ajax.proxy({
+                url: "/api/admin/neo4j/susp2neo4j",
+                type: "post",
+                dataType: "json",
+                data: {"id": id},
+                async: true,
+                success: function (d) {
+                    if (d.status === 200) {
+                        toastrMsg.success("上图完成");
+                    }
+                    else {
+                        console.log(d);
+                        toastrMsg.error("上图失败");
+                    }
+                },
+                error: function (d) {
+                    console.log(d);
+                    top.toastrMsg.error("上图失败");
                 }
             });
         }

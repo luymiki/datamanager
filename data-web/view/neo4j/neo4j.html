@@ -1,0 +1,96 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>Neo4j | 数据管理系统</title>
+
+    <meta name="keywords" content="Neo4j,数据管理系统">
+    <meta name="description" content="Neo4j | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+    </script>
+    <style>
+        #output {
+            overflow-y: auto;
+            top: 0;
+        }
+        #graph{
+            float:left;
+        }
+        #graph text{
+            font-family: 'Microsoft YaHei', '微软雅黑' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+        }
+        .node,.node text{
+            cursor: pointer;
+        }
+        #tips{
+            float:left;
+            width: 180px;
+            border-left: solid 1px #aaaaaa;
+        }
+        .default{
+            color: red;
+        }
+        .PERSON{
+            font-weight: bold;
+        }
+        .search-select{
+            width: 50px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <input id="search-input1" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                        <select id="search-select1" class="search-input search-select">
+                            <option value="PERSON">人员</option>
+                            <option value="IDCARD">证件</option>
+                        </select>
+                        <input id="search-input2" class="search-input" type="text" aria-required="true" aria-invalid="false" class="valid">
+                        <select id="search-select2" class="search-input search-select">
+                            <option value="PERSON">人员</option>
+                            <option value="IDCARD">证件</option>
+                        </select>
+                        <div class="btn btn-info" id="search-btn"><i class="fa fa-search"></i> 查询</div>
+                    </div>
+                    <div class="ibox-content" id="output" style="padding: 5px 5px 5px 5px;">
+                        <div id='graph' ></div>
+                        <div id='tips' >
+                            <div style="height: 20px;padding-left: 5px;font-weight: bold;border-bottom: dashed 1px  #aaaaaa;">信息</div>
+                            <div id="tips-info"></div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script type="text/javascript">
+        BASE_JS();
+    </script>
+
+    <script src="/js/neo4j/d3.v5.js"></script>
+    <script src="/js/neo4j/test.js"></script>
+    <script src="/js/neo4j/neo4j.js"></script>
+
+
+</body>
+</html>
