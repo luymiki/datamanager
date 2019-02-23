@@ -164,8 +164,8 @@ public class SuspiciousServiceImpl extends BaseServiceImpl<String, Suspicious> i
      * @param suspObject
      */
     private void tiquQQ(String suspId,String token, Map suspObject) {
-        JSON json = (JSON) JSON.parse(String.format(queryDsl, "qqreginfo,email,qqzone,qqloginip,wxreginfo", suspId));
-        JSONObject resultJson = get(JSON.toJSONString(json), token);
+        String json = String.format(queryDsl, "qqreginfo,email,qqzone,qqloginip,wxreginfo", suspId);
+        JSONObject resultJson = get(json, token);
         //提取QQ号 qqreginfo：qq;email:qq.com;qqzone:qq；qqloginip：qq ；wxreginfo：qq
         if (resultJson != null && resultJson.getJSONObject("data") != null && resultJson.getJSONObject("data").getJSONArray("data") != null) {
             JSONArray dataList = resultJson.getJSONObject("data").getJSONArray("data");

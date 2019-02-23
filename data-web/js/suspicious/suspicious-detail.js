@@ -252,7 +252,8 @@
                 $('#zfb-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                 return false;
             }
-            zfbdata = zfbdata.split(" |,|，|、");
+
+            zfbdata = zfbdata.split(/\s+|,|、|，/);
             if(zfbdata.length===0){
                 $('#zfb-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                 return false;
@@ -332,7 +333,7 @@
                 $('#yhzh-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                 return false;
             }
-            zfbdata = zfbdata.split(" |,|，|、");
+            zfbdata = zfbdata.split(/\s+|,|、|，/);
             if(zfbdata.length===0){
                 $('#yhzh-table').bootstrapTable("destroy").html("<tr><td>无</td></tr>");
                 return false;

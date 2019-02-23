@@ -110,8 +110,8 @@
             var old = "";
             var id = $("#id").val();
             var type = obj.attr("data-type");
-            var dataValue = obj.attr("data-value").split(/,|，/);
-            var nv = obj.val().split(/,|，/);
+            var dataValue = obj.attr("data-value").split(/\s+|,|、|，/);
+            var nv = obj.val().split(/\s+|,|、|，/);
             if (dataValue.length > nv.length) {
                 //删除了内容，不比较
                 return false;

@@ -419,12 +419,19 @@
                 }
             });
         };
+
+        //是否正在上图
+        var neo4jing = false;
         /**
          * 数据上neo4j图库
          * @param id
          * @private
          */
         var _neo4j = function (id) {
+            if(neo4jing){
+                toastrMsg.info("上一个信息上图中未完成，请稍后。。。");
+                return false;
+            }
             toastrMsg.success("信息上图中，请稍后。。。");
             $.ajax.proxy({
                 url: "/api/admin/neo4j/susp2neo4j",
@@ -435,13 +442,14 @@
                 success: function (d) {
                     if (d.status === 200) {
                         toastrMsg.success("上图完成");
-                    }
-                    else {
+                    }else {
                         console.log(d);
                         toastrMsg.error("上图失败");
                     }
+                    neo4jing = false;
                 },
                 error: function (d) {
+                    neo4jing = false;
                     console.log(d);
                     top.toastrMsg.error("上图失败");
                 }

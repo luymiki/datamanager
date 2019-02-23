@@ -1,0 +1,21 @@
+{
+  "indexName": "%s",
+  "conditions": [
+    {
+      "field": "%s",
+      "values":%s,
+      "searchType": 1,
+      "dataType": 2
+    },
+    {
+      "field": "%s",
+      "values": [
+        "%s"
+      ],
+      "searchType": 1,
+      "dataType": 2
+    }
+  ],
+  "aggs": [],
+  "sort": "create_time desc"
+}

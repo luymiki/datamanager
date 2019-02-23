@@ -20,6 +20,7 @@
     var img_h = 20;
     var graph = $("#graph");
     var tips = $("#tips");
+    var tips_btn = $("#tips_btn");
     var nodesData = [];
     var edgesData = [];
     var linksSvg;
@@ -29,7 +30,7 @@
 
     var neo4j = (function () {
         var _init = function () {
-            tips.height(height);
+            tips.height(height-35);
             graph.height(height).width(width);
             _event();
         };
@@ -47,10 +48,10 @@
             graph.children('svg').remove();
             var svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height);
             var g = svg.append("g").attr("transform", "translate(0,0)");
-                g.append("text")
-                    .attr("fill","red")
-                    .attr("transform", "translate(" + width/2 + "," + height/2 + ")")
-                    .text("+").style("font-size",20);
+            g.append("text")
+                .attr("fill", "red")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                .text("+").style("font-size", 20);
 
             //设置一个color的颜色比例尺，为了让不同的扇形呈现不同的颜色
             var colorScale = d3.scaleOrdinal()
@@ -80,7 +81,7 @@
             //新建一个力导向图
             forceSimulation = d3.forceSimulation()
                 .force("link", d3.forceLink().distance(200))
-                .force("charge", d3.forceManyBody().strength(-30))
+                .force("charge", d3.forceManyBody())
                 .force("center", d3.forceCenter())
                 .force("collision", d3.forceCollide(10));
 
@@ -170,6 +171,15 @@
                         case "EMAIL_NODE":
                             return "url(#" + icon.email + ")";
                             break;
+                        case "GROUP_NODE":
+                            return "url(#" + icon.group + ")";
+                            break;
+                        case "FRIEND_NODE":
+                            return "url(#" + icon.friend + ")";
+                            break;
+                        case "JIAOYI_NODE":
+                            return "url(#" + icon.jiaoyi + ")";
+                            break;
                         default:
                             //image.attr("class", "fa fa-wechat");
                             break;
@@ -198,7 +208,7 @@
                             return "PERSON";
                             break;
                         default:
-                            return "default";
+                            return "node";
                             break;
                     }
                 });
@@ -206,7 +216,7 @@
             //缩放
             var zoom = d3.zoom();
             svg.call(zoom
-                .scaleExtent([1 / 3, 8])
+                .scaleExtent([1 / 4, 8])
                 .on("zoom", zoomed)).on("dblclick.zoom", null);
             function zoomed() {
                 g.attr("transform", d3.event.transform);
@@ -214,6 +224,10 @@
 
             //节点单击事件
             nodeSvg.selectAll("circle[class=node]").on("click", function (d, i) {
+                _tips(d);
+            })
+            //节点单击事件
+            nodeSvg.selectAll("text[class=node]").on("click", function (d, i) {
                 _tips(d);
             })
             //节点双击事件
@@ -264,34 +278,34 @@
 
         //动态添加节点
         function restart(data) {
-            for(var i=0;i<data.nodes.length;i++){
+            for (var i = 0; i < data.nodes.length; i++) {
                 var n = data.nodes[i];
                 var f = false;
-                for(var j=0;j<nodesData.length;j++){
-                    if(nodesData[j].attr.id===n.attr.id){
-                        f =true;
+                for (var j = 0; j < nodesData.length; j++) {
+                    if (nodesData[j].attr.id === n.attr.id) {
+                        f = true;
                         break;
                     }
                 }
-                if(!f){
-                    nodesData[nodesData.length]=data.nodes[i];
+                if (!f) {
+                    nodesData[nodesData.length] = data.nodes[i];
                 }
             }
-            for(var i=0;i<data.links.length;i++){
+            for (var i = 0; i < data.links.length; i++) {
                 var n = data.links[i];
                 var f = false;
-                for(var j=0;j<edgesData.length;j++){
-                    if(edgesData[j].id===n.id){
-                        f =true;
+                for (var j = 0; j < edgesData.length; j++) {
+                    if (edgesData[j].id === n.id) {
+                        f = true;
                         break;
                     }
                 }
-                if(!f){
-                    edgesData[edgesData.length]=data.links[i];
+                if (!f) {
+                    edgesData[edgesData.length] = data.links[i];
                 }
 
             }
-            data.nodes =nodesData;
+            data.nodes = nodesData;
             data.links = edgesData;
             render(data);
         };
@@ -306,7 +320,10 @@
             "idcard": "icon-idcard",
             "ip": "icon-ip",
             "phone": "icon-phone",
-            "email": "icon-email"
+            "email": "icon-email",
+            "group": "icon-group",
+            "friend": "icon-friend",
+            "jiaoyi": "icon-jiaoyi"
         };
         var initImg = function (defs, img_w, img_h) {
             defs.append("pattern")
@@ -399,6 +416,33 @@
                 .attr("width", img_w)
                 .attr("height", img_h)
                 .attr("xlink:href", "/img/email.jpg");
+            defs.append("pattern")
+                .attr("id", "icon-group")
+                .attr("height", 1)
+                .attr("width", 1).append("image")
+                .attr("x", -(img_w / 2 - 10))
+                .attr("y", -(img_h / 2 - 10))
+                .attr("width", img_w)
+                .attr("height", img_h)
+                .attr("xlink:href", "/img/group.jpg");
+            defs.append("pattern")
+                .attr("id", "icon-friend")
+                .attr("height", 1)
+                .attr("width", 1).append("image")
+                .attr("x", -(img_w / 2 - 10))
+                .attr("y", -(img_h / 2 - 10))
+                .attr("width", img_w)
+                .attr("height", img_h)
+                .attr("xlink:href", "/img/friend.jpg");
+            defs.append("pattern")
+                .attr("id", "icon-jiaoyi")
+                .attr("height", 1)
+                .attr("width", 1).append("image")
+                .attr("x", -(img_w / 2 - 10))
+                .attr("y", -(img_h / 2 - 10))
+                .attr("width", img_w)
+                .attr("height", img_h)
+                .attr("xlink:href", "/img/jiaoyi.jpg");
         }
         var _tips = function (data) {
             var tipsInfo = tips.find("#tips-info").html("");
@@ -418,8 +462,8 @@
                 } else {
                     tipsInfo.append($('<div></div>').text(k + "\t : " + data[k]))
                 }
-
             }
+            tipsInfo.attr("data-str", JSON.stringify(data));
 
         };
 
@@ -462,7 +506,142 @@
                 edgesData = [];
                 query({"type": type1, "type2": type2, "keyword": keyword1, "keyword2": keyword2}, render);
             });
-        }
+            /**
+             * 移除选择节点
+             */
+            $("#remove").click(function () {
+                removeNode();
+            });
+            /**
+             * 移除选择节点关联的孤立节点
+             */
+            $("#removeLonly").click(function () {
+                removeLonly();
+            });
+        };
+
+        /**
+         * 移除孤立节点
+         * @returns {boolean}
+         */
+        var removeLonly = function(){
+            var dataStr = $("#tips-info").attr("data-str");
+            if (!dataStr) {
+                return false;
+            }
+            var data = JSON.parse(dataStr);
+            // //找到节点
+            var node = getNodeByAttrId(data.id);
+            if(!node){
+                top.toastrMsg.error("节点不存在");
+                return false;
+            }
+            //找到边
+            var _links = getLinksByAttrId(data.id);
+            if (!_links || _links.length === 0) {
+                top.toastrMsg.error("不存在关联节点");
+                return false;
+            }
+            var rst = false;
+            //判断边对应的另一端节点是否是孤立
+            for (var i = 0; i < _links.length; i++) {
+                var lonly = false;
+                var _id = -1;
+                if (_links[i].start === data.id && nodeIsLony(_links[i].end, _links[i].start)) {
+                    lonly = true;
+                    _id = _links[i].end;
+                } else if (_links[i].end === data.id && nodeIsLony(_links[i].start, _links[i].end)) {
+                    lonly = true;
+                    _id = _links[i].start;
+                }
+                //是孤立的，从集合中移除，节点和边
+                if (lonly) {
+                    //console.log(getNodeByAttrId(_id));
+                    remove(_id,nodesData);//移除节点
+                    remove(_links[i].id,edgesData);//移除节点
+                    rst = true;
+                }
+            }
+            //重新渲染
+            if(rst){
+                restart({nodes:nodesData,links:edgesData})
+            }
+            return false;
+        };
+        /**
+         * 移除孤立节点
+         * @returns {boolean}
+         */
+        var removeNode = function(){
+            var dataStr = $("#tips-info").attr("data-str");
+            if (!dataStr) {
+                return false;
+            }
+            var data = JSON.parse(dataStr);
+            if (confirm("移除节点" + data.attr.name + "[" + data.attr.id + "]" + "？")) {
+
+                var node_ = getNodeByAttrId(data.id);
+                if(node_){
+                    remove(data.id,nodesData);//移除节点
+                    //找到边
+                    var _links = getLinksByAttrId(data.id);
+                    if (_links && _links.length > 0) {
+                        //移除边
+                        for (var i = 0; i < _links.length; i++) {
+                            remove(_links[i].id,edgesData);//移除节点
+                        }
+                    }
+                    //重新渲染
+                    restart({nodes:nodesData,links:edgesData})
+                }
+            }
+            return false;
+        };
+        var getNodeByAttrId = function (id) {
+            for (var i = 0; i < nodesData.length; i++) {
+                if (nodesData[i].id === id) {
+                    return nodesData[i];
+                }
+            }
+            return null;
+        };
+        var getLinksByAttrId = function (id) {
+            var da = [];
+            for (var i = 0; i < edgesData.length; i++) {
+                if (edgesData[i].end === id || edgesData[i].start === id) {
+                    da[da.length] = edgesData[i];
+                }
+            }
+            return da;
+        };
+        var nodeIsLony = function (id, oid) {
+            var node = getNodeByAttrId(id);
+            if (node) {
+                var _links = getLinksByAttrId(node.id);
+                if (!_links || _links.length === 0) {
+                    return true;
+                } else if (!_links || _links.length === 1) {
+                    var ll = _links[0];
+                    if (ll.start === oid || ll.end === oid) {
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+        };
+        var remove = function (id, list) {
+            var index_ = -1;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === id) {
+                    index_ = i;
+                    break;
+                }
+            }
+            if (index_ > -1) {
+                list.splice(i, 1);
+            }
+        };
         return {
             init: _init,
             render: render

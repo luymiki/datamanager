@@ -3,6 +3,7 @@ package com.anluy.admin;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,11 @@ import java.io.File;
  * <p>
  * Created by hc.zeng on 2019/2/15.
  */
-@Component
+@Configuration
 public class Neo4jConfig {
 
     @Bean
-    private GraphDatabaseService graphDatabaseService(FileManagerConfig fileManagerConfig) {
+    public GraphDatabaseService graphDatabaseService(@Qualifier("fileManagerConfig") FileManagerConfig fileManagerConfig) {
         File file = new File(fileManagerConfig.getUploadDir() + "/" + "NEO4J-DATABASE");
         if (!file.exists()) {
             file.mkdirs();

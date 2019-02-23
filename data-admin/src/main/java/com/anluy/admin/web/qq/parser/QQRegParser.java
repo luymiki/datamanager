@@ -139,6 +139,9 @@ public class QQRegParser {
         String[] infos = line.split("\t");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {
+            if("无创建群加入的群：".equals(hy)){
+                continue;
+            }
             hylist.add(hy.trim());
         }
         return hylist;

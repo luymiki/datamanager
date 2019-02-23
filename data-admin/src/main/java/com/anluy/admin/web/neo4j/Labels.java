@@ -95,4 +95,27 @@ public interface Labels {
      */
     Label EMAIL = Label.label("EMAIL");
 
+    /**
+     * QQ群、微信群、节点
+     */
+    Label GROUP_NODE = Label.label("GROUP_NODE");
+
+    /**
+     * QQ群、微信群
+     */
+    Label GROUP = Label.label("GROUP");
+    /**
+     * QQ群、微信好友、节点
+     */
+    Label FRIEND_NODE = Label.label("FRIEND_NODE");
+    /**
+     * QQ群、微信好友
+     */
+    Label FRIEND = Label.label("FRIEND");
+
+    /**
+     * 交易节点
+     */
+    Label JIAOYI_NODE = Label.label("JIAOYI_NODE");
+
 }
