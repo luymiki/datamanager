@@ -67,7 +67,7 @@ public class ExcelUtils {
         int rownum = sheet.getPhysicalNumberOfRows();
         Row row = null;
         String cellData = null;
-        for (int i = 0; i < rownum; i++) {
+        for (int i = 0; i <= rownum; i++) {
             List<String> list = new ArrayList<>();
             row = sheet.getRow(i);
             if (row != null) {

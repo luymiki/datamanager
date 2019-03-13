@@ -80,10 +80,10 @@
 
             //新建一个力导向图
             forceSimulation = d3.forceSimulation()
-                .force("link", d3.forceLink().distance(200))
-                .force("charge", d3.forceManyBody())
-                .force("center", d3.forceCenter())
-                .force("collision", d3.forceCollide(10));
+                .force("link", d3.forceLink().distance(0))
+                .force("charge", d3.forceManyBody(0))
+                .force("center", d3.forceCenter(-20))
+                .force("collision", d3.forceCollide(20));
 
             //初始化力导向图，也就是传入数据
             //生成节点数据
@@ -201,6 +201,12 @@
                 })
                 .attr("dy", 10)
                 .text(function (d) {
+                    if(d.label.indexOf("_NODE")>0){
+                        return d.name;
+                    }
+                    if(d.label === "WEIXIN"){
+                        return d.name+"("+d.attr.id+")";
+                    }
                     return d.name;
                 }).attr("class", function (d) {
                     switch (d.label) {
@@ -489,13 +495,15 @@
                     top.toastrMsg.error("查询失败");
                 }
             });
-        }
+        };
         var _loadNext = function (d) {
-            query({"type": d.label, "keyword": d.attr.id}, function (data) {
-                console.log(data);
-                restart(data);
-            });
-        }
+            if(d.label.indexOf("_NODE")>0 || d.label==="PERSON"){
+                query({"type": d.label, "keyword": d.attr.id}, function (data) {
+                    console.log(data);
+                    restart(data);
+                });
+            }
+        };
         var _event = function () {
             $("#search-btn").click(function () {
                 var keyword1 = $("#search-input1").val();

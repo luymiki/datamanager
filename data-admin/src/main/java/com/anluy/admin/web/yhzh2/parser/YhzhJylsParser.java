@@ -34,8 +34,8 @@ public class YhzhJylsParser {
      * @return
      * @throws Exception
      */
-    public List<YhzhJylsInfo> parser(String ssyh, File file, String sheetName) throws Exception {
-        List<List<String>> list = ExcelUtils.read(file, sheetName);
+    public List<YhzhJylsInfo> parser(String ssyh, File file, int sheetIndex) throws Exception {
+        List<List<String>> list = ExcelUtils.read(file, sheetIndex);
         return parse(ssyh, list);
     }
 
@@ -46,8 +46,8 @@ public class YhzhJylsParser {
      * @return
      * @throws Exception
      */
-    public List<YhzhJylsInfo> parser(String ssyh, String path, String sheetName) throws Exception {
-        return parser(ssyh, new File(path), sheetName);
+    public List<YhzhJylsInfo> parser(String ssyh, String path, int sheetIndex) throws Exception {
+        return parser(ssyh, new File(path), sheetIndex);
     }
 
     private List<YhzhJylsInfo> parse(String ssyh, List<List<String>> txtContent) throws Exception {
@@ -71,6 +71,8 @@ public class YhzhJylsParser {
             YhzhJylsInfo jyls = new YhzhJylsInfo();
             jyls.setFileId(attachment.getId());
             jyls.setTags(attachment.getTags());
+            jyls.setSuspId(attachment.getSuspId());
+            jyls.setSuspName(attachment.getSuspName());
             jyls.setSsyh(ssyh);
             ClassUtils.setDataToObject(jyls,list,titleMapping,functionMap);
             if (jyls.getJyje()!=null) {
@@ -94,7 +96,7 @@ public class YhzhJylsParser {
     public static void main(String[] args) {
         YhzhJylsParser zfbRegParser = new YhzhJylsParser(new Attachment());
         try {
-            List<YhzhJylsInfo> info = zfbRegParser.parser("工商银行", "H:\\数据管理系统\\数据导入20180903\\工行客户及交易信息（9-20，1516条）.xls", "交易信息");
+            List<YhzhJylsInfo> info = zfbRegParser.parser("工商银行", "H:\\数据管理系统\\数据导入20180903\\工行客户及交易信息（9-20，1516条）.xls", 1);
             System.out.println(info);
         } catch (Exception e) {
             e.printStackTrace();

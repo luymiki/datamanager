@@ -20,6 +20,7 @@
         var _initListTable = function(){
             $('#data-table').myTable({
                 columns: [{field: 'xh',title: '序号',width:'50px'},
+                    {field: 'susp_name',title: '姓名',sortable:true},
                     {field: 'ssyh',title: '所属银行',sortable:true},
                     {field: 'kh',title: '卡号',sortable:true},
                     {field: 'zh',title: '账号',sortable:true},

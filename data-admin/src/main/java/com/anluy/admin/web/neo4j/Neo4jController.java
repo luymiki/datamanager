@@ -94,7 +94,7 @@ public class Neo4jController {
                 map = neo4jService.queryCypherPath(cypher);
             } else {
                 cypher = neo4jService.createCypher(type, keyword);
-                map = neo4jService.queryCypher(cypher);
+                map = neo4jService.queryCypherPath(cypher);
             }
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("人员信息查询完成").setData(map).setPath(request.getRequestURI()));
         } catch (Exception exception) {

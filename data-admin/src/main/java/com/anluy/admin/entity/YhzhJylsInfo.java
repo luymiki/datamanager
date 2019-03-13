@@ -14,7 +14,11 @@ public class YhzhJylsInfo extends BaseEntity<String> {
 
     @JSONField(name = "file_id")
     private String fileId;
+    @JSONField(name = "susp_id")
+    private String suspId;
 
+    @JSONField(name = "susp_name")
+    private String suspName;
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
@@ -504,5 +508,21 @@ public class YhzhJylsInfo extends BaseEntity<String> {
 
     public void setDsId(String dsId) {
         this.dsId = dsId;
+    }
+
+    public String getSuspId() {
+        return suspId;
+    }
+
+    public void setSuspId(String suspId) {
+        this.suspId = suspId;
+    }
+
+    public String getSuspName() {
+        return suspName;
+    }
+
+    public void setSuspName(String suspName) {
+        this.suspName = suspName;
     }
 }

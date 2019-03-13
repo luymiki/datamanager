@@ -84,8 +84,8 @@ public class YhzhKhxxInfoParserController {
             String path = uploadDir + attachment.getPath();
             YhzhKhxxParser parser = new YhzhKhxxParser(attachment);
             YhzhJylsParser parserJyls = new YhzhJylsParser(attachment);
-            List<YhzhKhxxInfo> yhzhKhxxInfoList = parser.parser(attachment.getFolder(),path,"客户信息");
-            List<YhzhJylsInfo> yhzhJylsInfoList = parserJyls.parser(attachment.getFolder(),path,"交易信息");
+            List<YhzhKhxxInfo> yhzhKhxxInfoList = parser.parser(attachment.getFolder(),path,0);
+            List<YhzhJylsInfo> yhzhJylsInfoList = parserJyls.parser(attachment.getFolder(),path,1);
             List<Map> saveList = new ArrayList<>();
             yhzhKhxxInfoList.forEach(regInfo->{
                 regInfo.setId(UUID.randomUUID().toString() );

@@ -36,6 +36,7 @@ public class Neo4jServiceImpl implements Neo4jService {
     private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jServiceImpl.class);
     private static final String ID = "id";
     private static final String NAME = "name";
+    private static final String SPLIT = "SPLIT@";
     @Resource
     private ElasticsearchRestClient elasticsearchRestClient;
 
@@ -120,23 +121,23 @@ public class Neo4jServiceImpl implements Neo4jService {
             suspNode.setProperty(NAME, suspInfo.get(NAME));
             suspiciousNode.setNode(suspNode);
 
-            Node idcardNode = createNode(Labels.IDCARD_NODE,id,"证件");
+            Node idcardNode = createNode(Labels.IDCARD_NODE, id, "证件");
             suspiciousNode.setIdcardNode(idcardNode);
-            Node qqNode = createNode(Labels.QQ_NODE,id,"QQ");
+            Node qqNode = createNode(Labels.QQ_NODE, id, "QQ");
             suspiciousNode.setQqNode(qqNode);
-            Node weixinNode = createNode(Labels.WEIXIN_NODE,id,"微信");
+            Node weixinNode = createNode(Labels.WEIXIN_NODE, id, "微信");
             suspiciousNode.setWeixinNode(weixinNode);
-            Node tenplayNode = createNode(Labels.TENPLAY_NODE,id,"财付通");
+            Node tenplayNode = createNode(Labels.TENPLAY_NODE, id, "财付通");
             suspiciousNode.setTenplayNode(tenplayNode);
-            Node aliplayNode =createNode(Labels.ALIPLAY_NODE,id,"支付宝");
+            Node aliplayNode = createNode(Labels.ALIPLAY_NODE, id, "支付宝");
             suspiciousNode.setAliplayNode(aliplayNode);
-            Node yhzhNode = createNode(Labels.YHZH_NODE,id,"银行账户");
+            Node yhzhNode = createNode(Labels.YHZH_NODE, id, "银行账户");
             suspiciousNode.setYhzhNode(yhzhNode);
-            Node phoneNode = createNode(Labels.PHONE_NODE,id,"手机");
+            Node phoneNode = createNode(Labels.PHONE_NODE, id, "手机");
             suspiciousNode.setPhoneNode(phoneNode);
-            Node ipNode = createNode(Labels.IP_NODE,id,"IP");
+            Node ipNode = createNode(Labels.IP_NODE, id, "IP");
             suspiciousNode.setIpNode(ipNode);
-            Node emailNode = createNode(Labels.EMAIL_NODE,id,"EMAIL");
+            Node emailNode = createNode(Labels.EMAIL_NODE, id, "EMAIL");
             suspiciousNode.setEmailNode(emailNode);
             //创建关系
             idcardNode.createRelationshipTo(suspNode, RelationshipTypes.HAVE);
@@ -172,16 +173,17 @@ public class Neo4jServiceImpl implements Neo4jService {
         return suspiciousNode;
     }
 
-    private Node createNode(Label label,String id,String name){
+    private Node createNode(Label label, String id, String name) {
         String key = label.name() + "-" + id;
         Node node = graphDatabaseService.findNode(label, ID, key);
-        if(node==null){
+        if (node == null) {
             node = graphDatabaseService.createNode(label);
-            node.setProperty(ID,key);
+            node.setProperty(ID, key);
             node.setProperty(NAME, name);
         }
         return node;
     }
+
     /**
      * 创建身份证关联节点
      *
@@ -271,7 +273,7 @@ public class Neo4jServiceImpl implements Neo4jService {
             if (StringUtils.isBlank((String) field)) {
                 return null;
             }
-            fields = field.toString().split(" |,|，|、|  |；|;");
+            fields = field.toString().split(" |,|，|、|  |；|;|\r|\n");
         }
         return fields;
     }
@@ -302,11 +304,9 @@ public class Neo4jServiceImpl implements Neo4jService {
     public String createCypher(String type, String keyword) {
         keyword = keyword.trim();
         StringBuffer sb = new StringBuffer();
-        //MATCH p= (n:PERSON)<-[*]->(m)  WHERE (n.id='张样品' OR n.name='张样品') RETURN p
-        //sb.append("MATCH (n:").append(type).append(")-[r *1..2]-(m)");
-        sb.append("MATCH (n:").append(type).append(")-[r *1..2]-(m)");
+        sb.append("MATCH p=(n:").append(type).append(")-[r *").append(Labels.PERSON.name().equals(type) ? "3" : "2").append("]-(m)");
         sb.append(" WHERE (n.id='").append(keyword).append("' OR n.name='").append(keyword).append("')");
-        sb.append(" RETURN n,r,m");
+        sb.append(" RETURN p");
         return sb.toString();
     }
 
@@ -328,7 +328,9 @@ public class Neo4jServiceImpl implements Neo4jService {
             sb.append("m) ");
         }
         sb.append(") WHERE (n.id='").append(keyword).append("' OR n.name='").append(keyword).append("')");
-        if (StringUtils.isNotBlank(keyword2) && StringUtils.isNotBlank(type2)) {
+        if ("*".equals(keyword2) && StringUtils.isNotBlank(type2)) {
+            sb.append(" AND m<>n ");
+        } else if (StringUtils.isNotBlank(keyword2) && StringUtils.isNotBlank(type2)) {
             keyword2 = keyword2.trim();
             sb.append(" AND (m.id='").append(keyword2).append("' OR m.name='").append(keyword2).append("')");
         }
@@ -517,20 +519,26 @@ public class Neo4jServiceImpl implements Neo4jService {
                 gropuNode.createRelationshipTo(mainNode, RelationshipTypes.HAVE);
             }
             Set<String> data = dataMap.get(id);
-            for (String da : data) {
-                if(StringUtils.isBlank(da)){
+            for (String das : data) {
+                if (StringUtils.isBlank(das)) {
                     continue;
                 }
-                if("-".equals(da)){
+                if ("-".equals(das)) {
                     continue;
                 }
-                da = da.trim();
-                Node subNode = graphDatabaseService.findNode(nodeLabel, ID,  da);
+                String da = das.trim();
+                String name = da;
+                String[] dss = das.split(SPLIT);
+                if (dss.length > 1) {
+                    da = dss[0];
+                    name = dss[1];
+                }
+                Node subNode = graphDatabaseService.findNode(nodeLabel, ID, da);
                 //不存在节点
                 if (subNode == null) {
                     subNode = graphDatabaseService.createNode(nodeLabel);
                     subNode.setProperty(ID, da);
-                    subNode.setProperty(NAME, da);
+                    subNode.setProperty(NAME, name);
                     //创建边
                     gropuNode.createRelationshipTo(subNode, RelationshipTypes.HAVE);
                 } else {
@@ -570,6 +578,7 @@ public class Neo4jServiceImpl implements Neo4jService {
                 @Override
                 public void apply(Map<String, Set> stringSetMap, JSONObject jsonObject) {
                     String qq = (String) jsonObject.get("qq");
+                    String nc = (String) jsonObject.get("nc");
                     String[] jrqh = toArray(jsonObject.get("jrqh"));
                     String[] cjqh = toArray(jsonObject.get("cjqh"));
                     if (jrqh != null) {
@@ -619,7 +628,13 @@ public class Neo4jServiceImpl implements Neo4jService {
                 public void apply(Map<String, Set> stringSetMap, JSONObject jsonObject) {
                     String qq = (String) jsonObject.get("weixin");
                     String zh = jsonObject.getString("zh");
-                    stringSetMap.get(qq).add(zh);
+                    String nc = jsonObject.getString("nc");
+                    if ("weixin".equals(zh)) return;
+                    if ("gangtiexiaxp".equals(zh)) return;
+                    //公众号忽略
+                    if (zh.startsWith("gh_")) return;
+
+                    stringSetMap.get(qq).add(zh + SPLIT + nc);
                 }
             });
             this.createNodeRelationship(firendMap, Labels.WEIXIN, Labels.FRIEND_NODE, "微信好友", Labels.WEIXIN);
@@ -632,7 +647,8 @@ public class Neo4jServiceImpl implements Neo4jService {
                 public void apply(Map<String, Set> stringSetMap, JSONObject jsonObject) {
                     String qq = (String) jsonObject.get("weixin");
                     String zh = jsonObject.getString("zh");
-                    stringSetMap.get(qq).add(zh);
+                    String mc = jsonObject.getString("mc");
+                    stringSetMap.get(qq).add(zh + SPLIT + mc);
                 }
             });
             this.createNodeRelationship(groupMap, Labels.WEIXIN, Labels.GROUP_NODE, "微信群", Labels.GROUP);
@@ -663,13 +679,14 @@ public class Neo4jServiceImpl implements Neo4jService {
             this.createNodeRelationship(firendMap, Labels.TENPLAY, Labels.JIAOYI_NODE, "交易", Labels.TENPLAY);
         }
     }
+
     /**
      * 创建支付宝相关的节点
      *
      * @param zfb
      * @param token
      */
-    private void createAilPlay(Object zfb,String token) {
+    private void createAilPlay(Object zfb, String token) {
         //查询支付宝信息，提取交易对手信息
         String[] qqArry = toArray(zfb);
         if (qqArry != null && qqArry.length > 0) {
@@ -693,7 +710,7 @@ public class Neo4jServiceImpl implements Neo4jService {
      * @param yhzh
      * @param token
      */
-    private void createTrades(Object yhzh,String token) {
+    private void createTrades(Object yhzh, String token) {
         //查询银行交易流水信息，提取交易对手信息
         String[] qqArry = toArray(yhzh);
         if (qqArry != null && qqArry.length > 0) {
@@ -718,9 +735,9 @@ public class Neo4jServiceImpl implements Neo4jService {
                 }
             });
             //合并两份数据
-            firendMap.forEach((kh,set)->{
+            firendMap.forEach((kh, set) -> {
                 Set<String> set2 = firendMap2.get(kh);
-                if(set2!=null && !set2.isEmpty()){
+                if (set2 != null && !set2.isEmpty()) {
                     set.addAll(set2);
                 }
             });

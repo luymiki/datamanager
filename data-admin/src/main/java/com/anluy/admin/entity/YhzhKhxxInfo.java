@@ -13,6 +13,11 @@ import java.util.Date;
 public class YhzhKhxxInfo extends BaseEntity<String> {
     @JSONField(name = "file_id")
     private String fileId;
+    @JSONField(name = "susp_id")
+    private String suspId;
+
+    @JSONField(name = "susp_name")
+    private String suspName;
 
     @JSONField(name = "create_time", format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -103,6 +108,22 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     @Field("手机银行开户网点所在地")
     private String sjyhkhwdszd;//	手机银行开户网点所在地
     private Integer ljjybs;//	交易流水记录数
+
+    public String getSuspId() {
+        return suspId;
+    }
+
+    public void setSuspId(String suspId) {
+        this.suspId = suspId;
+    }
+
+    public String getSuspName() {
+        return suspName;
+    }
+
+    public void setSuspName(String suspName) {
+        this.suspName = suspName;
+    }
 
     public String getFileId() {
         return fileId;

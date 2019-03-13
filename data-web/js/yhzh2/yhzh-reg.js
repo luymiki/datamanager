@@ -18,14 +18,14 @@ window.upladerCHecked = function () {
     return true;
 }
 var list=[];
-var suspicious_list={selected:{}};
+// var suspicious_list={selected:{}};
 var parser = (function () {
 
     var _init = function () {
         _khyh($("#yys"));
         $("#parserEml").on("click",_saveEmlOne);
-        suspicious_list.selected.suspName="公共人员";
-        suspicious_list.selected.suspId="0155acf5-e2bc-472a-b7bc-01ac81cee56f";
+        // suspicious_list.selected.suspName="公共人员";
+        // suspicious_list.selected.suspId="0155acf5-e2bc-472a-b7bc-01ac81cee56f";
     };
 
     var _khyh= function (input) {
