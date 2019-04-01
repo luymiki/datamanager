@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 功能说明：
@@ -64,14 +66,14 @@ public class Neo4jServiceImpl implements Neo4jService {
             }
 
             this.createGmsfzh(suspiciousNode);
-            this.createRelationship(suspiciousNode.getInfo().get("qq"), Labels.QQ, suspiciousNode.getQqNode());
-            this.createRelationship(suspiciousNode.getInfo().get("weixin"), Labels.WEIXIN, suspiciousNode.getWeixinNode());
-            this.createRelationship(suspiciousNode.getInfo().get("cft"), Labels.TENPLAY, suspiciousNode.getTenplayNode());
-            this.createRelationship(suspiciousNode.getInfo().get("zfb"), Labels.ALIPLAY, suspiciousNode.getAliplayNode());
-            this.createRelationship(suspiciousNode.getInfo().get("yhzh"), Labels.YHZH, suspiciousNode.getYhzhNode());
-            this.createRelationship(suspiciousNode.getInfo().get("phone"), Labels.PHONE, suspiciousNode.getPhoneNode());
-            this.createRelationship(suspiciousNode.getInfo().get("ip"), Labels.IP, suspiciousNode.getIpNode());
-            this.createRelationship(suspiciousNode.getInfo().get("email"), Labels.EMAIL, suspiciousNode.getEmailNode());
+            this.createRelationship(suspiciousNode.getInfo().get("qq"), Labels.QQ, suspiciousNode.getQqNode(), true);
+            this.createRelationship(suspiciousNode.getInfo().get("weixin"), Labels.WEIXIN, suspiciousNode.getWeixinNode(), false);
+            this.createRelationship(suspiciousNode.getInfo().get("cft"), Labels.TENPLAY, suspiciousNode.getTenplayNode(), false);
+            this.createRelationship(suspiciousNode.getInfo().get("zfb"), Labels.ALIPLAY, suspiciousNode.getAliplayNode(), false);
+            this.createRelationship(suspiciousNode.getInfo().get("yhzh"), Labels.YHZH, suspiciousNode.getYhzhNode(), true);
+            this.createRelationship(suspiciousNode.getInfo().get("phone"), Labels.PHONE, suspiciousNode.getPhoneNode(), true);
+            this.createRelationship(suspiciousNode.getInfo().get("ip"), Labels.IP, suspiciousNode.getIpNode(), false);
+            this.createRelationship(suspiciousNode.getInfo().get("email"), Labels.EMAIL, suspiciousNode.getEmailNode(), false);
 
             //dsl查询语句
             if (StringUtils.isBlank(queryDsl)) {
@@ -215,15 +217,22 @@ public class Neo4jServiceImpl implements Neo4jService {
      * @param field
      * @param label
      * @param node
+     * @param isNumber 是否是全数字
      */
-    private void createRelationship(Object field, Label label, Node node) {
+    private void createRelationship(Object field, Label label, Node node, boolean isNumber) {
         String[] fields = this.toArray(field);
         if (fields != null && fields.length > 0) {
             for (String sfzh : fields) {
                 if (StringUtils.isBlank(sfzh)) {
                     continue;
                 }
-                sfzh = sfzh.trim();
+                sfzh = sfzh.trim().toLowerCase();
+                if (isNumber) {
+                    sfzh = getNumber(sfzh);
+                }
+                if (StringUtils.isBlank(sfzh)) {
+                    continue;
+                }
                 Node sfzhNode = graphDatabaseService.findNode(label, ID, sfzh);
                 if (sfzhNode == null) {
                     sfzhNode = graphDatabaseService.createNode(label);
@@ -265,17 +274,26 @@ public class Neo4jServiceImpl implements Neo4jService {
             Set<String> set = new HashSet<>();
             l.forEach(s -> {
                 if (StringUtils.isNotBlank(s)) {
-                    set.add(s);
+                    String[] ss = s.toString().split(" |,|，|、|  |；|;|\r|\n");
+                    for (String st : ss) {
+                        set.add(st);
+                    }
                 }
             });
-            fields = set.toArray(new String[l.size()]);
+            fields = set.toArray(new String[set.size()]);
         } else {
             if (StringUtils.isBlank((String) field)) {
                 return null;
             }
             fields = field.toString().split(" |,|，|、|  |；|;|\r|\n");
         }
-        return fields;
+        Set<String> set = new HashSet<>();
+        for (String f : fields) {
+            if(StringUtils.isNotBlank(f)){
+                set.add(f);
+            }
+        }
+        return set.toArray(new String[set.size()]);
     }
 
     private String arryToString(String[] field) {
@@ -292,6 +310,19 @@ public class Neo4jServiceImpl implements Neo4jService {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    /**
+     * 获取数字
+     *
+     * @param str
+     * @return
+     */
+    private String getNumber(String str) {
+        String regEx = "[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
     }
 
     /**
@@ -745,4 +776,8 @@ public class Neo4jServiceImpl implements Neo4jService {
             this.createNodeRelationship(firendMap, Labels.YHZH, Labels.JIAOYI_NODE, "交易", Labels.YHZH);
         }
     }
+//
+//    public static void main(String[] args) {
+//        System.out.println("fsfsdfsdf、阀手动阀".split(" |,|，|、|  |；|;|\r|\n").length);
+//    }
 }

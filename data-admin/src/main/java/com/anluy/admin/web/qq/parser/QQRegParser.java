@@ -82,7 +82,7 @@ public class QQRegParser {
                 if (infoIndex == i) {
                     infoIndex = -1;
                     String[] infos = line.split("\t");
-                    if(infos.length != 17){
+                    if(infos.length != 16 && infos.length != 17){
                         throw new RuntimeException("文件格式不正确，不能解析");
                     }
                     regInfo.setQq(infos[0]);
@@ -107,14 +107,14 @@ public class QQRegParser {
                     regInfo.setXm(infos[9]);
                     regInfo.setEmail(infos[10]);
                     regInfo.setHome(infos[11]);
-                    regInfo.setCs(infos[13]);
-                    regInfo.setBycs(infos[14]);
-                    regInfo.setXz(infos[15]);
-                    if (StringUtils.isNotBlank(infos[16])) {
+                    regInfo.setCs(infos.length == 16? infos[12]:infos[13]);
+                    regInfo.setBycs(infos.length == 16? infos[13]:infos[14]);
+                    regInfo.setXz(infos.length == 16? infos[14]:infos[15]);
+                    if (StringUtils.isNotBlank(infos.length == 16? infos[15]:infos[16])) {
                         try {
-                            regInfo.setZcsj(simpleDateFormat2.format(simpleDateFormat2.parse(infos[16])));
+                            regInfo.setZcsj(simpleDateFormat2.format(simpleDateFormat2.parse(infos.length == 16? infos[15]:infos[16])));
                         } catch (ParseException e) {
-                            LOGGER.error("注册时间解析异常 " + infos[16] + " -> yyyy-MM-dd HH:mm:ss");
+                            LOGGER.error("注册时间解析异常 " + (infos.length == 16? infos[15]:infos[16]) + " -> yyyy-MM-dd HH:mm:ss");
                         }
                     }
                 } else if (hyIndex == i) {//好友

@@ -33,7 +33,7 @@
                     {field: 'sfzh',title: '注册身份证号'},
                     {field: 'zcsj',title: '注册时间'},
                     {field: 'dh',title: '手机号'},
-                    // {field: 'khxx_list',title: '开户行信息',formatter:formatterList},
+                    {field: 'khxx_list',title: '开户行信息',formatter:formatterList},
                     {field: 'yhzh_list',title: '银行账号',formatter:formatterList},
                     {field: 'opt',title: '操作',width:'130px'}
                 ],

@@ -92,7 +92,19 @@ public class CftRegParser {
             kyhList.add(list.get(7));
             String ii7 = list.size()>8? list.get(8):null;
             if(StringUtils.isNotBlank(ii7)){
-                yhzhList.add(ii7.replace("[","").replace("]",""));
+                String yhkh = ii7.replace("[","").replace("]","");
+                boolean b = true;
+                for (int j = 0; j <yhkh.length() ; j++) {
+                    try{
+                        Integer.valueOf(yhkh.charAt(j));
+                    }catch (Exception e){
+                        LOGGER.error(yhkh+"不是银行卡号");
+                        b = false;
+                    }
+                }
+                if(b){
+                    yhzhList.add(yhkh);
+                }
             }
         }
         return regInfo;
