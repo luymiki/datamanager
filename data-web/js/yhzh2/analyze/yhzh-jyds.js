@@ -7,6 +7,12 @@
     var yhzh_id;
     var ds_id;
     var zcType;
+
+    var title;
+    var hzid;
+    var qjfbid;
+    var jefbid;
+
     var cft = (function () {
         var _init = function () {
             var params = utils.getURLParams();
@@ -36,7 +42,8 @@
                         var file = d.data.data;
                         if(file && file.length===1){
                             yhzhInfo =file[0];
-                            $("#cft-title").html("银行账号 [ "+yhzhInfo["kh"]+" ] "+(ds_id?"与对手["+ds_id+"]":"")+" 的交易汇总");
+                            title = "银行账号 [ "+yhzhInfo["kh"]+" ] "+(ds_id?"与对手["+ds_id+"]":"")+" 的交易汇总";
+                            $("#cft-title").html(title);
                         }
                     }else {
                         toastrMsg.error("查询失败");
@@ -80,6 +87,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
+                        hzid = msg.data.id;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -132,6 +140,7 @@
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"],"dsId":ds_id,"zcType":zcType||""},
                 success : function (msg) {
                     if(msg.status===200){
+                        qjfbid = msg.data.id;
                         data = msg.data["group_jyje"];
                         //console.log(data)
                         $("#loadding-icon-jyje").hide();
@@ -231,6 +240,7 @@
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"],"dsId":ds_id},
                 success : function (msg) {
                     if(msg.status===200){
+                        jefbid =  msg.data.id;
                         var nzc100 = msg.data["nzc100"]["group_zc0"];
                         var zc100 = msg.data["zc100"]["group_zc0"];
                         //console.log(msg)
@@ -309,8 +319,16 @@
         var formatter = function (val) {
             return val === undefined || val=== null? val :val.toFixed(2);
         }
+        var exportExcel = function () {
+            var from = $('<form method="post" action="/api/admin/fx/cft/exportExcel" target="_blank"></form>').appendTo('body');
+            $('<input type="text" name="title">').val(title).appendTo(from);
+            $('<input type="text" name="hzid">').val(hzid).appendTo(from);
+            $('<input type="text" name="qjfbid">').val(qjfbid).appendTo(from);
+            $('<input type="text" name="jefbid">').val(jefbid).appendTo(from);
+            from.submit().remove();
+        }
         var _event = function () {
-
+            $("#exportExcel").on('click',exportExcel);
         };
 
         return {

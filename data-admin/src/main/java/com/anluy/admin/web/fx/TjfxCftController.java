@@ -1,5 +1,6 @@
 package com.anluy.admin.web.fx;
 
+import com.alibaba.fastjson.JSONObject;
 import com.anluy.admin.service.TjfxCftService;
 import com.anluy.admin.web.AuthorizationController;
 import com.anluy.commons.web.Result;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 功能说明：财付通流水分析
@@ -145,6 +147,35 @@ public class TjfxCftController {
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("统计成功").setData(result).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("统计失败:" + exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+        }
+    }
+    /**
+     * 导出excel
+     *
+     * @return
+     */
+    @ApiOperation(value = "exportExcel", response = Result.class)
+    @RequestMapping(value = "/exportExcel",method = {RequestMethod.GET,RequestMethod.POST})
+    @ApiImplicitParams({@ApiImplicitParam(name="cftId",value = "财付通记录编号"),
+            @ApiImplicitParam(name="dsId",value = "对手账号")})
+    public Object exportExcel(HttpServletRequest request, HttpServletResponse response,
+                              String title, String hzid, String qjfbid, String jefbid, String dshzid) {
+        try {
+            if(StringUtils.isBlank(title) ){
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"导出标题为空"));
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("title",title);
+            jsonObject.put("hzid",hzid);
+            jsonObject.put("qjfbid",qjfbid);
+            jsonObject.put("jefbid",jefbid);
+            jsonObject.put("dshzid",dshzid);
+            tjfxCftService.exportExcel(request,response,jsonObject,title);
+            return null;
+        } catch (Exception exception) {
+            LOGGER.error("导出失败:" + exception.getMessage(), exception);
             return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
         }
     }

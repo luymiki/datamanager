@@ -47,6 +47,7 @@ public class WebConfig {
                                 "/api/admin/websocket/**",
                                 "/error",
                                 "/login",
+                                "/**/exportExcel",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",
                                 "/swagger-resources/**",

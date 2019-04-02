@@ -5,6 +5,13 @@
     "use strict";
     var yhzhInfo;
     var zcType;
+
+    var title;
+    var hzid;
+    var qjfbid;
+    var jefbid;
+    var dshzid;
+
     var yhzh = (function () {
         var _init = function () {
             var params = utils.getURLParams();
@@ -34,7 +41,8 @@
                         var file = d.data.data;
                         if(file && file.length===1){
                             yhzhInfo =file[0];
-                            $("#yhzh-title").html("银行账号 [ "+yhzhInfo["zh"]+" ] 的交易汇总");
+                            title = "银行账号 [ "+yhzhInfo["zh"]+" ] 的交易汇总";
+                            $("#yhzh-title").html(title);
                         }
                     }else {
                         toastrMsg.error("查询失败");
@@ -83,6 +91,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
+                        hzid = msg.data.id;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -132,7 +141,8 @@
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"],zcType:zcType||""},
                 success : function (msg) {
                     if(msg.status===200){
-                        data = msg.data;
+                        dshzid = msg.data.id;
+                        data = msg.data.data;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -184,6 +194,7 @@
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"],zcType:zcType||""},
                 success : function (msg) {
                     if(msg.status===200){
+                        qjfbid = msg.data.id;
                         data = msg.data["group_jyje"];
                         //console.log(data)
                         $("#loadding-icon-jyje").hide();
@@ -284,6 +295,7 @@
                 data:{"ssyh":yhzhInfo["ssyh"],"kh":yhzhInfo["kh"],"zh":yhzhInfo["zh"]},
                 success : function (msg) {
                     if(msg.status===200){
+                        jefbid =  msg.data.id;
                         var nzc100 = msg.data["nzc100"]["group_zc0"];
                         var zc100 = msg.data["zc100"]["group_zc0"];
                         //console.log(msg)
@@ -372,6 +384,15 @@
         var formatterJybs = function (val) {
             return val === undefined || val=== null ? val :"<a class='jybs'>"+val+"</a>";
         }
+        var exportExcel = function () {
+            var from = $('<form method="post" action="/api/admin/fx/cft/exportExcel" target="_blank"></form>').appendTo('body');
+            $('<input type="text" name="title">').val(title).appendTo(from);
+            $('<input type="text" name="hzid">').val(hzid).appendTo(from);
+            $('<input type="text" name="qjfbid">').val(qjfbid).appendTo(from);
+            $('<input type="text" name="jefbid">').val(jefbid).appendTo(from);
+            $('<input type="text" name="dshzid">').val(dshzid).appendTo(from);
+            from.submit().remove();
+        }
         var _event = function () {
             $("#jyds-table").on('click',".jyds",function () {
                 var dsid = $(this).attr("data-dsid");
@@ -384,6 +405,7 @@
             $("#data-table").on('click',".jybs",function () {
                 top.contabs.addMenuItem("/view/yhzh2/analyze/yhzh-range-list.html?id="+yhzhInfo["id"]+"&zcType="+(zcType||""),'查看交易流水信息');
             });
+            $("#exportExcel").on('click',exportExcel);
         };
 
         return {

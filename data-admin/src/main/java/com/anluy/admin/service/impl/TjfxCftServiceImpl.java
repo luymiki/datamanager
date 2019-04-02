@@ -160,8 +160,10 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxCftJyls tjfxCftJyls = new TjfxCftJyls();
+        tjfxCftJyls.setId(UUID.randomUUID().toString());
         tjfxCftJyls.setCftId(cftId);
         this.aggJyls(dslJson, tjfxCftJyls, jyjeRange, dsId, zcType, token);
+        cacheManager.getCache(CACHE_NAME).put(tjfxCftJyls.getId(),JSON.toJSON(tjfxCftJyls));
         return tjfxCftJyls;
     }
 
@@ -180,7 +182,12 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
         TjfxCftJyds jyds = new TjfxCftJyds();
         jyds.setCftId(cftId);
-        return this.analyzeJyds(dslJson,jyds,zcType,token);
+        Object obj =  this.analyzeJyds(dslJson,jyds,zcType,token);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",UUID.randomUUID().toString());
+        jsonObject.put("data",obj);
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),JSON.toJSON(obj));
+        return jsonObject;
     }
 
 
@@ -196,7 +203,10 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
     public Object analyzeJyje(String cftId, String dsId, String zcType, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeJyje(dslJson,dsId,zcType,token);
+        JSONObject jsonObject = (JSONObject) this.analyzeJyje(dslJson,dsId,zcType,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
 
@@ -212,7 +222,10 @@ public class TjfxCftServiceImpl extends BaseServiceImpl implements TjfxCftServic
     public Object analyzeZc100(String cftId, String dsId, String token) throws IOException {
         String dsl = String.format(queryDsl, cftId);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        JSONObject jsonObject =  (JSONObject) this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
 

@@ -1,7 +1,9 @@
 package com.anluy.admin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.anluy.commons.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Date;
  * <p>
  * Created by hc.zeng on 2018/5/23.
  */
-public class TjfxJyls extends BaseEntity<String> {
+public class TjfxJyls extends BaseEntity<String> implements Serializable {
     private Double zdjyje;//最大交易金额
     private Double zxjyje;//最小交易金额
     private Double zdzrje;//最大转入金额
@@ -36,7 +38,9 @@ public class TjfxJyls extends BaseEntity<String> {
 //    private int zzljzrbs;//转账累计转入笔数
 //    private int zzljzcbs;//转账累计转出笔数
 //    private Double zzpjjyje;//转账平均交易金额
+    @JSONField(name = "zzjysj", format = "yyyy-MM-dd HH:mm:ss")
     private Date zzjysj;//最早交易时间
+    @JSONField(name = "zwjysj", format = "yyyy-MM-dd HH:mm:ss")
     private Date zwjysj;//最晚交易时间
 
     public Double getZdjyje() {

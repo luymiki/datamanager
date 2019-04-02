@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 功能说明：银行流水统计分析
@@ -108,10 +105,12 @@ public class TjfxYhzhServiceImpl extends BaseServiceImpl implements TjfxYhzhServ
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxYhzhJyls tjfxCftJyls = new TjfxYhzhJyls();
+        tjfxCftJyls.setId(UUID.randomUUID().toString());
         tjfxCftJyls.setSsyh(ssyh);
         tjfxCftJyls.setKh(kh);
         tjfxCftJyls.setZh(zh);
         this.aggJyls(dslJson, tjfxCftJyls, jyjeRange, dsId, zcType, token);
+        cacheManager.getCache(CACHE_NAME).put(tjfxCftJyls.getId(),JSON.toJSON(tjfxCftJyls));
         return tjfxCftJyls;
     }
 
@@ -131,7 +130,12 @@ public class TjfxYhzhServiceImpl extends BaseServiceImpl implements TjfxYhzhServ
         jyds.setSsyh(ssyh);
         jyds.setZh(zh);
         jyds.setKh(kh);
-        return this.analyzeJyds(dslJson,jyds,zcType,token);
+        Object obj =  this.analyzeJyds(dslJson,jyds,zcType,token);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",UUID.randomUUID().toString());
+        jsonObject.put("data",obj);
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),JSON.toJSON(obj));
+        return jsonObject;
     }
 
 
@@ -146,7 +150,10 @@ public class TjfxYhzhServiceImpl extends BaseServiceImpl implements TjfxYhzhServ
     public Object analyzeJyje(String ssyh,String kh,String zh, String dsId, String zcType, String token) throws IOException {
         String dsl = this.getDsl(ssyh,kh,zh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeJyje(dslJson,dsId,zcType,token);
+        JSONObject jsonObject = (JSONObject) this.analyzeJyje(dslJson,dsId,zcType,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
 
@@ -161,7 +168,10 @@ public class TjfxYhzhServiceImpl extends BaseServiceImpl implements TjfxYhzhServ
     public Object analyzeZc100(String ssyh,String kh,String zh, String dsId, String token) throws IOException {
         String dsl = this.getDsl(ssyh,kh,zh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        JSONObject jsonObject =  (JSONObject) this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
 

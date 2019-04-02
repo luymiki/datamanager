@@ -3,17 +3,19 @@ package com.anluy.admin.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.anluy.admin.entity.TjfxCftJyds;
 import com.anluy.admin.entity.TjfxJyds;
 import com.anluy.admin.entity.TjfxJyls;
+import com.anluy.admin.utils.ExcelExportUtil;
 import com.anluy.admin.utils.MD5;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCache;
 import org.springframework.cache.support.SimpleValueWrapper;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 /**
@@ -23,7 +25,9 @@ import java.util.*;
  */
 public interface TjfxJylsService extends TjfxService {
     String CACHE_NAME = "Eqa-Aggs-Cache";
+
     String getAggUrl();
+
     CacheManager getCcacheManager();
 
     /**
@@ -70,7 +74,7 @@ public interface TjfxJylsService extends TjfxService {
             jyls.setLjzcje(aggsObj.getDouble("sum_jyje"));
             jyls.setLjzcbs(aggsObj.getInteger("count_jyje"));
         }
-        cond3.put("values", new String[]{"入","进"});
+        cond3.put("values", new String[]{"入", "进"});
         aggsObj = aggsJyje(dslJson, token);
         if (aggsObj != null) {
             jyls.setZdzrje(aggsObj.getDouble("max_jyje"));
@@ -186,13 +190,14 @@ public interface TjfxJylsService extends TjfxService {
 
     /**
      * 统计交易流水信息
+     *
      * @param dsId
      * @param zcType
      * @param token
      * @return
      * @throws IOException
      */
-    default Object analyzeJyje(JSONObject dslJson,String dsId, String zcType, String token) throws IOException {
+    default Object analyzeJyje(JSONObject dslJson, String dsId, String zcType, String token) throws IOException {
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
 
@@ -235,7 +240,7 @@ public interface TjfxJylsService extends TjfxService {
      * @return
      * @throws IOException
      */
-    default Object analyzeJyds(JSONObject dslJson , TjfxJyds tjfxJyds, String zcType, String token) throws IOException {
+    default Object analyzeJyds(JSONObject dslJson, TjfxJyds tjfxJyds, String zcType, String token) throws IOException {
         List<TjfxJyds> resultList = new ArrayList<>();
         Set<String> jydsZh = new HashSet<>();
         JSONArray conditions = dslJson.getJSONArray("conditions");
@@ -268,11 +273,11 @@ public interface TjfxJylsService extends TjfxService {
         cond1.put("dataType", 2);
         conditions.add(cond1);
 
-        JSON jo = (JSON)JSON.toJSON(tjfxJyds);
+        JSON jo = (JSON) JSON.toJSON(tjfxJyds);
         //统计对手
         jydsZh.forEach(dszh -> {
             cond1.put("values", new String[]{dszh});
-            TjfxJyds jyds = JSON.toJavaObject(jo,tjfxJyds.getClass());
+            TjfxJyds jyds = JSON.toJavaObject(jo, tjfxJyds.getClass());
             //TjfxJyds jyds = ObjectUtils.clone(tjfxJyds);
             jyds.setDfId(dszh);
             this.aggJyls(dslJson, jyds, null, null, zcType, token);
@@ -291,15 +296,17 @@ public interface TjfxJylsService extends TjfxService {
         });
         return resultList;
     }
+
     /**
      * 统计被100整除的数据
+     *
      * @param aggurl
      * @param dslJson
      * @param dsId
      * @param token
      * @return
      */
-    default Object analyzeZc100(String aggurl,JSONObject dslJson,String dsId,String token){
+    default Object analyzeZc100(String aggurl, JSONObject dslJson, String dsId, String token) {
         JSONArray aggsJSONArray = dslJson.getJSONArray("aggs");
         aggsJSONArray.clear();
 
@@ -322,7 +329,7 @@ public interface TjfxJylsService extends TjfxService {
 
         cond.put("searchType", 3);
         JSONObject aggsObj2 = aggs(aggurl, JSON.toJSONString(dslJson), token);
-        Map result = new HashMap();
+        JSONObject result = new JSONObject();
         result.put("zc100", aggsObj);
         result.put("nzc100", aggsObj2);
         return result;
@@ -364,5 +371,54 @@ public interface TjfxJylsService extends TjfxService {
                 cond.put("searchType", 3);
             }
         }
+    }
+
+    default void exportExcel(HttpServletRequest request, HttpServletResponse response, JSONObject dataMap, String fileNameCn) throws Exception {
+        //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+        response.setContentType("multipart/form-data");
+        //2.设置文件头：最后一个参数是设置下载文件名(假如我们叫a.pdf)
+        String fileName = "数据导出-" + fileNameCn + ".xls";
+        fileName = new String(fileName.getBytes(), "ISO8859-1");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        response.setCharacterEncoding("UTF-8");
+        Map<String, Object> beans = new HashMap<>();
+        beans.put("title", fileNameCn);
+        EhCacheCache cache = (EhCacheCache) this.getCcacheManager().getCache(CACHE_NAME);
+        Object cacheObj = cache.get(dataMap.get("hzid"));
+        if (cacheObj != null) {
+            JSONObject r = (JSONObject) ((SimpleValueWrapper) cacheObj).get();
+            List l = new ArrayList<>();
+            r.put("xh", 1);
+            l.add(r);
+            beans.put("dataList", l);
+        }
+        Object cacheObj2 = cache.get(dataMap.get("qjfbid"));
+        if (cacheObj2 != null) {
+            JSONObject r = (JSONObject) ((SimpleValueWrapper) cacheObj2).get();
+            JSONArray jsonArray = r.getJSONArray("group_jyje");
+            JSONObject jo = new JSONObject();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject oo = (JSONObject) jsonArray.get(i);
+                jo.put("qjfb"+i, oo.getIntValue("doc_count"));
+            }
+            beans.put("qjfb", jo);
+        }
+        Object cacheObj3 = cache.get(dataMap.get("jefbid"));
+        if (cacheObj3 != null) {
+            JSONObject r = (JSONObject) ((SimpleValueWrapper) cacheObj3).get();
+            JSONObject jo = new JSONObject();
+            jo.put("Y100", r.getJSONObject("zc100").getInteger("group_zc0"));
+            jo.put("N100", r.getJSONObject("nzc100").getInteger("group_zc0"));
+            beans.put("jefb", jo);
+        }
+        Object cacheObj4 = cache.get(dataMap.get("dshzid"));
+        if (cacheObj4 != null) {
+            JSONArray r = (JSONArray) ((SimpleValueWrapper) cacheObj4).get();
+            for (int i = 0; i < r.size(); i++) {
+                r.getJSONObject(i).put("xh", i + 1);
+            }
+            beans.put("dsDataList", r);
+        }
+        ExcelExportUtil.exportExcel( "/template/export2.xls",beans,response.getOutputStream());
     }
 }

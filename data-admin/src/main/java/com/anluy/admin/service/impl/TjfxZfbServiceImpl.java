@@ -33,7 +33,6 @@ import java.util.*;
 @Service
 public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TjfxZfbServiceImpl.class);
-    private static final String CACHE_NAME ="Eqa-Aggs-Cache";
     @Resource
     private EqaConfig eqaConfig;
 
@@ -402,9 +401,11 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
 
         TjfxZfbJyls tjfxZfbJyls = new TjfxZfbJyls();
+        tjfxZfbJyls.setId(UUID.randomUUID().toString());
         tjfxZfbJyls.setUserId(userId);
         tjfxZfbJyls.setXcbh(xcbh);
         this.aggJyls(dslJson, tjfxZfbJyls,jyjeRange,dsId,zcType, token);
+        cacheManager.getCache(CACHE_NAME).put(tjfxZfbJyls.getId(),JSON.toJSON(tjfxZfbJyls));
         return tjfxZfbJyls;
     }
 
@@ -425,7 +426,12 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
         TjfxZfbJyds jyds = new TjfxZfbJyds();
         jyds.setUserId(userId);
         jyds.setXcbh(xcbh);
-        return this.analyzeJyds(dslJson,jyds,zcType,token);
+        Object obj =  this.analyzeJyds(dslJson,jyds,zcType,token);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",UUID.randomUUID().toString());
+        jsonObject.put("data",obj);
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),JSON.toJSON(obj));
+        return jsonObject;
     }
 
     /**
@@ -440,7 +446,10 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
     public Object analyzeJyje(String userId, String xcbh,String dsId, String zcType,  String token) throws IOException {
         String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeJyje(dslJson,dsId,zcType,token);
+        JSONObject jsonObject = (JSONObject) this.analyzeJyje(dslJson,dsId,zcType,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
 
@@ -457,7 +466,10 @@ public class TjfxZfbServiceImpl extends BaseServiceImpl implements TjfxZfbServic
     public Object analyzeJyjeZc100(String userId, String xcbh, String dsId, String token) throws IOException {
         String dsl = String.format(queryDsl, userId,xcbh);
         JSONObject dslJson = (JSONObject) JSON.parse(dsl);
-        return this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        JSONObject jsonObject =  (JSONObject) this.analyzeZc100(eqaConfig.getAggsUrl(),dslJson,dsId,token);
+        jsonObject.put("id",UUID.randomUUID().toString());
+        cacheManager.getCache(CACHE_NAME).put(jsonObject.get("id"),jsonObject);
+        return jsonObject;
     }
 
     @Override

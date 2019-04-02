@@ -8,6 +8,12 @@
     var ds_id;
     var xcbh;
     var zcType;
+
+    var title;
+    var hzid;
+    var qjfbid;
+    var jefbid;
+
     var zfb = (function () {
         var _init = function () {
             var params = utils.getURLParams();
@@ -39,7 +45,8 @@
                             zfbInfo =file[0];
                             user_id = zfbInfo["user_id"];
                             xcbh = zfbInfo["xcbh"];
-                            $("#zfb-title").html("支付宝账号 [ "+zfbInfo["user_id"]+" ] "+(ds_id?"与对手["+ds_id+"]":"")+" 的交易汇总");
+                            title = "支付宝账号 [ "+zfbInfo["user_id"]+" ] "+(ds_id?"与对手["+ds_id+"]":"")+" 的交易汇总";
+                            $("#zfb-title").html(title);
                         }
                     }else {
                         toastrMsg.error("查询失败");
@@ -83,6 +90,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
+                        hzid = msg.data.id;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -134,6 +142,7 @@
                 data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id,"zcType":zcType},
                 success : function (msg) {
                     if(msg.status===200){
+                        qjfbid = msg.data.id;
                         data = msg.data["group_jyje"];
                         //console.log(data)
                         $("#loadding-icon-jyje").hide();
@@ -233,6 +242,7 @@
                 data:{"userId":user_id,"xcbh":xcbh,"dsId":ds_id},
                 success : function (msg) {
                     if(msg.status===200){
+                        jefbid =  msg.data.id;
                         var nzc100 = msg.data["nzc100"]["group_zc0"];
                         var zc100 = msg.data["zc100"]["group_zc0"];
                         //console.log(msg)
@@ -310,8 +320,16 @@
         var formatter = function (val) {
             return val === undefined || val=== null? val :val.toFixed(2);
         }
+        var exportExcel = function () {
+            var from = $('<form method="post" action="/api/admin/fx/cft/exportExcel" target="_blank"></form>').appendTo('body');
+            $('<input type="text" name="title">').val(title).appendTo(from);
+            $('<input type="text" name="hzid">').val(hzid).appendTo(from);
+            $('<input type="text" name="qjfbid">').val(qjfbid).appendTo(from);
+            $('<input type="text" name="jefbid">').val(jefbid).appendTo(from);
+            from.submit().remove();
+        }
         var _event = function () {
-
+            $("#exportExcel").on('click',exportExcel);
         };
 
         return {

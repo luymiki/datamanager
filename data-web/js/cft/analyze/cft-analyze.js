@@ -5,6 +5,11 @@
     "use strict";
     var cftInfo;
     var zcType;
+    var title;
+    var hzid;
+    var qjfbid;
+    var jefbid;
+    var dshzid;
     var cft = (function () {
         var _init = function () {
             var params = utils.getURLParams();
@@ -34,7 +39,8 @@
                         var file = d.data.data;
                         if(file && file.length===1){
                             cftInfo =file[0];
-                            $("#cft-title").html("财付通账号 [ "+cftInfo["zh"]+" ] 的交易汇总");
+                            title="财付通账号 [ "+cftInfo["zh"]+" ] 的交易汇总";
+                            $("#cft-title").html(title);
                         }
                     }else {
                         toastrMsg.error("查询失败");
@@ -53,7 +59,6 @@
     })();
 
     var reg = (function () {
-
 
         var cftid ;
         var _init = function init(_data) {
@@ -104,6 +109,7 @@
                 success : function (msg) {
                     if(msg.status===200){
                         data = [msg.data];
+                        hzid = msg.data.id;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -152,7 +158,8 @@
                 data:{"cftId":cftid,zcType:zcType||""},
                 success : function (msg) {
                     if(msg.status===200){
-                        data = msg.data;
+                        dshzid = msg.data.id;
+                        data = msg.data.data;
                         //console.log(data)
                         var xh =  1;
                         for(var i= 0;i<data.length;i++){
@@ -204,6 +211,7 @@
                 data:{"cftId":cftid,zcType:zcType||""},
                 success : function (msg) {
                     if(msg.status===200){
+                        qjfbid = msg.data.id;
                         data = msg.data["group_jyje"];
                         //console.log(data)
                         $("#loadding-icon-jyje").hide();
@@ -304,6 +312,7 @@
                 data:{"cftId":cftid},
                 success : function (msg) {
                     if(msg.status===200){
+                        jefbid =  msg.data.id;
                         var nzc100 = msg.data["nzc100"]["group_zc0"];
                         var zc100 = msg.data["zc100"]["group_zc0"];
                         //console.log(msg)
@@ -392,6 +401,16 @@
         var formatterJybs = function (val) {
             return val === undefined || val=== null ? val :"<a class='jybs'>"+val+"</a>";
         }
+        var exportExcel = function () {
+            var from = $('<form method="post" action="/api/admin/fx/cft/exportExcel" target="_blank"></form>').appendTo('body');
+            $('<input type="text" name="title">').val(title).appendTo(from);
+            $('<input type="text" name="hzid">').val(hzid).appendTo(from);
+            $('<input type="text" name="qjfbid">').val(qjfbid).appendTo(from);
+            $('<input type="text" name="jefbid">').val(jefbid).appendTo(from);
+            $('<input type="text" name="dshzid">').val(dshzid).appendTo(from);
+            from.submit().remove();
+        }
+
         var _event = function () {
             $("#integrated").on('click',_integrated);
             $("#jyds-table").on('click',".jyds",function () {
@@ -405,6 +424,7 @@
             $("#data-table").on('click',".jybs",function () {
                 top.contabs.addMenuItem("/view/cft/analyze/cft-range-list.html?id="+cftInfo["id"]+"&zcType="+(zcType||""),'查看交易流水信息');
             });
+            $("#exportExcel").on('click',exportExcel);
         };
 
         return {
