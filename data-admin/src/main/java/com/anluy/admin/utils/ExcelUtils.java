@@ -2,13 +2,14 @@ package com.anluy.admin.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -59,6 +60,21 @@ public class ExcelUtils {
             }
         }
         return new ArrayList<>();
+    }
+
+    public static  Map<String, byte[]> readDwr(File file, int sheetIndex) throws Exception {
+        Workbook wb = readExcel(file);
+        if (wb != null) {
+            //获取第一个sheet
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+            if (sheet instanceof HSSFSheet) {
+                return printImg(getHSSFPictures((HSSFSheet) sheet));
+            } else if (sheet instanceof XSSFSheet) {
+                return printImg(getXSSFPictures((XSSFSheet) sheet));
+            }
+
+        }
+        return new HashMap();
     }
 
     private static List<List<String>> read(Sheet sheet) {
@@ -237,9 +253,72 @@ public class ExcelUtils {
         }
     }
 
+    /**
+     * 获取图片和位置 (xls)
+     *
+     * @param sheet
+     * @return
+     * @throws IOException
+     */
+    public static Map<String, PictureData> getHSSFPictures(HSSFSheet sheet) throws IOException {
+        Map<String, PictureData> map = new HashMap<String, PictureData>();
+        List<HSSFShape> list = sheet.getDrawingPatriarch().getChildren();
+        for (HSSFShape shape : list) {
+            if (shape instanceof HSSFPicture) {
+                HSSFPicture picture = (HSSFPicture) shape;
+                HSSFClientAnchor cAnchor = (HSSFClientAnchor) picture.getAnchor();
+                String key = cAnchor.getRow1() + "-" + cAnchor.getCol1(); // 行号-列号
+                map.put(key, picture.getPictureData());
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 获取图片和位置 (xlsx)
+     *
+     * @param sheet
+     * @return
+     * @throws IOException
+     */
+    public static Map<String, PictureData> getXSSFPictures(XSSFSheet sheet) throws IOException {
+        Map<String, PictureData> map = new HashMap<String, PictureData>();
+        List<POIXMLDocumentPart> list = sheet.getRelations();
+        for (POIXMLDocumentPart part : list) {
+            if (part instanceof XSSFDrawing) {
+                XSSFDrawing drawing = (XSSFDrawing) part;
+                List<XSSFShape> shapes = drawing.getShapes();
+                for (XSSFShape shape : shapes) {
+                    XSSFPicture picture = (XSSFPicture) shape;
+                    XSSFClientAnchor anchor = picture.getPreferredSize();
+                    CTMarker marker = anchor.getFrom();
+                    String key = marker.getRow() + "-" + marker.getCol();
+                    map.put(key, picture.getPictureData());
+                }
+            }
+        }
+        return map;
+    }
+
+    //图片写出
+    public static Map<String, byte[]> printImg(Map<String, PictureData> sheetMap) throws IOException {
+        Map<String, byte[]> map = new HashMap<>();
+        Object key[] = sheetMap.keySet().toArray();
+        for (int i = 0; i < sheetMap.size(); i++) {
+            // 获取图片流
+            PictureData pic = sheetMap.get(key[i]);
+            // 获取图片索引
+            String picName = key[i].toString();
+            // 获取图片格式
+//            String ext = pic.suggestFileExtension();
+            map.put(picName,pic.getData());
+        }
+        return map;
+    }
+
     public static void main(String[] args) {
-        readHtml(new File("I:\\update-20190112\\17817815981 - 副本.xml"));
-        //System.out.println(checkHtml(new File("I:\\update-20190112\\17817815981 - 副本.xml")));
+//        readHtml(new File("I:\\update-20190112\\17817815981 - 副本.xml"));
+        System.out.println(read(new File("H:\\数据管理系统\\数据导入20191219\\copy.xlsx"), 1));
     }
 
 }

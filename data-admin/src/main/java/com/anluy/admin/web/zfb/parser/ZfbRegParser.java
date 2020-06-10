@@ -4,6 +4,7 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.utils.CSVReader;
+import com.anluy.admin.utils.ExcelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +33,23 @@ public class ZfbRegParser {
      * @return
      * @throws Exception
      */
-    public List<ZfbRegInfo>  parser(File file) throws Exception {
-        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+    public List<ZfbRegInfo> parser(File file) throws Exception {
+        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file), "GBK"));
         List<List<String>> stringList = csvReader.readAll();
         csvReader.close();
         return parse(stringList);
+    }
+
+    /**
+     * 解析文件
+     *
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbRegInfo> parserExcel(File file) throws Exception {
+        List<List<String>> stringList = ExcelUtils.read(file, "基本信息");
+        return parseExcel(stringList);
     }
 
     /**
@@ -46,18 +59,29 @@ public class ZfbRegParser {
      * @return
      * @throws Exception
      */
-    public List<ZfbRegInfo>  parser(String path) throws Exception {
+    public List<ZfbRegInfo> parserExcel(String path) throws Exception {
+        return parserExcel(new File(path));
+    }
+
+    /**
+     * 解析文件
+     *
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbRegInfo> parser(String path) throws Exception {
         return parser(new File(path));
     }
 
-    private List<ZfbRegInfo>  parse(List<List<String>> txtContent) {
-        if(txtContent.size()<2){
+    private List<ZfbRegInfo> parse(List<List<String>> txtContent) {
+        if (txtContent.size() < 2) {
             throw new RuntimeException("文件格式不正确，不能解析");
         }
         List<ZfbRegInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
             List<String> infolist = txtContent.get(i);
-            if(infolist.size() < 10){
+            if (infolist.size() < 10) {
                 throw new RuntimeException("文件格式不正确，不能解析");
             }
             ZfbRegInfo regInfo = new ZfbRegInfo();
@@ -69,7 +93,7 @@ public class ZfbRegParser {
             regInfo.setName(infolist.get(3));
             regInfo.setZjlx(infolist.get(4));
             regInfo.setSfzh(infolist.get(5));
-            if(StringUtils.isNotBlank(infolist.get(6))){
+            if (StringUtils.isNotBlank(infolist.get(6))) {
                 regInfo.setYe(Double.valueOf(infolist.get(6)));
             }
             regInfo.setBdsj(infolist.get(7));
@@ -80,12 +104,12 @@ public class ZfbRegParser {
             regInfo.setKhxxList(kyhList);
             regInfo.setYhzhList(yhzhList);
 
-            if(StringUtils.isNotBlank(infolist.get(8))){
+            if (StringUtils.isNotBlank(infolist.get(8))) {
                 String[] strs = infolist.get(8).split(";");
-                for (String  infos :     strs            ) {
+                for (String infos : strs) {
                     String[] s = infos.split(":");
-                    if(s.length==3){
-                        kyhList.add(s[1].trim()+":"+s[0].trim());
+                    if (s.length == 3) {
+                        kyhList.add(s[1].trim() + ":" + s[0].trim());
                         yhzhList.add(s[2].trim());
                     }
                 }
@@ -97,11 +121,58 @@ public class ZfbRegParser {
         return dataList;
     }
 
+    private List<ZfbRegInfo> parseExcel(List<List<String>> txtContent) {
+        if (txtContent.size() < 2) {
+            throw new RuntimeException("文件格式不正确，不能解析");
+        }
+        List<ZfbRegInfo> dataList = new ArrayList<>();
+        for (int i = 1; i < txtContent.size(); i++) {
+            List<String> infolist = txtContent.get(i);
+            if (infolist.size() < 10) {
+                throw new RuntimeException("文件格式不正确，不能解析");
+            }
+            ZfbRegInfo regInfo = new ZfbRegInfo();
+            regInfo.setFileId(attachment.getId());
+            regInfo.setTags(attachment.getTags());
+            regInfo.setUserId(infolist.get(0));
+            regInfo.setName(infolist.get(1));
+            regInfo.setEmail(infolist.get(3));
+            regInfo.setDlsj(infolist.get(5));
+            regInfo.setBdsj(infolist.get(6));
+            regInfo.setZjlx(infolist.get(14));
+            regInfo.setSfzh(StringUtils.isBlank(infolist.get(15)) ? infolist.get(16) : infolist.get(15));
+            if (StringUtils.isNotBlank(infolist.get(11))) {
+                regInfo.setYe(Double.valueOf(infolist.get(11)));
+            }
+
+            List<String> kyhList = new ArrayList<>();
+            List<String> yhzhList = new ArrayList<>();
+
+            regInfo.setKhxxList(kyhList);
+            regInfo.setYhzhList(yhzhList);
+
+            if (StringUtils.isNotBlank(infolist.get(12))) {
+                String[] strs = infolist.get(8).split(";");
+                for (String infos : strs) {
+                    String[] s = infos.split("-");
+                    if (s.length == 3) {
+                        kyhList.add(s[1].trim() + ":" + s[0].trim());
+                        yhzhList.add(s[2].trim());
+                    }
+                }
+            }
+            regInfo.setXcbh(null);
+            dataList.add(regInfo);
+        }
+
+        return dataList;
+    }
+
     private List<String> split(String line) {
         String[] infos = line.split(",");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {
-            hylist.add(hy.replace("\"","").trim());
+            hylist.add(hy.replace("\"", "").trim());
         }
         return hylist;
     }

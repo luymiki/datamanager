@@ -78,36 +78,96 @@ public class CftRegParser {
         regInfo.setKhxxList(kyhList);
         regInfo.setYhzhList(yhzhList);
 
-        kyhList.add(infolist.size()>7? infolist.get(7):null);
+        if(infolist.size()>7){
+            kyhList.add(infolist.get(7));
+        }
         String i7 = infolist.size()>8? infolist.get(8):null;
         if(StringUtils.isNotBlank(i7)){
             yhzhList.add(i7.replace("[","").replace("]",""));
         }
-
+        boolean xiaoho = false;
         for (int i = 2; i < txtContent.size(); i++) {
             List<String> list = txtContent.get(i);
-            if(list.size() <8 ){
+            if("注销信息".equals(list.get(0))){
+                i++;
+                xiaoho = true;
                 continue;
             }
-            kyhList.add(list.get(7));
-            String ii7 = list.size()>8? list.get(8):null;
-            if(StringUtils.isNotBlank(ii7)){
-                String yhkh = ii7.replace("[","").replace("]","");
-                boolean b = true;
-                for (int j = 0; j <yhkh.length() ; j++) {
-                    try{
-                        Integer.valueOf(yhkh.charAt(j));
-                    }catch (Exception e){
-                        LOGGER.error(yhkh+"不是银行卡号");
-                        b = false;
-                    }
-                }
-                if(b){
-                    yhzhList.add(yhkh);
-                }
+            if(xiaoho){
+                xiaohu(regInfo,list,kyhList,yhzhList);
+            }else {
+                none(regInfo,list,kyhList,yhzhList);
             }
         }
         return regInfo;
+    }
+
+    /**
+     * 默认处理
+     */
+    private void none( CftRegInfo regInfo,List<String> list, List<String> kyhList,List<String> yhzhList){
+        if(list.size() <8 ){
+            return;
+        }
+        if(list.size()>7){
+            kyhList.add(list.get(7));
+        }
+        String ii7 = list.size()>8? list.get(8):null;
+        if(StringUtils.isNotBlank(ii7)){
+            String yhkh = ii7.replace("[","").replace("]","");
+            boolean b = true;
+            for (int j = 0; j <yhkh.length() ; j++) {
+                try{
+                    Integer.valueOf(yhkh.charAt(j));
+                }catch (Exception e){
+                    LOGGER.error(yhkh+"不是银行卡号");
+                    b = false;
+                }
+            }
+            if(b){
+                yhzhList.add(yhkh);
+            }
+        }
+    }
+    /**
+     * 注销信息处理
+     */
+    private void xiaohu(CftRegInfo regInfo,List<String> list, List<String> kyhList,List<String> yhzhList){
+        String i2 = list.size()>2? list.get(2):null;
+        if(StringUtils.isNotBlank(i2)&& StringUtils.isBlank(regInfo.getName())){
+            regInfo.setName(i2);
+        }
+        String i3 = list.size()>3? list.get(3):null;
+        if(StringUtils.isNotBlank(i3)){
+            String sfzh = i3.replace("[","").replace("]","");
+            if(regInfo.getSfzh()!=null && regInfo.getSfzh().indexOf(sfzh)<0){
+                regInfo.setSfzh(regInfo.getSfzh()+","+sfzh);
+            }else if(regInfo.getSfzh()==null){
+                regInfo.setSfzh(sfzh);
+            }
+        }
+        if(list.size() <7 ){
+            return;
+        }
+        if(list.size()>6){
+            kyhList.add(list.get(6));
+        }
+        String ii7 = list.size()>7? list.get(7):null;
+        if(StringUtils.isNotBlank(ii7)){
+            String yhkh = ii7.replace("[","").replace("]","");
+            boolean b = true;
+            for (int j = 0; j <yhkh.length() ; j++) {
+                try{
+                    Integer.valueOf(yhkh.charAt(j));
+                }catch (Exception e){
+                    LOGGER.error(yhkh+"不是银行卡号");
+                    b = false;
+                }
+            }
+            if(b){
+                yhzhList.add(yhkh);
+            }
+        }
     }
 
     private List<String> split(String line) {
@@ -119,7 +179,7 @@ public class CftRegParser {
         return hylist;
     }
 
-//    public static void main(String[] args) throws Exception {
-//        new CftRegParser("").parser("H:\\数据管理系统\\导入数据20180601\\cft\\434374098\\tp_434374098_info.txt");
-//    }
+    public static void main(String[] args) throws Exception {
+        new CftRegParser("").parser("I:\\tp_2693271184_info.txt");
+    }
 }

@@ -4,6 +4,7 @@ import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbLoginInfo;
 import com.anluy.admin.entity.ZfbRegInfo;
 import com.anluy.admin.utils.CSVReader;
+import com.anluy.admin.utils.ExcelUtils;
 import com.anluy.admin.utils.IPAddrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +42,17 @@ public class ZfbLoginParser {
         csvReader.close();
         return parse(stringList);
     }
+    /**
+     * 解析文件
+     *
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbLoginInfo> parserExcel( File file,String userId,String dlzh,String name,String xcbh) throws Exception {
+        List<List<String>> stringList = ExcelUtils.read(file, "登录IP");
+        return parseExcel(stringList, userId, dlzh, name, xcbh);
+    }
 
     /**
      * 解析文件
@@ -51,6 +63,16 @@ public class ZfbLoginParser {
      */
     public List<ZfbLoginInfo> parser(String path) throws Exception {
         return parser(new File(path));
+    }
+    /**
+     * 解析文件
+     *
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbLoginInfo> parserExcel(String path,String userId,String dlzh,String name,String xcbh) throws Exception {
+        return parserExcel(new File(path), userId, dlzh, name, xcbh);
     }
 
     private List<ZfbLoginInfo> parse(List< List<String>> txtContent) throws Exception{
@@ -77,6 +99,34 @@ public class ZfbLoginParser {
                 regInfo.setCzsj(sdf.parse(list.get(4)));
             }
             regInfo.setXcbh(list.get(5));
+            dataList.add(regInfo);
+        }
+        return dataList;
+    }
+    private List<ZfbLoginInfo> parseExcel(List< List<String>> txtContent,String userId,String dlzh,String name,String xcbh) throws Exception{
+        if(txtContent.size()<2){
+            throw new RuntimeException("文件格式不正确，不能解析");
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<ZfbLoginInfo> dataList = new ArrayList<>();
+        for (int i = 1; i < txtContent.size(); i++) {
+            List<String> list = txtContent.get(i);
+            if(list.size() < 3){
+                continue;
+            }
+            ZfbLoginInfo regInfo = new ZfbLoginInfo();
+            regInfo.setFileId(attachment.getId());
+            regInfo.setTags(attachment.getTags());
+           // regInfo.setInfoId(attachment.getFolder());//借用folder字段方注册信息的编号
+            regInfo.setDlzh(dlzh);
+            regInfo.setUserId(userId);
+            regInfo.setName(name);
+            regInfo.setIp(list.get(0));
+            regInfo.setGsd(ipAddrUtil.findCityInfoString(regInfo.getIp()));
+            if(StringUtils.isNotBlank(list.get(2))){
+                regInfo.setCzsj(sdf.parse(list.get(2)));
+            }
+            regInfo.setXcbh(xcbh);
             dataList.add(regInfo);
         }
         return dataList;

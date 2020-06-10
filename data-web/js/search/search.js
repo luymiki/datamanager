@@ -9,6 +9,7 @@
         var val = "";
         var _init = function () {
             _getMeta();
+            _initMetaSelect();
             $("#search-btn").click(_search);
             $("#search").keyup(function (e) {
                 if (e.keyCode === 13) {
@@ -172,7 +173,19 @@
                 }
             });
         };
-
+        /**
+         * 初始化元数据选择列表
+         * @private
+         */
+        var _initMetaSelect = function () {
+            var $select = $("#meta-index");
+            $select.empty();
+            $("<option value=''>全部</option>").appendTo($select);
+            for (var i = 0; i < metaList.length; i++) {
+                var mm = metaList[i];
+                $("<option value='" + mm["indexName"] + "'>" + mm["indexNameCn"] + "</option>").appendTo($select);
+            }
+        }
         var _pageNum = 1;
         var _pageSize = 10;
         var _pagination;
@@ -189,13 +202,13 @@
                 $("#pagination_box").show();
                 $("#show-data-list").hide();
                 $('#data-table').bootstrapTable("destroy");
-
+                var indexName = $("#meta-index").val();
                 var vals = val.split(" ");
                 $.ajax.proxy({
                     url: "/api/eqa/fulltext",
                     type: "POST",
                     dataType: "json",
-                    data: {"pageNum": page, "pageSize": _pageSize, "keyword": val},
+                    data: {"pageNum": page, "pageSize": _pageSize, "keyword": val,"indexName":indexName},
                     async: true,
                     success: function (d) {
                         console.log(d);

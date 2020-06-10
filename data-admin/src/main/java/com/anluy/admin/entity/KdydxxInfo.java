@@ -40,6 +40,11 @@ public class KdydxxInfo extends BaseEntity<String> {
     private String qszt;//	签收状态
     private String tk;//	退款
 
+    private String kdgs;//	快递公司
+    private Double sl;//	数量
+    private String jjr;//	寄件人
+    private String jjdh;//寄件电话
+    private String jjdz;//	寄件地址
 
     public String getFileId() {
         return fileId;
@@ -199,5 +204,45 @@ public class KdydxxInfo extends BaseEntity<String> {
 
     public void setFlid(String flid) {
         this.flid = flid;
+    }
+
+    public String getKdgs() {
+        return kdgs;
+    }
+
+    public void setKdgs(String kdgs) {
+        this.kdgs = kdgs;
+    }
+
+    public Double getSl() {
+        return sl;
+    }
+
+    public void setSl(Double sl) {
+        this.sl = sl;
+    }
+
+    public String getJjr() {
+        return jjr;
+    }
+
+    public void setJjr(String jjr) {
+        this.jjr = jjr;
+    }
+
+    public String getJjdh() {
+        return jjdh;
+    }
+
+    public void setJjdh(String jjdh) {
+        this.jjdh = jjdh;
+    }
+
+    public String getJjdz() {
+        return jjdz;
+    }
+
+    public void setJjdz(String jjdz) {
+        this.jjdz = jjdz;
     }
 }

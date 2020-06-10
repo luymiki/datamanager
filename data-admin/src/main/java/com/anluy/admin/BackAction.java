@@ -31,7 +31,7 @@ public class BackAction {
     @Resource
     private ElasticsearchRestClient elasticsearchRestClient;
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24, initialDelay = 6000)
+   // @Scheduled(fixedDelay = 1000 * 60 * 60 * 24, initialDelay = 6000)
     public void back() {
         try {
             LOGGER.info("开始备份数据");

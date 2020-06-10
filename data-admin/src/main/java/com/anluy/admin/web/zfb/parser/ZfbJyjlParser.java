@@ -3,6 +3,7 @@ package com.anluy.admin.web.zfb.parser;
 import com.anluy.admin.entity.Attachment;
 import com.anluy.admin.entity.ZfbJyjlInfo;
 import com.anluy.admin.utils.CSVReader;
+import com.anluy.admin.utils.ExcelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +36,23 @@ public class ZfbJyjlParser {
      * @return
      * @throws Exception
      */
-    public List<ZfbJyjlInfo> parser( File file) throws Exception {
-        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+    public List<ZfbJyjlInfo> parser(File file) throws Exception {
+        CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file), "GBK"));
         List<List<String>> stringList = csvReader.readAll();
         csvReader.close();
         return parse(stringList);
+    }
+
+    /**
+     * 解析文件
+     *
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbJyjlInfo> parserExcel(File file, String userId, String dlzh, String name, String xcbh) throws Exception {
+        List<List<String>> stringList = ExcelUtils.read(file, "交易记录");
+        return parseExcel(stringList, userId, dlzh, name, xcbh);
     }
 
     /**
@@ -53,8 +66,19 @@ public class ZfbJyjlParser {
         return parser(new File(path));
     }
 
-    private List<ZfbJyjlInfo> parse(List<List<String>> txtContent) throws Exception{
-        if(txtContent.size()<2){
+    /**
+     * 解析文件
+     *
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public List<ZfbJyjlInfo> parserExcel(String path, String userId, String dlzh, String name, String xcbh) throws Exception {
+        return parserExcel(new File(path), userId, dlzh, name, xcbh);
+    }
+
+    private List<ZfbJyjlInfo> parse(List<List<String>> txtContent) throws Exception {
+        if (txtContent.size() < 2) {
             throw new RuntimeException("文件格式不正确，不能解析");
         }
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -62,7 +86,7 @@ public class ZfbJyjlParser {
         List<ZfbJyjlInfo> dataList = new ArrayList<>();
         for (int i = 1; i < txtContent.size(); i++) {
             List<String> list = txtContent.get(i);
-            if(list.size() < 17){
+            if (list.size() < 17) {
                 continue;
             }
             ZfbJyjlInfo regInfo = new ZfbJyjlInfo();
@@ -78,7 +102,7 @@ public class ZfbJyjlParser {
             regInfo.setMaijiaid(list.get(6));
             regInfo.setMaijiaxx(list.get(7));
             regInfo.setDsId(regInfo.getMaijiaid());
-            if(StringUtils.isNotBlank(list.get(8))){
+            if (StringUtils.isNotBlank(list.get(8))) {
                 regInfo.setJe(Double.valueOf(list.get(8)));
                 regInfo.setJyje(regInfo.getJe());
                 if (regInfo.getJyje() != null) {
@@ -89,27 +113,27 @@ public class ZfbJyjlParser {
                 }
                 regInfo.setJdlx("出");
             }
-            if(StringUtils.isNotBlank(list.get(9))){
-                if(list.get(9).indexOf("/")>0){
+            if (StringUtils.isNotBlank(list.get(9))) {
+                if (list.get(9).indexOf("/") > 0) {
                     regInfo.setSksj(sdf2.parse(list.get(9)));
-                }else {
+                } else {
                     regInfo.setSksj(sdf1.parse(list.get(9)));
                 }
             }
-            if(StringUtils.isNotBlank(list.get(10))){
-                if(list.get(10).indexOf("/")>0){
+            if (StringUtils.isNotBlank(list.get(10))) {
+                if (list.get(10).indexOf("/") > 0) {
                     regInfo.setZhxgsj(sdf2.parse(list.get(10)));
-                }else {
+                } else {
                     regInfo.setZhxgsj(sdf1.parse(list.get(10)));
                 }
             }
-            if(StringUtils.isNotBlank(list.get(11))){
-                if(list.get(11).indexOf("/")>0){
+            if (StringUtils.isNotBlank(list.get(11))) {
+                if (list.get(11).indexOf("/") > 0) {
                     regInfo.setCjsj(sdf2.parse(list.get(11)));
-                }else {
+                } else {
                     regInfo.setCjsj(sdf1.parse(list.get(11)));
                 }
-                if(regInfo.getCjsj()!=null){
+                if (regInfo.getCjsj() != null) {
                     regInfo.setJysj(regInfo.getCjsj());
                 }
             }
@@ -124,13 +148,78 @@ public class ZfbJyjlParser {
         return dataList;
     }
 
+    private List<ZfbJyjlInfo> parseExcel(List<List<String>> txtContent, String userId, String dlzh, String name, String xcbh) throws Exception {
+        if (txtContent.size() < 2) {
+            throw new RuntimeException("文件格式不正确，不能解析");
+        }
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        List<ZfbJyjlInfo> dataList = new ArrayList<>();
+        for (int i = 1; i < txtContent.size(); i++) {
+            List<String> list = txtContent.get(i);
+            if (list.size() < 17) {
+                continue;
+            }
+            ZfbJyjlInfo regInfo = new ZfbJyjlInfo();
+            regInfo.setFileId(attachment.getId());
+            regInfo.setTags(attachment.getTags());
+            regInfo.setJyh(list.get(0));
+            regInfo.setWbjyh(list.get(1));
+            regInfo.setJyzt(list.get(4));
+            regInfo.setHzhbid(null);
+            regInfo.setMjId(list.get(5));
+            regInfo.setUserId(userId);
+            regInfo.setMjxx(list.get(7));
+
+            regInfo.setMaijiaid(list.get(9));
+            regInfo.setMaijiaxx(list.get(11));
+            regInfo.setDsId(regInfo.getMaijiaid());
+            if (StringUtils.isNotBlank(list.get(14))) {
+                regInfo.setJe(Double.valueOf(list.get(14)));
+                regInfo.setJyje(regInfo.getJe());
+                if (regInfo.getJyje() != null) {
+                    Double mod = regInfo.getJyje() % 100;
+                    regInfo.setZc100(mod);
+                } else {
+                    regInfo.setZc100(-1.0);
+                }
+                regInfo.setJdlx("出");
+            }
+            if (StringUtils.isNotBlank(list.get(20))) {
+                if (list.get(20).indexOf("/") > 0) {
+                    regInfo.setSksj(sdf2.parse(list.get(20)));
+                } else {
+                    regInfo.setSksj(sdf1.parse(list.get(20)));
+                }
+            }
+
+            if (StringUtils.isNotBlank(list.get(2))) {
+                if (list.get(11).indexOf("/") > 0) {
+                    regInfo.setCjsj(sdf2.parse(list.get(2)));
+                } else {
+                    regInfo.setCjsj(sdf1.parse(list.get(2)));
+                }
+                if (regInfo.getCjsj() != null) {
+                    regInfo.setJysj(regInfo.getCjsj());
+                }
+            }
+
+            regInfo.setLyd(list.get(3));
+            regInfo.setSpmc(list.get(13));
+            regInfo.setShrdz(StringUtils.isBlank(list.get(24)) ? null : list.get(24));
+            regInfo.setXcbh(xcbh);
+            dataList.add(regInfo);
+        }
+        return dataList;
+    }
+
     private List<String> split(String line) {
-        line = line.replace("o.,","o.，").replace("O.,","O.，");
-        line = line.replace(",\",","，\",");
+        line = line.replace("o.,", "o.，").replace("O.,", "O.，");
+        line = line.replace(",\",", "，\",");
         String[] infos = line.split(",");
         List<String> hylist = new ArrayList<>();
         for (String hy : infos) {
-            hylist.add(hy.replace("\"","").replaceFirst("\t","").trim());
+            hylist.add(hy.replace("\"", "").replaceFirst("\t", "").trim());
         }
         return hylist;
     }

@@ -3,9 +3,9 @@
  */
 "use strict"
 window.accept = {
-    title: 'CSV',
-    extensions: 'csv',
-    mimeTypes: "application/csv"
+    title: 'CSV,EXCEL',
+    extensions: 'csv,xls,xlsx',
+    mimeTypes: "application/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 };
 window.uplader = [ ];
 window.fileNumLimit =1;

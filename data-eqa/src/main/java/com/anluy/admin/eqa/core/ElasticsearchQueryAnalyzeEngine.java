@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 功能说明：
@@ -73,23 +75,24 @@ public class ElasticsearchQueryAnalyzeEngine {
 
 
     public Map query(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
-        DSLPOJO DSL = this.parseQueryDsl(paramsStr,pageNum,pageSize);
+        DSLPOJO DSL = this.parseQueryDsl(paramsStr, pageNum, pageSize);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(DSL.toString());
         }
         Map result = elasticsearchRestClient.query(DSL.getDsl(), DSL.getIndexName());
-        result.put("dsl",DSL);
+        result.put("dsl", DSL);
         return this.setMeta(result, DSL.getIndexName());
     }
 
     /**
      * 解析并生成dsl
+     *
      * @param paramsStr
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public DSLPOJO parseQueryDsl(String paramsStr, Integer pageNum, Integer pageSize){
+    public DSLPOJO parseQueryDsl(String paramsStr, Integer pageNum, Integer pageSize) {
         JSONObject dsl = createDsl(pageNum, pageSize);
         Configuration root = Configuration.from(paramsStr);
         String indexName = root.getString("indexName");
@@ -106,7 +109,7 @@ public class ElasticsearchQueryAnalyzeEngine {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(dsl.toJSONString());
         }
-        return  new DSLPOJO(dsl.toJSONString(),indexName);
+        return new DSLPOJO(dsl.toJSONString(), indexName);
     }
 
     private JSONObject queryDsl(List<Configuration> conditionList) {
@@ -190,7 +193,7 @@ public class ElasticsearchQueryAnalyzeEngine {
             Integer dataType = condition.getInt("dataType", DATA_TYPE_TEXT);
             String field = condition.getString("field");
             List<String> values = condition.getList("values", String.class);
-            if(values == null){
+            if (values == null) {
                 continue;
             }
             JSONObject itemBool = new JSONObject();
@@ -226,8 +229,8 @@ public class ElasticsearchQueryAnalyzeEngine {
         Map map = new HashMap();
 
         switch (dataType) {
-            case DATA_TYPE_TEXT:{
-                map.put("default_field",field);
+            case DATA_TYPE_TEXT: {
+                map.put("default_field", field);
                 if (fuzzy) {
                     map.put("query", "*" + value + "*");
                 } else {
@@ -315,7 +318,7 @@ public class ElasticsearchQueryAnalyzeEngine {
     private List<Map> condition(String field, List<String> values, int dataType, boolean fuzzy) {
         List<Map> conditions = new ArrayList<>();
         for (String val : values) {
-            if(StringUtils.isNotBlank(val)){
+            if (StringUtils.isNotBlank(val)) {
                 conditions.add(this.condition(field, val, dataType, fuzzy));
             }
         }
@@ -324,6 +327,7 @@ public class ElasticsearchQueryAnalyzeEngine {
 
     /**
      * 聚合统计
+     *
      * @param paramsStr
      * @param pageNum
      * @param pageSize
@@ -331,17 +335,18 @@ public class ElasticsearchQueryAnalyzeEngine {
      * @throws IOException
      */
     public Map aggs(String paramsStr, Integer pageNum, Integer pageSize) throws IOException {
-        DSLPOJO DSL = this.parseAggsDsl(paramsStr,pageNum,pageSize);
+        DSLPOJO DSL = this.parseAggsDsl(paramsStr, pageNum, pageSize);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(DSL.toString());
         }
         Map result = elasticsearchRestClient.aggs(DSL.getDsl(), DSL.getIndexName());
-        result.put("dsl",DSL);
+        result.put("dsl", DSL);
         return result;
     }
 
     /**
      * 解析生成统计的dsl
+     *
      * @param paramsStr
      * @param pageNum
      * @param pageSize
@@ -366,8 +371,9 @@ public class ElasticsearchQueryAnalyzeEngine {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(dsl.toJSONString());
         }
-        return new DSLPOJO(dsl.toJSONString(),indexName);
+        return new DSLPOJO(dsl.toJSONString(), indexName);
     }
+
     /**
      * @param aggsList
      * @return
@@ -422,36 +428,36 @@ public class ElasticsearchQueryAnalyzeEngine {
                     if (valueList != null || !valueList.isEmpty()) {
                         List<Map> rangeList = new ArrayList<>();
                         Object one = valueList.get(0);
-                        if(one instanceof Map){
+                        if (one instanceof Map) {
                             for (Object obj : valueList) {
-                                Map dm = (Map)obj;
+                                Map dm = (Map) obj;
                                 Object from = dm.get("from");
                                 Object to = dm.get("to");
                                 Map<String, Object> range = new HashMap<>();
-                                if(from!=null){
-                                    range.put("from",from);
+                                if (from != null) {
+                                    range.put("from", from);
                                 }
-                                if(to!=null){
-                                    range.put("to",to);
+                                if (to != null) {
+                                    range.put("to", to);
                                 }
                                 rangeList.add(range);
                             }
-                        }else {
+                        } else {
                             Object from = valueList.get(0);
                             Object to = null;
-                            if(valueList.size()>1){
+                            if (valueList.size() > 1) {
                                 to = valueList.get(1);
                             }
                             Map<String, Object> range = new HashMap<>();
-                            if(from!=null){
-                                range.put("from",from);
+                            if (from != null) {
+                                range.put("from", from);
                             }
-                            if(to!=null){
-                                range.put("to",to);
+                            if (to != null) {
+                                range.put("to", to);
                             }
                             rangeList.add(range);
                         }
-                        map.put("ranges",rangeList);
+                        map.put("ranges", rangeList);
                         item.put("range", map);
                     }
                     break;
@@ -486,39 +492,41 @@ public class ElasticsearchQueryAnalyzeEngine {
 
     /**
      * 解析并生成dsl
+     *
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public DSLPOJO parseFulltextDsl(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort){
+    public DSLPOJO parseFulltextDsl(String keyword, Integer pageNum, Integer pageSize, String indexName, String sort) {
         JSONObject dsl = createDsl(pageNum, pageSize);
         JSONObject query = new JSONObject();
         JSONObject bool = new JSONObject();
-        query.put("bool",bool);
-        JSONArray must = new JSONArray();
-        bool.put("must",must);
+        query.put("bool", bool);
+        JSONArray filter = new JSONArray();
+        bool.put("filter", filter);
         String[] ss = keyword.split(" |,|，");
         for (String k : ss) {
-            if(StringUtils.isBlank(k)){
+            if (StringUtils.isBlank(k)) {
                 continue;
             }
             JSONObject queryString = new JSONObject();
-            queryString.put("query","*"+k+"*");
-            queryString.put("default_operator","AND");
+//            queryString.put("query","*"+k+"*");
+            queryString.put("query", k + "*");
+            queryString.put("default_operator", "AND");
             JSONObject queryItem = new JSONObject();
             queryItem.put("query_string", queryString);
-            must.add(queryItem);
+            filter.add(queryItem);
         }
         dsl.put("query", query);
 
         JSONObject aggs = new JSONObject();
         JSONObject distinct = new JSONObject();
         JSONObject terms = new JSONObject();
-        terms.put("field","_index");
-        terms.put("size","1000");
-        distinct.put("terms",terms);
-        aggs.put("terms_index",distinct);
-        dsl.put("aggregations",aggs);
+        terms.put("field", "_index");
+        terms.put("size", "1000");
+        distinct.put("terms", terms);
+        aggs.put("terms_index", distinct);
+        dsl.put("aggregations", aggs);
 
         List sortList = this.sort(sort);
         if (sortList != null && !sortList.isEmpty()) {
@@ -527,8 +535,9 @@ public class ElasticsearchQueryAnalyzeEngine {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(dsl.toJSONString());
         }
-        return  new DSLPOJO(dsl.toJSONString(),indexName);
+        return new DSLPOJO(dsl.toJSONString(), indexName);
     }
+
     /**
      * 全文检索
      *
@@ -538,12 +547,55 @@ public class ElasticsearchQueryAnalyzeEngine {
      * @return
      * @throws IOException
      */
-    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName,String sort) throws IOException {
-        DSLPOJO dslpojo = this.parseFulltextDsl(keyword,pageNum,pageSize,indexName,sort);
+    public Map fulltext(String keyword, Integer pageNum, Integer pageSize, String indexName, String sort) throws IOException {
+        DSLPOJO dslpojo = this.parseFulltextDsl(keyword, pageNum, pageSize, indexName, sort);
         Map result = elasticsearchRestClient.query(dslpojo.getDsl(), indexName);
-        if(result.get("aggs")!=null){
+        if (result.get("aggs") != null) {
             Configuration aggsConfig = Configuration.from(result.get("aggs"));
-            result.put("indexs",aggsConfig.get("terms_index.buckets"));
+            JSONArray indexs = (JSONArray) aggsConfig.get("terms_index.buckets");
+            if (indexs != null) {
+                Map<String, JSONObject> indexMap = new HashMap<>();
+                for (int i = 0; i < indexs.size(); i++) {
+                    JSONObject index = indexs.getJSONObject(i);
+                    String iname = index.getString("key");
+                    String iname2 = iname + "_all";
+                    //数字结尾
+                    Pattern pattern = Pattern.compile("\\d$");
+                    Matcher matcher = pattern.matcher(iname);
+                    String num = null;
+                    if (matcher.find()) {
+                        num = matcher.group();
+                    }
+                    //有-线
+                    if (iname.indexOf("-") > 0) {
+                        iname = iname.split("-")[0] + "_all";
+                        index.put("key", iname);
+                    } else if (indexName.indexOf(iname2) >= 0) {
+                        //直接拼接_all可以找到
+                        index.put("key", iname2);
+                    } else if (num != null) {
+                        //数字结尾
+                        String sn = iname.substring(0, iname.length() - num.length());
+                        index.put("key", sn + "_all");
+                    }
+                    String key = index.getString("key");
+                    if (!indexMap.containsKey(key)) {
+                        indexMap.put(key, index);
+                    } else {
+                        JSONObject jo = indexMap.get(key);
+                        int count1 = jo.getInteger("doc_count");
+                        int count2 = index.getInteger("doc_count");
+                        jo.put("doc_count", count1 + count2);
+                    }
+                }
+                if (!indexMap.isEmpty()) {
+                    JSONArray indexs2 = new JSONArray();
+                    indexMap.forEach((k, v) -> indexs2.add(v));
+                    indexs = indexs2;
+                }
+            }
+
+            result.put("indexs", indexs);
         }
 
         return this.setMetaList(result);
@@ -575,6 +627,7 @@ public class ElasticsearchQueryAnalyzeEngine {
 
     /**
      * 给结果集设置元数据
+     *
      * @param result
      * @param indexName
      * @return
@@ -597,7 +650,7 @@ public class ElasticsearchQueryAnalyzeEngine {
     /**
      * 对象
      */
-    public class DSLPOJO{
+    public class DSLPOJO {
         private String dsl;
         private String indexName;
 

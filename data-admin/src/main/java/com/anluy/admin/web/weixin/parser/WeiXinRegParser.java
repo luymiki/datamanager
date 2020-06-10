@@ -80,20 +80,34 @@ public class WeiXinRegParser {
                 if (line.endsWith("基本资料：")) {
                     infoIndex = i + 1;//基本信息的行下标
                     continue;
+                } else if (line.indexOf("微信号：") >= 0) {
+                    infoIndex = i;//基本信息的行下标
                 } else if (line.startsWith("联系人：")) {
                     infoIndex = -1;
                     lxrIndex = i + 2;//好友信息的行下标
+                    continue;
+                } else if (line.indexOf("帐号") >= 0 && line.indexOf("QQ") >= 0 && line.indexOf("手机") >= 0 && line.indexOf("昵称") >= 0) {
+                    infoIndex = -1;
+                    lxrIndex = i + 1;//好友信息的行下标
                     continue;
                 } else if (line.startsWith("微信群：")) {
                     lxrIndex = -1;
                     qunIndex = i + 2;//好友信息的行下标
                     continue;
+                } else if (line.indexOf("帐号") >= 0 && line.indexOf("名称") >= 0 && line.indexOf("创建时间") >= 0) {
+                    lxrIndex = -1;
+                    qunIndex = i + 1;//好友信息的行下标
+                    continue;
                 } else if (line.startsWith("登录日志：")) {
                     qunIndex = -1;
                     ipIndex = i + 2;//好友信息的行下标
                     continue;
+                } else if (line.indexOf("时间") >= 0 && line.indexOf("IP") >= 0) {
+                    qunIndex = -1;
+                    ipIndex = i + 1;//好友信息的行下标
+                    continue;
                 }
-                if (infoIndex > 0) {
+                if (infoIndex >= 0) {
                     String[] infos = line.replace("\t", "").split("：");
                     if (infos.length == 2) {
 
@@ -103,7 +117,7 @@ public class WeiXinRegParser {
                                 break;
                             }
                             case "QQ": {
-                                if(infos[1]!=null && infos[1].length()>4){
+                                if (infos[1] != null && infos[1].length() > 4) {
                                     regInfo.setQq(infos[1]);
                                 }
                                 break;
@@ -142,41 +156,47 @@ public class WeiXinRegParser {
                             }
                         }
                     }
-                } else if (lxrIndex >0 && i>=lxrIndex  ) {//联系人
+                } else if (lxrIndex > 0 && i >= lxrIndex) {//联系人
                     List<String> list = this.split(line);
-                    if (list != null && list.size() == 8) {
-                        if("medianote".equals(list.get(1))
+                    if (list != null && list.size() > 1) {
+                        if ("medianote".equals(list.get(1))
                                 || "floatbottle".equals(list.get(1))
                                 || "qmessage".equals(list.get(1))
                                 || "qqmail".equals(list.get(1))
-                                || "fmessage".equals(list.get(1))){
+                                || "fmessage".equals(list.get(1))) {
                             continue;
                         }
                         Wxlxr wxlxr = new Wxlxr();
                         wxlxr.setWeixin(regInfo.getWeixin());
                         wxlxr.setFileId(regInfo.getFileId());
-                        wxlxr.setZh(list.get(1));
-                        wxlxr.setQq(list.get(2));
-                        wxlxr.setDh(list.get(3));
-                        wxlxr.setEmail(list.get(4));
-                        wxlxr.setBm(list.get(5));
-                        wxlxr.setWbo(list.get(6));
-                        wxlxr.setNc(list.get(7));
+                        wxlxr.setZh(list.size() > 1 ? list.get(1) : null);
+                        wxlxr.setQq(list.size() > 2 ? list.get(2) : null);
+                        wxlxr.setDh(list.size() > 3 ? list.get(3) : null);
+                        wxlxr.setEmail(list.size() > 4 ? list.get(4) : null);
+                        if (list.size() == 7) {
+                            wxlxr.setWbo(list.size() > 5 ? list.get(5) : null);
+                            wxlxr.setNc(list.size() > 6 ? list.get(6) : null);
+                        } else if (list.size() == 8) {
+                            wxlxr.setBm(list.size() > 5 ? list.get(5) : null);
+                            wxlxr.setWbo(list.size() > 6 ? list.get(6) : null);
+                            wxlxr.setNc(list.size() > 7 ? list.get(7) : null);
+                        }
+
                         wxlxr.setCreateTime(new Date());
                         wxlxr.setSuspId(attachment.getSuspId());
                         wxlxr.setSuspName(attachment.getSuspName());
                         wxlxrList.add(wxlxr);
                     }
-                }else if (qunIndex >0 &&  i>=qunIndex) {//群
+                } else if (qunIndex > 0 && i >= qunIndex) {//群
                     List<String> list = this.split(line);
-                    if (list != null ) {
+                    if (list != null) {
                         Wxqun wxlxr = new Wxqun();
                         wxlxr.setWeixin(regInfo.getWeixin());
                         wxlxr.setZh(list.get(1));
-                        if(list.size()>2){
+                        if (list.size() > 2) {
                             wxlxr.setMc(list.get(2));
                         }
-                        if(list.size()>3){
+                        if (list.size() > 3) {
                             wxlxr.setCjsj(list.get(3));
                         }
                         wxlxr.setFileId(regInfo.getFileId());
@@ -185,13 +205,17 @@ public class WeiXinRegParser {
                         wxlxr.setCreateTime(new Date());
                         wxqunList.add(wxlxr);
                     }
-                }else if (ipIndex >0 &&  i>=ipIndex) {//ip
+                } else if (ipIndex > 0 && i >= ipIndex) {//ip
                     List<String> list = this.split(line);
-                    if (list != null ) {
+                    if (list != null) {
                         Wxloginip wxlxr = new Wxloginip();
                         wxlxr.setWeixin(regInfo.getWeixin());
-                        wxlxr.setCjsj(list.get(1));
-                        if(list.size()>2){
+                        String cjsj = list.get(1);
+                        if(cjsj.indexOf("+")>10){
+                            cjsj = cjsj.substring(0,cjsj.indexOf("+")-1).trim();
+                        }
+                        wxlxr.setCjsj(cjsj);
+                        if (list.size() > 2) {
                             wxlxr.setIp(list.get(2));
                             wxlxr.setGsd(ipAddrUtil.findCityInfoString(wxlxr.getIp()));
                         }
