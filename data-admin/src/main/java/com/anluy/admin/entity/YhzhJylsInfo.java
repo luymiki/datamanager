@@ -33,7 +33,7 @@ public class YhzhJylsInfo extends BaseEntity<String> {
     private String cxfkjgyy;//	查询反馈结果原因
     @Field("查询卡号")
     private String kh;//	查询卡号
-    @Field("查询账号")
+    @Field("查询账号|账号")
     private String zh;//	查询账号
     @Field("交易类型")
     private String jylx;//	交易类型
@@ -43,16 +43,18 @@ public class YhzhJylsInfo extends BaseEntity<String> {
     private String jybz;//	币种
     @Field("交易金额")
     private Double jyje;//	交易金额
-    @Field("交易余额")
+    @Field("交易余额|账户余额")
     private Double jyye;//	交易余额
+    @Field("交易日期")
+    private String jyrq;//	交易日期
     @Field("交易时间")
     @JSONField(name = "jysj", format = "yyyy-MM-dd HH:mm:ss")
     private Date jysj;//	交易时间
     @Field("交易流水号")
     private String jylsh;//	交易流水号
-    @Field("交易对方名称")
+    @Field("交易对方名称|对方户名")
     private String dfmc;//	交易对方名称
-    @Field("交易对方账号")
+    @Field("交易对方账号|对方账号")
     private String dfzh;//	交易对方账号
     @Field("交易对方卡号")
     private String dfkh;//	交易对方卡号
@@ -60,9 +62,9 @@ public class YhzhJylsInfo extends BaseEntity<String> {
     private String dfzjhm;//	交易对方证件号码
     @Field("交易对手余额")
     private String dfye;//	交易对手余额
-    @Field("交易对方账号开户行")
+    @Field("交易对方账号开户行|对方行名")
     private String dfzhkhh;//	交易对方账号开户行
-    @Field("交易摘要")
+    @Field("交易摘要|摘要")
     private String jyzy;//	交易摘要
     @Field("交易网点名称")
     private String jywdmc;//	交易网点名称
@@ -524,5 +526,13 @@ public class YhzhJylsInfo extends BaseEntity<String> {
 
     public void setSuspName(String suspName) {
         this.suspName = suspName;
+    }
+
+    public String getJyrq() {
+        return jyrq;
+    }
+
+    public void setJyrq(String jyrq) {
+        this.jyrq = jyrq;
     }
 }

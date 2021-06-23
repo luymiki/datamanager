@@ -84,22 +84,34 @@ public class ExcelUtils {
         Row row = null;
         String cellData = null;
         for (int i = 0; i <= rownum; i++) {
-            List<String> list = new ArrayList<>();
             row = sheet.getRow(i);
             if (row != null) {
+                List<String> list = new ArrayList<>();
                 //System.out.println(i+":"+row.getPhysicalNumberOfCells());
-                for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+                for (int j = 0; j < row.getLastCellNum(); j++) {
+                    list.add(null);
+                    if(row.getCell(j)==null){
+                        continue;
+                    }
                     cellData = (String) getCellFormatValue(row.getCell(j));
-                    if ("-".equals(cellData)) {
-                        list.add(null);
+                    int columnIndex = row.getCell(j).getColumnIndex();
+                    if (cellData ==null || "-".equals(cellData)) {
+                        list.set(columnIndex,null);
+                    }else if (cellData instanceof String) {
+                        String t = cellData.trim();
+                        if("null".equals(t)){
+                            list.set(columnIndex,null);
+                        }else {
+                            list.set(columnIndex,t);
+                        }
                     } else {
-                        list.add(cellData);
+                        list.set(columnIndex,cellData);
                     }
                 }
-            } else {
-                continue;
+                dataList.add(list);
+            }else {
+                dataList.add(new ArrayList<>());
             }
-            dataList.add(list);
         }
         return dataList;
     }
@@ -185,7 +197,7 @@ public class ExcelUtils {
                     cellValue = "";
             }
         } else {
-            cellValue = "";
+            cellValue = null;
         }
         return cellValue;
     }
@@ -203,12 +215,18 @@ public class ExcelUtils {
             is = new FileInputStream(file);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
             String line = bufferedReader.readLine();
-            while (line != null) {
+            for (int i = 0; i < 1000 && line != null  ; i++) {
                 if (StringUtils.isNotBlank(line) && line.trim().toLowerCase().startsWith("<html")) {
                     return true;
                 }
                 line = bufferedReader.readLine();
             }
+//            while (line != null) {
+//                if (StringUtils.isNotBlank(line) && line.trim().toLowerCase().startsWith("<html")) {
+//                    return true;
+//                }
+//                line = bufferedReader.readLine();
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

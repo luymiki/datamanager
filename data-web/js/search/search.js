@@ -309,7 +309,7 @@
 
             var columns = [
                 {field: 'checkbox', title: '选择', width: '50px', checkbox: true},
-                {field: 'xh', title: '序号', width: '50px'}
+                {field: '_xh', title: '序号', width: '50px'}
             ];
             for (var i = 0; i < colMeta.length; i++) {
                 var col = colMeta[i];
@@ -350,7 +350,7 @@
                                 var data = msg.data.data;
                                 var xh =  ((request.data.pageNumber-1)*request.data.pageSize)+1;
                                 for(var i= 0;i<data.length;i++){
-                                    data[i]['xh'] = xh++;
+                                    data[i]['_xh'] = xh++;
                                 }
                                 request.success({
                                     rows : data,

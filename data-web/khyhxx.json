@@ -5,11 +5,11 @@
   },
   {
     "value":"ICBC",
-    "text":"中国工商银行"
+    "text":"工商银行"
   },
   {
     "value":"ABC",
-    "text":"中国农业银行"
+    "text":"农业银行"
   },
   {
     "value":"BOC",
@@ -17,11 +17,11 @@
   },
   {
     "value":"CCB",
-    "text":"中国建设银行"
+    "text":"建设银行"
   },
   {
     "value":"PSBC",
-    "text":"中国邮政储蓄银行"
+    "text":"邮政储蓄银行"
   },
   {
     "value":"COMM",

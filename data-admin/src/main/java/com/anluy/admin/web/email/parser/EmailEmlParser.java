@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
-import sun.misc.BASE64Decoder;
 
 
 /**
@@ -331,8 +330,8 @@ public class EmailEmlParser {
             }
             if(filepart){
                 //System.out.println(sb.toString());
-                BASE64Decoder decoder = new BASE64Decoder();
-                byte[] bb = decoder.decodeBuffer(sb.toString());
+                Base64.Decoder decoder = Base64.getDecoder();
+                byte[] bb = decoder.decode(sb.toString());
                 for(int i=0;i<bb.length;++i){
                     if(bb[i]<0){//调整异常数据
                         bb[i]+=256;
@@ -349,8 +348,8 @@ public class EmailEmlParser {
                 email.addFile(fp, MimeUtility.decodeText("file"));//内容
             }else {
                 if("base64".equals(encoding)){
-                    BASE64Decoder decoder = new BASE64Decoder();
-                    byte[] bb = decoder.decodeBuffer(sb.toString());
+                    Base64.Decoder decoder = Base64.getDecoder();
+                    byte[] bb = decoder.decode(sb.toString());
                     for(int i=0;i<bb.length;++i){
                         if(bb[i]<0){//调整异常数据
                             bb[i]+=256;

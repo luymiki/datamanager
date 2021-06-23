@@ -54,9 +54,10 @@ public class AuthorizedInterceptor implements HandlerInterceptor {
                 auth = httpServletRequest.getParameter(AUTHORIZATION);
             }
             if (StringUtils.isNotBlank(auth)) {
-
+                if("/api/eqa/aggs".equals(httpServletRequest.getRequestURI())){
+                    return true;
+                }
                 HttpClient httpClient = HttpClients.createDefault();
-                ;
 
                 // 设置超时时间
                 RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();

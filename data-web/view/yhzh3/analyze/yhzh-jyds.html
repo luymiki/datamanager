@@ -1,0 +1,98 @@
+<!DOCTYPE html> <!-- 使用 HTML5 doctype，不区分大小写 -->
+<html lang="zh-cmn-Hans"> <!-- 更加标准的 lang 属性写法 -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>银行流水信息列表 | 数据管理系统</title>
+
+    <meta name="keywords" content="银行流水信息列表,数据管理系统">
+    <meta name="description" content="银行流水信息列表 | 数据管理系统">
+
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <!-- 全局CSS -->
+    <script src="/js/meta.js"></script>
+    <script type="text/javascript">
+        BASE_CSS();
+        BOOTSTRAP_TABLE_CSS();
+    </script>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title" style="padding-top: 7px">
+                    <span id="cft-title" style="font-size: 20px;">交易汇总</span>
+                    <div class="ibox-tools" >
+                        <div class="btn btn-primary btn-sm" id="exportExcel" >导出EXCEL</div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table id="data-table" data-mobile-responsive="true">
+                    </table>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins" >
+                <div class="ibox-content row" >
+                    <div id="chart-line" class="col-sm-8" style="padding: 0px;">
+                        <div id="loadding-icon-jyje" style="width: 100%;text-align: center;" >
+                            <div class="sk-spinner sk-spinner-cube-grid">
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                            </div>
+                            统计中...
+                        </div>
+                        <div id="lineChart" style="height:250px;" ></div>
+                    </div>
+                    <div id="chart-pie" class="col-sm-4" style="padding: 0px;">
+                        <div id="loadding-icon-jyjeZc100" style="width: 100%;text-align: center;" >
+                            <div class="sk-spinner sk-spinner-cube-grid">
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                            </div>
+                            统计中...
+                        </div>
+                        <div style="margin: 10px;">
+                            <div id="pieChart" style="height:250px" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- 全局js -->
+<script type="text/javascript">
+    BASE_JS();
+    BOOTSTRAP_TABLE_JS();
+</script>
+
+<!-- ChartJS-->
+<!--<script src="/js/plugins/chartJs/Chart.min.js"></script>-->
+<script src="/js/plugins/echarts/echarts.js"></script>
+<script src="/js/yhzh2/analyze/yhzh-jyds.js"></script>
+
+
+</body>
+</html>

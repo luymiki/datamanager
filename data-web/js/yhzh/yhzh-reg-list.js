@@ -20,9 +20,11 @@
         var _initListTable = function(){
             $('#data-table').myTable({
                 columns: [{field: 'xh',title: '序号',width:'50px'},
+                    {field: 'susp_name',title: '姓名',sortable:true},
                     {field: 'ssyh',title: '所属银行',sortable:true},
                     {field: 'kh',title: '卡号',sortable:true},
                     {field: 'zh',title: '账号',sortable:true},
+                    {field: 'ljjybs',title: '交易笔数',sortable:true},
                     {field: 'khrq',title: '开户日期',sortable:true},
                     {field: 'xhrq',title: '销户日期',sortable:true},
                     {field: 'khwd',title: '开户网点',sortable:true},

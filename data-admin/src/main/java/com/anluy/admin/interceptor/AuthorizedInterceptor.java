@@ -2,9 +2,6 @@ package com.anluy.admin.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.anluy.commons.web.Result;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

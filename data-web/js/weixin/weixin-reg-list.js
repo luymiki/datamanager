@@ -167,6 +167,9 @@
             $("#addBtn").on('click',function () {
                 top.contabs.addMenuItem("/view/weixin/weixin-reg.html",'导入微信信息');
             });
+            $("#addBtn2").on('click',function () {
+                top.contabs.addMenuItem("/view/weixin/weixin-reg2.html",'导入微信信息');
+            });
             $("#data-table").on('click','.detail',function () {
                 top.contabs.addMenuItem("/view/weixin/weixin-reg-detail.html?id="+$(this).attr("data-id"),'查看信息');
             });

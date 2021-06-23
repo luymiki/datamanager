@@ -8,6 +8,7 @@ import com.anluy.admin.service.AttachmentService;
 import com.anluy.admin.utils.IPAddrUtil;
 import com.anluy.admin.web.qq.parser.QQRegParser;
 import com.anluy.admin.web.weixin.parser.WeiXinRegParser;
+import com.anluy.admin.web.weixin.parser.WeiXinRegParser2;
 import com.anluy.commons.BaseEntity;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
@@ -76,7 +77,54 @@ public class WeiXinRegParserController {
             String path = uploadDir + attachment.getPath();
             WeiXinRegParser parser = new WeiXinRegParser(attachment.getId(),ipAddrUtil);
             WxregInfo regInfo = parser.parser(attachment,path);
+            if(regInfo ==null){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"没有注册信息文件"));
+            }
             regInfo.setTags(attachment.getTags());
+            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
+    /**
+     * 解析
+     *
+     * @return
+     */
+    @ApiOperation(value = "解析文件", response = Result.class)
+    @ApiResponses(value = {@ApiResponse(code = 500, message = "解析文件失败")})//错误码说明
+    @RequestMapping(value = "/parser2", method = RequestMethod.POST)
+    public @ResponseBody
+    Object parser2(HttpServletRequest request, @RequestBody  List<Attachment> attachments) {
+        try {
+            if (attachments == null || attachments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001, "文件为空"));
+            }
+            Attachment regAttachment = null;
+            //找注册信息文件
+            for (Attachment attachment : attachments) {
+                if(attachment.getName().indexOf("RegInfo")>=0){
+                    regAttachment = attachment;
+                }
+            }
+            if (regAttachment == null) {
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001, "文件为空"));
+            }
+            if(StringUtils.isBlank(regAttachment.getId())){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
+            }
+            if(StringUtils.isBlank(regAttachment.getPath())){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件路径为空"));
+            }
+            if(StringUtils.isBlank(regAttachment.getSuffix())){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件类型为空"));
+            }
+            WeiXinRegParser2 parser = new WeiXinRegParser2(ipAddrUtil,fileManagerConfig);
+            WxregInfo regInfo = parser.parser(attachments);
+            if(regInfo ==null){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"没有注册信息文件"));
+            }
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);

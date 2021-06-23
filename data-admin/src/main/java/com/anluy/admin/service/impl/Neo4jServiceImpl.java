@@ -336,7 +336,16 @@ public class Neo4jServiceImpl implements Neo4jService {
         keyword = keyword.trim();
         StringBuffer sb = new StringBuffer();
         sb.append("MATCH p=(n:").append(type).append(")-[r *").append(Labels.PERSON.name().equals(type) ? "3" : "2").append("]-(m)");
-        sb.append(" WHERE (n.id='").append(keyword).append("' OR n.name='").append(keyword).append("')");
+        sb.append(" WHERE (");
+        String[] k1s = keyword.split(" ");
+        for (int i = 0; i < k1s.length; i++) {
+            if(i>0){
+                sb.append(" or ");
+            }
+            String k = k1s[i].trim();
+            sb.append(" n.id='").append(k).append("' OR n.name='").append(k).append("'");
+        }
+        sb.append(") ");
         sb.append(" RETURN p");
         return sb.toString();
     }
@@ -358,12 +367,30 @@ public class Neo4jServiceImpl implements Neo4jService {
         } else {
             sb.append("m) ");
         }
-        sb.append(") WHERE (n.id='").append(keyword).append("' OR n.name='").append(keyword).append("')");
+        sb.append(") WHERE (");
+        String[] k1s = keyword.split(" ");
+        for (int i = 0; i < k1s.length; i++) {
+            if(i>0){
+                sb.append(" or ");
+            }
+            String k = k1s[i].trim();
+            sb.append(" n.id='").append(k).append("' OR n.name='").append(k).append("'");
+        }
+        sb.append(") ");
         if ("*".equals(keyword2) && StringUtils.isNotBlank(type2)) {
             sb.append(" AND m<>n ");
         } else if (StringUtils.isNotBlank(keyword2) && StringUtils.isNotBlank(type2)) {
             keyword2 = keyword2.trim();
-            sb.append(" AND (m.id='").append(keyword2).append("' OR m.name='").append(keyword2).append("')");
+            String[] k2s = keyword2.split(" ");
+            sb.append(" AND (");
+            for (int i = 0; i < k2s.length; i++) {
+                if(i>0){
+                    sb.append(" or ");
+                }
+                String k = k2s[i].trim();
+                sb.append("m.id='").append(k).append("' OR m.name='").append(k).append("'");
+            }
+            sb.append(")");
         }
         sb.append(" RETURN p");
 

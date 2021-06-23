@@ -31,9 +31,9 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     private String cxfkjg;//	查询反馈结果
     @Field("证照类型")
     private String zzlx;//	证照类型
-    @Field("证照号码")
+    @Field("证照号码|身份证号")
     private String zzhm;//	证照号码
-    @Field("客户名称")
+    @Field("客户名称|户名")
     private String name;//	客户名称
     @Field("联系电话")
     private String lxdh;//	联系电话
@@ -41,7 +41,7 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     private String kzhinfo;//	卡账号信息
     @Field("卡号")
     private String kh;//	卡号
-    @Field("账号")
+    @Field("账号|账号")
     private String zh;//	账号
     @Field("开户日期")
     @JSONField(name = "khrq", format = "yyyy-MM-dd")
@@ -49,9 +49,9 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     @Field("销户日期")
     @JSONField(name = "xhrq", format = "yyyy-MM-dd")
     private Date xhrq;//	销户日期
-    @Field("开户网点")
+    @Field("开户网点|开户行|开户网点名称")
     private String khwd;//	开户网点
-    @Field("联系手机")
+    @Field("联系手机|联系电话")
     private String lxsj;//	联系手机
     @Field("代办人姓名")
     private String dbrxm;//	代办人姓名
@@ -59,13 +59,13 @@ public class YhzhKhxxInfo extends BaseEntity<String> {
     private String dbrzjlx;//	代办人证件类型
     @Field("代办人证件号码")
     private String dbrzjhm;//	代办人证件号码
-    @Field("住宅地址")
+    @Field("住宅地址|身份证登记住址")
     private String zzdz;//	住宅地址
     @Field("住宅电话")
     private String zzdh;//	住宅电话
     @Field("工作单位")
     private String gzdw;//	工作单位
-    @Field("单位地址")
+    @Field("单位地址|开户申请书上的留存地址")
     private String dwdz;//	单位地址
     @Field("单位电话")
     private String dwdh;//	单位电话

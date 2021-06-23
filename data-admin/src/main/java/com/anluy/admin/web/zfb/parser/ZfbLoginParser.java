@@ -144,7 +144,7 @@ public class ZfbLoginParser {
 //    public static void main(String[] args) {
 //        ZfbLoginParser zfbRegParser = new ZfbLoginParser(new Attachment());
 //        try {
-//            List<ZfbLoginInfo> info = zfbRegParser.parser("C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\支付宝模板\\登陆日志.csv");
+//            List<ZfbLoginInfo> info = zfbRegParser.parser2("C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\支付宝模板\\登陆日志.csv");
 //            System.out.println(info);
 //        } catch (Exception e) {
 //            e.printStackTrace();

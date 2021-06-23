@@ -45,42 +45,8 @@ public class CftRegParserController {
     private FileManagerConfig fileManagerConfig;
     @Resource
     private AnalyzeCodeAndPushMessage analyzeCodeAndPushMessage;
-    /**
-     * 解析
-     *
-     * @return
-     */
-    @ApiOperation(value = "解析文件", response = Result.class)
-    @ApiResponses(value = {@ApiResponse(code = 500, message = "解析文件失败")})//错误码说明
-    @RequestMapping(value = "/parser", method = RequestMethod.POST)
-    public @ResponseBody
-    Object parser(HttpServletRequest request, @RequestBody  Attachment attachment) {
-        try {
-            if(attachment == null  ){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件为空"));
-            }
-            if(StringUtils.isBlank(attachment.getId())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
-            }
-            if(StringUtils.isBlank(attachment.getPath())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件路径为空"));
-            }
-            if(StringUtils.isBlank(attachment.getSuffix())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件类型为空"));
-            }
-            String uploadDir = fileManagerConfig.getUploadDir();
-            String path = uploadDir + attachment.getPath();
-            CftRegParser parser = new CftRegParser(attachment.getId());
-            CftRegInfo regInfo = parser.parser(path);
-            regInfo.setSuspId(attachment.getSuspId());
-            regInfo.setSuspName(attachment.getSuspName());
-            regInfo.setTags(attachment.getTags());
-            return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("解析成功").setData(regInfo).setPath(request.getRequestURI()));
-        } catch (Exception exception) {
-            LOGGER.error(exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
-        }
-    }
+    @Resource
+    private CftTradesParserController cftTradesParserController;
 
     /**
      * 财付通文件保存
@@ -88,24 +54,43 @@ public class CftRegParserController {
      * @return
      */
     @ApiOperation(value = "财付通文件保存", response = Result.class)
-    @RequestMapping(value = "/save",method =RequestMethod.POST)
-    public Object save(HttpServletRequest request, @RequestBody CftRegInfo regInfo) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public Object save(HttpServletRequest request, @RequestBody List<Attachment> attachments) {
         try {
-            if(StringUtils.isBlank(regInfo.getZh())){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"账号为空"));
+            if (attachments == null || attachments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001, "文件为空"));
             }
-            if(StringUtils.isBlank(regInfo.getSuspName())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"可疑人姓名为空"));
+            Attachment regAttachment = null;
+            Attachment tradesAttachment = null;
+            //找注册信息文件
+            for (Attachment attachment : attachments) {
+                if(attachment.getName().indexOf("TenpayRegInfo")>=0){
+                    regAttachment = attachment;
+                }else if(attachment.getName().indexOf("TenpayTrades")>=0){
+                    tradesAttachment = attachment;
+                }
             }
-            if(StringUtils.isBlank(regInfo.getSuspId())){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"可疑人id为空"));
+            if (regAttachment == null) {
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001, "文件为空"));
             }
-            if(StringUtils.isBlank(regInfo.getFileId())){
+            if(StringUtils.isBlank(regAttachment.getId())){
                 return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件id为空"));
             }
+            if(StringUtils.isBlank(regAttachment.getPath())){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件路径为空"));
+            }
+            if(StringUtils.isBlank(regAttachment.getSuffix())){
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(Result.error(1001,"文件类型为空"));
+            }
+            String uploadDir = fileManagerConfig.getUploadDir();
+            String path = uploadDir + regAttachment.getPath();
+            CftRegParser parser = new CftRegParser(regAttachment.getId());
+            CftRegInfo regInfo = parser.parser(path);
+            regInfo.setSuspId(regAttachment.getSuspId());
+            regInfo.setSuspName(regAttachment.getSuspName());
+            regInfo.setTags(regAttachment.getTags());
             regInfo.setId(UUID.randomUUID().toString() );
             regInfo.setCreateTime(new Date());
-
             Map<String, Object> jsonMap = (Map<String, Object>)JSON.toJSON(regInfo);
             jsonMap.forEach((k,v)->{
                 switch (k){
@@ -123,10 +108,14 @@ public class CftRegParserController {
             analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_QQ,"zh");
             analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_WEIXIN,"zh");
             analyzeCodeAndPushMessage.analyze(rlist, AnalyzeCodeAndPushMessage.ANALYZE_TYPE_PHONE,"dh");
+            if(tradesAttachment!=null){
+                tradesAttachment.setFolder(regInfo.getId());
+                return cftTradesParserController.save(request,tradesAttachment);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("保存成功").setData(regInfo).setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("保存失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
         }
     }
 
@@ -136,33 +125,33 @@ public class CftRegParserController {
      * @return
      */
     @ApiOperation(value = "财付通文件删除", response = Result.class)
-    @RequestMapping(value = "/delete",method =RequestMethod.POST)
-    public Object delete(HttpServletRequest request,String id,String fileId) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Object delete(HttpServletRequest request, String id, String fileId) {
         try {
-            if(StringUtils.isBlank(fileId)){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"注册文件id为空"));
+            if (StringUtils.isBlank(fileId)) {
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001, "注册文件id为空"));
             }
-            if(StringUtils.isBlank(id)){
-                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001,"注册id为空"));
+            if (StringUtils.isBlank(id)) {
+                return ResponseEntity.status(HttpStatus.OK).body(Result.error(1001, "注册id为空"));
             }
             Attachment attachment = attachmentService.get(fileId);
-            if(attachment!=null){
+            if (attachment != null) {
                 String uploadDir = fileManagerConfig.getUploadDir();
-                String path = uploadDir +"/"+attachment.getPath();
+                String path = uploadDir + "/" + attachment.getPath();
                 File f = new File(path);
-                if(f.isFile()){
+                if (f.isFile()) {
                     f.delete();
                 }
                 attachmentService.delete(fileId);
             }
 
-            String deleteDsl = "{\"query\": { \"match\": {\"cft_id\": \""+id+"\"}}}";
-            elasticsearchRestClient.deleteByQuery(deleteDsl,"cfttrades");
-            elasticsearchRestClient.remove(id,"cftreginfo");
+            String deleteDsl = "{\"query\": { \"match\": {\"cft_id\": \"" + id + "\"}}}";
+            elasticsearchRestClient.deleteByQuery(deleteDsl, "cfttrades");
+            elasticsearchRestClient.remove(id, "cftreginfo");
             return ResponseEntity.status(HttpStatus.OK).body(Result.seuccess("删除成功").setPath(request.getRequestURI()));
         } catch (Exception exception) {
             LOGGER.error("删除失败:" + exception.getMessage(), exception);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
         }
     }
 }

@@ -190,9 +190,9 @@ public class EmailRegParser {
     }
 //
 //    public static void main(String[] args) {
-//        EmailRegParser parser = new EmailRegParser("");
+//        EmailRegParser parser2 = new EmailRegParser("");
 //        try {
-//            Object resultList = parser.parser("H:\\数据管理系统\\数据导入20180629\\colin8787@163.com 查询结果.txt");
+//            Object resultList = parser2.parser2("H:\\数据管理系统\\数据导入20180629\\colin8787@163.com 查询结果.txt");
 //            System.out.println(JSON.toJSONString(resultList));
 //        } catch (Exception e) {
 //            e.printStackTrace();

@@ -302,10 +302,10 @@ public class HuadanParser {
 
 //    public static void main(String[] args) {
 //        Attachment attachment = new Attachment();
-//        HuadanParser parser = new HuadanParser("1");
+//        HuadanParser parser2 = new HuadanParser("1");
 //        try {
 //            attachment.setFolder("联通");
-//            parser.parser(attachment,"C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\联通话单\\13025461418.xls");
+//            parser2.parser2(attachment,"C:\\Users\\Administrator\\Desktop\\数据管理系统\\导入数据\\样本勿删20180402\\联通话单\\13025461418.xls");
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }

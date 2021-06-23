@@ -1,14 +1,12 @@
 package com.anluy.admin.eqa.web;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONArray;
 import com.anluy.admin.eqa.core.ElasticsearchQueryAnalyzeEngine;
 import com.anluy.admin.eqa.entity.EqaIndex;
 import com.anluy.admin.eqa.entity.EqaMeta;
 import com.anluy.commons.elasticsearch.ElasticsearchRestClient;
 import com.anluy.commons.web.Result;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -28,10 +26,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 功能说明：
@@ -147,7 +143,7 @@ public class ExportController {
      * @return
      * @throws IOException
      */
-    private Object exprotByDsl(HttpServletResponse response,ElasticsearchQueryAnalyzeEngine.DSLPOJO dslpojo) throws IOException, TemplateException {
+    private Object exprotByDsl(HttpServletResponse response,ElasticsearchQueryAnalyzeEngine.DSLPOJO dslpojo) throws Exception {
         List<Map> result = new ArrayList<>();
         elasticsearchQueryAnalyzeEngine.getElasticsearchRestClient().scroll(dslpojo.getDsl(), null, new ElasticsearchRestClient.TimeWindowCallBack() {
             @Override
@@ -182,9 +178,11 @@ public class ExportController {
         if (metaList == null) {
             return null;
         }
-        List title = new ArrayList<>();
+        List<List<String>> title = new ArrayList<>();
         metaList.forEach(eqaMeta -> {
-            title.add(eqaMeta.getFieldName());
+            List<String> a = new ArrayList<>() ;
+            a.add(eqaMeta.getFieldName());
+            title.add(a);
         });
         List<List> dataList = new ArrayList<>();
         result.forEach(dataMap -> {
@@ -203,7 +201,7 @@ public class ExportController {
      * @return
      * @throws IOException
      */
-    private Object exprotByAggDsl(HttpServletResponse response, Map result,String fieldName) throws IOException, TemplateException {
+    private Object exprotByAggDsl(HttpServletResponse response, Map result,String fieldName) throws Exception {
         ElasticsearchQueryAnalyzeEngine.DSLPOJO dsl = (ElasticsearchQueryAnalyzeEngine.DSLPOJO)result.get("dsl");
         Map aggs = (Map)result.get("aggs");
         List group = (List)aggs.get(fieldName);
@@ -217,13 +215,18 @@ public class ExportController {
         if (metaList == null) {
             return null;
         }
-        List title = new ArrayList<>();
+        List<List<String>> title = new ArrayList<>();
         metaList.forEach(eqaMeta -> {
             if(eqaMeta.getFieldCode().equals(fieldName)){
-                title.add(eqaMeta.getFieldName());
+                List<String> a = new ArrayList<>() ;
+                a.add(fieldName);
+                title.add(a);
             }
         });
-        title.add("次数");
+        List<String> a = new ArrayList<>() ;
+        a.add("次数");
+        title.add(a);
+
         List<List> dataList = new ArrayList<>();
         group.forEach(dataMap -> {
             Map map = (Map)dataMap;
@@ -236,27 +239,18 @@ public class ExportController {
         return null;
     }
 
-    private void export(HttpServletResponse response,String fileNameCn,List title,List dataList) throws IOException, TemplateException {
+    private void export(HttpServletResponse response,String fileNameCn,List<List<String>> head,List dataList) throws Exception {
         //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
         response.setContentType("multipart/form-data");
         //2.设置文件头：最后一个参数是设置下载文件名(假如我们叫a.pdf)
-        String fileName = "数据导出-" + fileNameCn + ".xls";
+        String fileName = "数据导出-" + fileNameCn + ".xlsx";
         fileName = new String(fileName.getBytes(),"ISO8859-1");
         response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
         response.setCharacterEncoding("UTF-8");
-        Map<String, Object> beans = new HashMap<>();
-        beans.put("titleList", title);
-        beans.put("dataList", dataList);
 
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setClassForTemplateLoading(ExportController.class,"/template");
-        //configuration.setDirectoryForTemplateLoading(new File(ExportController.class.getResource("/template").getFile()));
-        Template template = configuration.getTemplate("export.xml");
-
-        Writer writer = response.getWriter();
-        template.process(beans,writer);
-        writer.flush();
-        writer.close();
+        OutputStream out = response.getOutputStream();
+        EasyExcel.write(out).sheet(0).head(head).doWrite(dataList);
+        out.flush();
+        out.close();
     }
 }

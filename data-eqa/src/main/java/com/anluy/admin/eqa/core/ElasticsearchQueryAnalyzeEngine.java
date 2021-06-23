@@ -255,10 +255,7 @@ public class ElasticsearchQueryAnalyzeEngine {
                 }
                 break;
             }
-
         }
-        ;
-
         return conditionMap;
     }
 
@@ -317,9 +314,32 @@ public class ElasticsearchQueryAnalyzeEngine {
 
     private List<Map> condition(String field, List<String> values, int dataType, boolean fuzzy) {
         List<Map> conditions = new ArrayList<>();
-        for (String val : values) {
-            if (StringUtils.isNotBlank(val)) {
-                conditions.add(this.condition(field, val, dataType, fuzzy));
+        switch (dataType) {
+            case DATA_TYPE_TEXT:
+            case DATA_TYPE_DIC: {
+                for (String val : values) {
+                    if (StringUtils.isNotBlank(val)) {
+                        conditions.add(this.condition(field, val, dataType, fuzzy));
+                    }
+                }
+                break;
+            }
+            case DATA_TYPE_TAG:
+            default: {
+                if (fuzzy) {
+                    for (String val : values) {
+                        if (StringUtils.isNotBlank(val)) {
+                            conditions.add(this.condition(field, val, dataType, fuzzy));
+                        }
+                    }
+                } else {
+                    Map conditionMap = new HashMap();
+                    Map map = new HashMap();
+                    map.put(field, values);
+                    conditionMap.put("terms", map);
+                    conditions.add(conditionMap);
+                }
+                break;
             }
         }
         return conditions;
@@ -396,7 +416,7 @@ public class ElasticsearchQueryAnalyzeEngine {
             switch (aggsType) {
                 case AGGS_TYPE_TERMS: {
                     item.put("terms", map);
-                    map.put("size", 10000);
+                    map.put("size", 500000);
                     break;
                 }
                 case AGGS_TYPE_MAX: {

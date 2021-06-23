@@ -60,7 +60,7 @@
     var _queryQuChong = function(dataTable,params,fieldName){
         var columns = [];
         columns[columns.length] = {field: 'checkbox',title: '选择',width:'50px',checkbox:true};
-        columns[columns.length] = {field: 'xh',title: '序号',width:'50px'};
+        columns[columns.length] = {field: '_xh',title: '序号',width:'50px'};
         var fieldList = zdycx.fieldList();
         for (var i = 0; i < fieldList.length; i++) {
             var mm = fieldList[i];
@@ -81,7 +81,7 @@
                     var xh =  1;
                     for(var i= 0;i<data.length;i++){
                         var d = data[i];
-                        rowdata[i] = {"xh":xh++,"doc_count":d.doc_count};
+                        rowdata[i] = {"_xh":xh++,"doc_count":d.doc_count};
                         rowdata[i][fieldName] = d.key;
                         //console.log(rowdata[i]);
                     }
@@ -114,7 +114,7 @@
     var _query = function(dataTable,params){
         var columns = [];
         columns[columns.length] = {field: 'checkbox',title: '选择',width:'50px',checkbox:true};
-        columns[columns.length] = {field: 'xh',title: '序号',width:'50px'};
+        columns[columns.length] = {field: '_xh',title: '序号',width:'50px'};
         columns[columns.length] =  {field: 'id',title: 'ID',visible:false};
         var fieldList = zdycx.fieldList();
         for (var i = 0; i < fieldList.length; i++) {
@@ -151,7 +151,7 @@
                             var data = msg.data.data;
                             var xh =  ((request.data.pageNumber-1)*request.data.pageSize)+1;
                             for(var i= 0;i<data.length;i++){
-                                data[i]['xh'] = xh++;
+                                data[i]['_xh'] = xh++;
                             }
                             request.success({
                                 rows : data,
